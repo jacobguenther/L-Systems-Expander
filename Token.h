@@ -7,7 +7,7 @@ class Token
 {
 public:
    typedef enum {DATAT,EOLT,EOFT} Type;
-   Token(){};
+   Token(){}
    Token(const string & _d, Type _t):data(_d),mytype(_t){}
    const string & getdata() const {return data;}
    bool isdata() const {return mytype==DATAT;} 

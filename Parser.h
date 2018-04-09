@@ -19,7 +19,7 @@ private:
    void match(char x);
    char nextchar(){return input.peek();}
    double number();
-   void error(const string &);
+   [[noreturn]] void error(const string &);
    Parsenode* value();
    Parsenode* ternop(Parsenode *pred);
    Parsenode* boolexpr();

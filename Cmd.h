@@ -7,8 +7,7 @@ using std::string;
 #include <list>
 using std::list;
 
-#include "xboost_shared_ptr.hpp"
-using xboost::shared_ptr;
+using std::shared_ptr; //no usings in .h!!! CMH 4/8/18
 
 //class Parsenode;
 #include "Parser.h"

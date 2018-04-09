@@ -131,78 +131,83 @@ while(t.isdata())
 
 vector<Lsystem> readlsystemfile(const string &configfilename)
 {
-ifstream in(configfilename.c_str());
-if(!in.good()) 
-   throw runtime_error("Couldn't open file " + configfilename + "\n");
-Lexer lex(in);
-
-vector<Lsystem> thelsystems;
-while(1)
-   {
-   string systemname;
-   bool activerule=true;
-   Ruletable table;
-   string startrule;
-   Exprtype expressions;
-   
-   Token t;
-   while(t=lex.nexttoken(), t.iseol()) ;//get a non EOL token
-   if(t.iseof())
-      if (thelsystems.empty()) 
-         throw runtime_error("No L systems in file "+ configfilename);
-      else
-         return thelsystems;
-   systemname=t.getdata();
-   t=lex.nexttoken();
-   while(t.isdata())
-      {
-      if(t.getdata() == "inactive")   
-         {
-         activerule = false;
-         t=lex.nexttoken();
-         }
-      else throw runtime_error("unrecognized option after system name: " + systemname);
-      }
-   if (t.iseof())
-      throw runtime_error("Unexpected end of file during " + systemname);
-   // t is EOL
-   t=lex.nexttoken();
-   while(t.isdata()) //read (rule, rule option, or expression) line
-      {
-      string rulename = t.getdata();
-      try
-         {
-         if(rulename[0]=='$') 
+    ifstream in(configfilename);
+    if(!in.good()) {
+        in.clear();
+        in.open("../"+configfilename);
+    }
+    if(!in.good())
+        throw runtime_error("Couldn't open file " + configfilename + "\n");
+    Lexer lex(in);
+    
+    vector<Lsystem> thelsystems;
+    while(1)
+    {
+        string systemname;
+        bool activerule=true;
+        Ruletable table;
+        string startrule;
+        Exprtype expressions;
+        
+        Token t;
+        while(t=lex.nexttoken(), t.iseol()) ;//get a non EOL token
+        if(t.iseof()) {
+            if (thelsystems.empty()) 
+                throw runtime_error("No L systems in file "+ configfilename);
+            else
+                return thelsystems;
+        }
+        systemname=t.getdata();
+        t=lex.nexttoken();
+        while(t.isdata())
+        {
+            if(t.getdata() == "inactive")   
             {
-            t=lex.nexttoken();
-            assertdatatoken(t);
-            if (t.getdata() != "=")
-               throw runtime_error("Expected '='");
-            t=lex.nexttoken();
-            assertdatatoken(t);
-            expressions[rulename]=Parser(t.getdata()).parse();
-            t=lex.nexttoken();
-            if(t.isdata())
-               throw runtime_error("Unexpected additional characters "+t.getdata());
+                activerule = false;
+                t=lex.nexttoken();
             }
-         else
+            else throw runtime_error("unrecognized option after system name: " + systemname);
+        }
+        if (t.iseof())
+            throw runtime_error("Unexpected end of file during " + systemname);
+        // t is EOL
+        t=lex.nexttoken();
+        while(t.isdata()) //read (rule, rule option, or expression) line
+        {
+            string rulename = t.getdata();
+            try
             {
-            if (startrule.empty()) startrule=rulename;
-            t=lex.nexttoken();
-            assertdatatoken(t);
-            if(t.getdata()==":")
-               table[rulename].setcmds(readrule(lex));
-            else if(t.getdata()=="?")
-               readruleoptions(lex,table[rulename]);
-            else throw runtime_error("Expected option line or rule definition");
+                if(rulename[0]=='$') 
+                {
+                    t=lex.nexttoken();
+                    assertdatatoken(t);
+                    if (t.getdata() != "=")
+                        throw runtime_error("Expected '='");
+                    t=lex.nexttoken();
+                    assertdatatoken(t);
+                    expressions[rulename]=Parser(t.getdata()).parse();
+                    t=lex.nexttoken();
+                    if(t.isdata())
+                        throw runtime_error("Unexpected additional characters "+t.getdata());
+                }
+                else
+                {
+                    if (startrule.empty()) startrule=rulename;
+                    t=lex.nexttoken();
+                    assertdatatoken(t);
+                    if(t.getdata()==":")
+                        table[rulename].setcmds(readrule(lex));
+                    else if(t.getdata()=="?")
+                        readruleoptions(lex,table[rulename]);
+                    else throw runtime_error("Expected option line or rule definition");
+                }
             }
-         }
-      catch (runtime_error &error)
-         {throw runtime_error(string(error.what()) + " in " + systemname +" rule "+rulename);}
-      t=lex.nexttoken();
-      }
-   thelsystems.push_back(Lsystem(systemname,activerule,table,startrule,expressions));
-   if(t.iseof())
-         return thelsystems;
-   }
+            catch (runtime_error &error)
+            {throw runtime_error(string(error.what()) + " in " + systemname +" rule "+rulename);}
+            t=lex.nexttoken();
+        }
+        thelsystems.push_back(Lsystem(systemname,activerule,table,startrule,expressions));
+        if(t.iseof())
+            return thelsystems;
+    }
 }

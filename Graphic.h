@@ -1,7 +1,6 @@
 #ifndef GRAPHIC_H
 #define GRAPHIC_H
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #ifdef __APPLE__

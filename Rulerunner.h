@@ -36,8 +36,8 @@ class Rulestate
 friend class Rulerunner;
 public:
    Rulestate(Rule * _m, bool _b, double _os, bool _f)
-      :myrule(_m),backwards(_b),oldscale(_os),flipped(_f),
-       mypos(backwards ? myrule->cmds.end() : myrule->cmds.begin())
+      :backwards(_b),flipped(_f),myrule(_m),
+       mypos(backwards ? myrule->cmds.end() : myrule->cmds.begin()),oldscale(_os)
        {}
    
    bool done()
@@ -64,8 +64,8 @@ friend class Pushcmd;
 public:
    Rulerunner(const Lsystem &_l, int _maxdepth, double _minscale, const Consttype & _c)
       :therules(_l.table),maxdepth(_maxdepth),finished(false),
-       startrule(_l.startrule),context(_c,_l.expressions),backwards(false),
-       agraphic(),minscale(_minscale)
+       agraphic(),startrule(_l.startrule),
+       context(_c,_l.expressions),backwards(false),minscale(_minscale)
       {
       for(Ruletable::iterator ii=therules.begin(); ii != therules.end(); ++ii)
          ii->second.cachevalues(context);

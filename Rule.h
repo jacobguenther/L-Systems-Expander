@@ -2,8 +2,8 @@
 #define RULE_H
 
 #include "Lexer.h"
-#include "xboost_shared_ptr.hpp"
-using xboost::shared_ptr;
+#include <memory>
+using std::shared_ptr;
 
 #include <stdexcept>
 using std::logic_error;
@@ -46,3 +46,4 @@ private:
 typedef map<string,Rule> Ruletable;
 
 #endif
+

@@ -1,8 +1,9 @@
 #ifndef TURTLE_H
 #define TURTLE_H
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 #include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
 const double DEG2RAD = M_PI/180;
 
 #include "PointMotion.h"
@@ -10,7 +11,7 @@ const double DEG2RAD = M_PI/180;
 class Turtle
 {
 public:
-   Turtle():position(0,0),flipfac(1),angle(0),scalefac(1){}
+   Turtle():flipfac(1),position(0,0),angle(0),scalefac(1){}
    void flip()
       {
       flipfac*=-1;

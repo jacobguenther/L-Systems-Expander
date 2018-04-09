@@ -1,7 +1,6 @@
 #ifndef PARSENODE_H
 #define PARSENODE_H
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include <stdexcept>
@@ -63,10 +62,10 @@ public:
          case '%': return static_cast<int>(ll) % static_cast<int>(rr);
          case '&': return ll&&rr;
          case '|': return ll||rr;
-         case '=': return ll==rr;
+//         case '=': return ll==rr; //Shouldn't compare doubles with ==
          case 'g': return ll>=rr;
          case 'l': return ll<=rr;
-         case 'n': return ll!=rr;
+//         case 'n': return ll!=rr; //Shouldn't compare doubles with ==
          case '<': return ll<rr;
          case '>': return ll>rr;
          default : throw runtime_error(string("unrecognized binary operator ")+op);
@@ -108,7 +107,7 @@ class Numnode : public Parsenode
 {
 public: 
    Numnode(double _v):val(_v){}
-   double eval(const Context &cc){return val;}
+   double eval(const Context &){return val;}
 private:
    double val;
 };

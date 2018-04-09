@@ -13,18 +13,30 @@
 #include "Cmd.h"
 using std::vector;
 
+
+//All these externs are for avoiding a warning, this should get fixed
+// with anonymous namespaces or static something like that.
+//Globals? Really? 4/8/18 CMH This whole section!!!
+extern int main_menu_id,frac_menu_id,level_menu_id;
 int main_menu_id,frac_menu_id,level_menu_id;
 enum buffer_type {SINGLE, DOUBLE};
+extern buffer_type bufferstate; // For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
 buffer_type bufferstate = DOUBLE; // For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
+extern GLdouble tx,ty,sc,gh; //!!!!"class"ify this
 GLdouble tx=-0.5,ty=0,sc=1,gh=.5; //!!!!"class"ify this
-const int numptsframe=1;
-Rulerunner *globalrunnerptr=0;
+extern Rulerunner *globalrunnerptr;
+Rulerunner *globalrunnerptr=nullptr;
+extern int level;
 int level=1;
 //Rule seg;
 //Ruletable table;
+extern vector<Lsystem> systems;
 vector<Lsystem> systems;
+extern int curfractal;
 int curfractal=-1;
+extern double p1;
 double p1=0;
+extern double thresh;
 double thresh = 0.003;
 const double THRESHMAX=1.0;
 const double THRESHMIN=.0001;
@@ -125,7 +137,7 @@ void handle_main_menu(int value)
 	else if (value==103) readtheconfigfile();
 }
 
-void keyboard(unsigned char dakey, int x, int y)
+void keyboard(unsigned char dakey, int , int )
 {
 const double SCALEAMOUNT = 1.4;
 const double MOVESIZE = .01;
@@ -179,19 +191,20 @@ else switch(dakey) {
    }
 }
 
-void special(int dakey, int x, int y)
-{
+void special(int , int , int )
+{ //!!! remove
 }
 
 void reshape(int w, int h)
 {
-   glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+   glViewport(0, 0, GLsizei (w), GLsizei (h));
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
+    
    if (w <= h) 
-      gluOrtho2D (-0.5, 1.5, -1.0*(GLfloat)h/(GLfloat)w, 1.0*(GLfloat)h/(GLfloat)w);
+      gluOrtho2D (-0.5, 1.5, -1.0*h/w, 1.0*h/w);
    else 
-      gluOrtho2D (-0.5*(GLfloat)w/(GLfloat)h, 1.5*(GLfloat)w/(GLfloat)h, -1.0, 1.0);
+      gluOrtho2D (-0.5*w/h, 1.5*w/h, -1.0, 1.0);
    glMatrixMode(GL_MODELVIEW);
    glutPostRedisplay();
 }
@@ -214,7 +227,7 @@ try
    glutPostRedisplay();
    }
 catch (std::exception &error)
-   {
+   {//!!! Some errors (like can't read config file) are terminal, others we can proceed
    std::cerr << error.what() << std::endl;
    }
 }

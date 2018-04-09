@@ -77,7 +77,7 @@ while(!rulestates.empty() && !agraphic.get())
    }
 if (rulestates.empty() && !agraphic.get())
    finished=true;
-};
+}
 
 void Rulerunner::drawnextpoint()
 {

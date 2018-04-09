@@ -8,9 +8,9 @@ using std::logic_error;
 shared_ptr<Parsenode> Parser::parse()
 {
 Parsenode *val = value();
-if(input.get()==std::char_traits<char>::eof()) return shared_ptr<Parsenode>(val);
+if(input.get()==std::char_traits<char>::eof())
+    return shared_ptr<Parsenode>(val);
 error("Expected end of input"); //throws
-return shared_ptr<Parsenode>(); //this line never executed
 }
 
 void Parser::match(char x)
@@ -149,7 +149,7 @@ if (isdigit(nextchar()) || nextchar()=='.')
    return new Numnode(number());
    
 error("Expected expression"); //throws
-return 0;
+//return 0;
 }
 
 Parsenode* Parser::expr()
@@ -219,7 +219,7 @@ input >> val;
 return val;
 }
 
-void Parser::error(const string &text)
+void Parser::error(const string &text) 
 {
 throw runtime_error(input.str() + "\n" + 
                     string(input.eof() ? input.str().length() : static_cast<int>(input.tellg()),'-') + "^\n" +

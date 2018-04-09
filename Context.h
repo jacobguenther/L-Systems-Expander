@@ -3,11 +3,11 @@
 
 #include <map>
 #include <string>
-#include "xboost_shared_ptr.hpp"
+#include <memory>
+using std::shared_ptr;
 
 using std::map;
 using std::string;
-using xboost::shared_ptr;
 
 class Parsenode;
 
@@ -23,3 +23,4 @@ public:
 };
 
 #endif
+
