@@ -150,7 +150,7 @@ vector<Lsystem> readlsystemfile(const string &configfilename)
         Exprtype expressions;
         
         Token t;
-        while(t=lex.nexttoken(), t.iseol()) ;//get a non EOL token
+        do t=lex.nexttoken(); while (t.iseol());//get a non EOL token
         if(t.iseof()) {
             if (thelsystems.empty()) 
                 throw runtime_error("No L systems in file "+ configfilename);
