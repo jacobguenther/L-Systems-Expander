@@ -3,11 +3,20 @@ set(CMAKE_CXX_STANDARD 17) #Use c++17
 set(CMAKE_CXX_STANDARD_REQUIRED ON) #require the above (otherwise allows fallback to earlier version)
 set(CMAKE_CXX_EXTENSIONS OFF) #Don't use non-standard compiler extensions
 
-set(CMAKE_CXX_FLAGS #turn on all warnings, minus some that are not useful
+#turn on all warnings, minus some that are not useful
+set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Weverything \
     -Wno-padded -Wno-c++98-compat -Wno-weak-vtables -Wno-missing-prototypes \
     -Wno-global-constructors -Wno-deprecated-declarations\
     ")
+
+#explicitly set some warnings that Xcode has flags for
+#(otherwise these are set to Xcode defaults, *after* the above)
+set(CMAKE_CXX_FLAGS
+"${CMAKE_CXX_FLAGS} \
+-Wconversion \
+")
+
 
 project (LSystems)
 set(SOURCES 

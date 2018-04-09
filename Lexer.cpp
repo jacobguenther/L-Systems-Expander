@@ -94,7 +94,7 @@ if (next == '#')              {infile.ignore(9999,'\n'); ; infile.putback('\n');
 if (next == '"')              return NORMQ;
 if (next == std::char_traits<char>::eof()) return DATATOKEN;
 //otherwise
-thetoken.push_back(next);
+thetoken.push_back(char(next));
 return NORMN;
 }
 
@@ -108,7 +108,7 @@ while(1)
    if (next == '"')              return NORMN;
    if (next == '\n')             {infile.putback('\n'); return DATATOKEN;} //throw "newline in string"?!!!
    //otherwise (including #)
-   thetoken.push_back(next);
+   thetoken.push_back(char(next));
    }
 }
 
@@ -124,7 +124,7 @@ while(1)
    if (next == '\n')             {infile.putback('\n'); return DATATOKEN;} //throw "newline in string"?!!!
    if (isspace(next))            return DATATOKEN;
    //otherwise
-   thetoken.push_back(next);
+   thetoken.push_back(char(next));
    }
 }
 
@@ -139,13 +139,13 @@ if (isalpha(next))
    return NORMQ;
    }
 //otherwise
-   thetoken.push_back(next);
+   thetoken.push_back(char(next));
    return NORMQ;
 }
 
 State Lexer::bsn()
 {
-char next = infile.get();
+auto next = infile.get();
 if (next == std::char_traits<char>::eof()) return DATATOKEN;
 if (isspace(next)) return BSSPN;
 if (isalpha(next))
@@ -154,7 +154,7 @@ if (isalpha(next))
    return NORMN;
    }
 //otherwise
-   thetoken.push_back(next);
+   thetoken.push_back(char(next));
    return NORMN;
 }
 

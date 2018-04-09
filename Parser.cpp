@@ -15,7 +15,7 @@ error("Expected end of input"); //throws
 
 void Parser::match(char x)
 {//should never be called unless you KNOW it's going to succeed
-char y=input.get();
+char y=char(input.get()); //!!!Check for EOF? (probably not given precondition) CMH 4/8/18
 if(x!=y)
    throw logic_error(string("Called match(")+x+") but got "+y+"!");
 }
@@ -221,9 +221,10 @@ return val;
 
 void Parser::error(const string &text) 
 {
-throw runtime_error(input.str() + "\n" + 
-                    string(input.eof() ? input.str().length() : static_cast<int>(input.tellg()),'-') + "^\n" +
-                    text);
+    throw runtime_error(input.str() + "\n" +
+        string(input.eof() ?
+               input.str().length() :
+               static_cast<unsigned int>(input.tellg()),'-') + "^\n" + text);
 }
 /*
 value -> boolexpr ternop

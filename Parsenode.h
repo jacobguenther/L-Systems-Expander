@@ -14,6 +14,7 @@ using std::vector;
 
 #include "Context.h"
 #include <iostream>
+//!!! Maybe turn off warnings in this file wrt using double as bool and comparing double ==
 
 class Parsenode
 {
@@ -32,7 +33,7 @@ public:
       :pred(_p),trueval(_t),falseval(_f){}
    double eval(const Context &cc)
       {
-      return pred->eval(cc) ? trueval->eval(cc) : falseval -> eval(cc);
+      return bool(pred->eval(cc)) ? trueval->eval(cc) : falseval->eval(cc);
       }
    ~Ternopnode()
       {
@@ -60,12 +61,12 @@ public:
          case '*': return ll*rr;
          case '/': return ll/rr;
          case '%': return static_cast<int>(ll) % static_cast<int>(rr);
-         case '&': return ll&&rr;
-         case '|': return ll||rr;
-//         case '=': return ll==rr; //Shouldn't compare doubles with ==
+         case '&': return bool(ll)&&bool(rr);
+         case '|': return bool(ll)||bool(rr);
+//         case '=': return ll==rr; // !!! Shouldn't compare doubles with ==
          case 'g': return ll>=rr;
          case 'l': return ll<=rr;
-//         case 'n': return ll!=rr; //Shouldn't compare doubles with ==
+//         case 'n': return ll!=rr; // !!! Shouldn't compare doubles with ==
          case '<': return ll<rr;
          case '>': return ll>rr;
          default : throw runtime_error(string("unrecognized binary operator ")+op);

@@ -1,16 +1,3 @@
-"Matt H Flake"
-    seg : right 90 seg left 180 seg seg right 180 seg left 90 seg seg right 90 seg left 180 seg seg right 180 seg left 90
-    seg ? localscale 1/2
-    
-"Matt Star Flake"
-    star : forward left 144 forward left 144 forward left 144 forward left 144 forward left 144
-    forward : star forward
-    star ? localscale 2/5
-    
-"Matt Diamond Flake"
-    seg : seg right 90 seg right 180 seg seg right 180 seg left 90 seg
-    seg ? localscale 1/2
-
 "Matt Standard Flake"
     seg : seg right 90 seg1 right 180 seg1 seg1 right 180 seg1 left 90 seg
     seg1 : seg

@@ -17,7 +17,7 @@ private:
    istringstream input;
 
    void match(char x);
-   char nextchar(){return input.peek();}
+   char nextchar(){return char(input.peek());} //!!!check for eof?
    double number();
    [[noreturn]] void error(const string &);
    Parsenode* value();

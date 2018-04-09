@@ -26,21 +26,21 @@ extern GLdouble tx,ty,sc,gh; //!!!!"class"ify this
 GLdouble tx=-0.5,ty=0,sc=1,gh=.5; //!!!!"class"ify this
 extern Rulerunner *globalrunnerptr;
 Rulerunner *globalrunnerptr=nullptr;
-extern int level;
-int level=1;
+extern unsigned int level;
+unsigned int level=1;
 //Rule seg;
 //Ruletable table;
 extern vector<Lsystem> systems;
 vector<Lsystem> systems;
 extern int curfractal;
-int curfractal=-1;
+int curfractal=-1; //!!! change to optional
 extern double p1;
 double p1=0;
 extern double thresh;
 double thresh = 0.003;
 const double THRESHMAX=1.0;
 const double THRESHMIN=.0001;
-#define INTERACTIVEDISPLAYSTEPS 5000
+#define INTERACTIVEDISPLAYSTEPS 50000
 
 void readtheconfigfile();
 void display()
@@ -53,7 +53,7 @@ glClear(GL_COLOR_BUFFER_BIT);
 delete globalrunnerptr;
 vars["p1"]=p1;
 if(curfractal != -1)
-   globalrunnerptr = new Rulerunner(systems[curfractal],level,thresh,vars);
+   globalrunnerptr = new Rulerunner(systems[size_t(curfractal)],level,thresh,vars);
 if (bufferstate == DOUBLE) 
    {
    int steps=0;
@@ -63,7 +63,7 @@ if (bufferstate == DOUBLE)
    }
 else
   glFlush();
-if (int jj=glGetError()) std::cerr << gluErrorString(jj) << std::endl;
+if (auto jj=glGetError()) std::cerr << gluErrorString(jj) << std::endl;
 }
 
 void idle()
@@ -90,7 +90,7 @@ void init()
 void change_window_title()
 {
 	std::ostringstream os1;
-	os1 << "L' Systems Fractal: " << systems[curfractal].getname()
+	os1 << "L' Systems Fractal: " << systems[size_t(curfractal)].getname()
 	    << " Level: " << level;
 
 glutSetWindowTitle(os1.str().c_str());
@@ -101,7 +101,7 @@ void change_main_menu(void)
 	glutSetMenu(main_menu_id);
 
 	std::ostringstream os1;
-	os1 << "Fractal: " << systems[curfractal].getname();
+	os1 << "Fractal: " << systems[size_t(curfractal)].getname();
 	glutChangeToMenuEntry(1, os1.str().c_str(),101); // Use symbolic constants!!
 
 	std::ostringstream os2;
@@ -109,14 +109,14 @@ void change_main_menu(void)
 	glutChangeToMenuEntry(2, os2.str().c_str(),102);
 }
 
-void adjust_level(int newlevel)
+void adjust_level(unsigned int newlevel)
 {
 level=newlevel;
 change_window_title();
 glutPostRedisplay();
 }
 
-void handle_level_menu(int value)
+void handle_level_menu(unsigned int value)
 {
 adjust_level(value);
 }
@@ -139,21 +139,21 @@ void handle_main_menu(int value)
 
 void keyboard(unsigned char dakey, int , int )
 {
-const double SCALEAMOUNT = 1.4;
+const GLdouble SCALEAMOUNT = 1.4;
 const double MOVESIZE = .01;
 if( dakey >= '0' && dakey <= '9') adjust_level(dakey-'0');
 else switch(dakey) {
    case 27: exit(0);
    case '=':
       glTranslated(-tx,-ty,0);
-      glScalef(SCALEAMOUNT,SCALEAMOUNT,1);
+      glScaled(SCALEAMOUNT,SCALEAMOUNT,1);
       sc *= SCALEAMOUNT;
       glTranslated(tx,ty,0);    
       glutPostRedisplay();
       break;  
    case '-':
       glTranslated(-tx,-ty,0);
-      glScalef(1.0/SCALEAMOUNT,1.0/SCALEAMOUNT,1);
+      glScaled(1.0/SCALEAMOUNT,1.0/SCALEAMOUNT,1);
       sc /= SCALEAMOUNT;
       glTranslated(tx,ty,0);    
       glutPostRedisplay();
@@ -219,7 +219,7 @@ try
       {
       if (systems[ii].isactive())
          {
-         curfractal=ii;
+         curfractal=int(ii);
          break;
          }
       }
@@ -256,7 +256,7 @@ glutAddMenuEntry("Reread config file",103); // Fractal, set up by change_main_me
 //glutAddMenuEntry("---------------------------",103);
 for(unsigned int ii=0;ii<systems.size();++ii)
 	if(systems[ii].isactive()) 
-	   glutAddMenuEntry(systems[ii].getname().c_str(),ii);
+	   glutAddMenuEntry(systems[ii].getname().c_str(),int(ii));
 glutAttachMenu(GLUT_RIGHT_BUTTON);
 // change_main_menu();
 handle_frac_menu(0);
