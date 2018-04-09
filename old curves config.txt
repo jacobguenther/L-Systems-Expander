@@ -1,0 +1,64 @@
+niner
+	a : a left 120 |a right 120 a left 120 |a right 120 a right 60 \
+		|a right 120 a left 120 |a left 60 \
+		a 
+	a ? localscale 1/3 drawmethod midpoint
+
+
+sevener2
+	$sm2 = asind(sqrt(3)/(2*sqrt(7)))
+	$tilang = 120-$sm2
+	start : e
+	e : a left 120 a left 120 a left 120
+	d : [ a ] left 60 \
+		[ a ] left 60 \
+		[ a ] left 60 \
+		[ a ] left 60 \
+		[ a ] left 60 \
+		[ a ] left 60 
+	c : [ a ] left $tilang invis@ 1/sqrt(7) right $tilang-60*p1 a
+	a : left 120-$sm2 a \
+		right 120 a \
+		a \
+		right 120 a \
+		left 120 a \
+		a \
+		left 120 a \
+		right 120-$sm2
+	a ? localscale 1/sqrt(7) drawmethod midpoint
+	b : [ a ] left 120 [ a ] left 120 [ a ] left 120
+	invis ? drawmethod invisible
+	invis : invis 
+	
+sevener
+	$sm  = asind(1/(2*sqrt(7)))
+	$sm2 = asind(sqrt(3)/(2*sqrt(7)))
+	a : | left 90+$sm a \
+		right 90+$sm-$sm2 |a \
+		right 90+$sm2-$sm a \
+	    left 2*$sm2 |a \
+	    right 2*$sm2 a \
+	    left 90+$sm2-$sm |a \
+	    left 90+$sm-$sm2 a \
+	    right 90+$sm |
+	a ? localscale 1/sqrt(7)
+	    
+13.1
+	$sm = atand(sqrt(3)/7)
+	a : right small \
+		left 180 a \
+		right 120 a \
+		a \
+		right 120 a \
+		left 120 a \
+		right 120 a \
+		a \
+		a \
+		left 120 a \
+		right 120 a \
+		left 120 a \
+		a \
+		left 120 a \
+		right 180 left small
+		
+	 

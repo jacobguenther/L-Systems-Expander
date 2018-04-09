@@ -1,0 +1,122 @@
+--------------------------------------------
+General
+--------------------------------------------
+can we make a C++ base class for glut programs? And/or CAVE programs?
+
+How about a camera zoom class based on transvecpos.hpp?
+
+dont forget curve inside penrose tilings
+
+Use this projects parser, context, etc. as master versions
+
+--------------------------------------------
+Efficiency
+--------------------------------------------
+Rulerunner's map of strings (Rulenames) to Cmdconts should be replaced by
+a bunch of pointers, but then the RuleCmds in that container need to contain
+these pointers, not strings. This is a new thing the Lsystem should hold,
+it can be created at syntax check time.
+
+Would it help to make the "top" turtle a member directly? (ie, is stack.top()
+inefficient?)
+
+How bad is the autoptr to Graphic stuff? We could go back to a regular pointer
+(although I don't know where the memory leak was) or we could replace a lot of
+the .get() calls if we keep a boolean to say whether we have a graphic yet.
+--------------------------------------------
+Graphics
+--------------------------------------------
+handling point streams (which could create other point streams)
+(ie, midpoints of all segments, cutting corners, ...)
+within turtle class, rulerunner class, or seperately
+similarly, will the points list ever have more than one point in it?
+
+rulerunner needs to return draw primitives (ie, segment, etc.) but then
+we need some way to combine them for efficiency. Or do we?
+
+the whole makeapoint, nextpoint thing could be redone in a different way. Should it?
+It's really a point (ah, well, ..., Motion) stream. 
+
+Midpoint graphic class isn't stable w/ respect to haveapt being reset. Actually, I don't
+think this class works generally at all.
+
+--------------------------------------------
+Header file correctness
+--------------------------------------------
+check const correctness everywhere
+
+typdef all containers
+
+include guards
+
+rationalize headers into smaller parts, who needs what?
+and make ALL functions go into .cpp files
+
+.h files should include only needed header files, forward declaring when necessary
+
+address virtual constructor issue. EH? What the heck did I mean. Desctructor, maybe?
+
+version number and date all files
+copyright notice
+
+--------------------------------------------
+Things to do
+--------------------------------------------
+when and how to set things like maxdepth or threshold cutoff. I guess in the rulerunner
+constructor?
+
+Check a system after reading it to be sure all rules it refers to exist. Similarly
+with variables.
+
+rectgraphic
+
+lexer needs a getdatatoken() routine
+
+lexer needs a little help with comment lines. Seems that 
+	1) a commented out \ is still not an end of line
+	2) lines with nothing but whitespace and then a comment shouldn't get eol after comment
+This should be solved by Haskell style layout rules.
+
+Need starting position for turtle. Starting size, too?
+
+info and startrule are wierd. Info needs to be a system option, and startrule looks like a
+rule option but is really a system option. Should also have a way to display the info.
+
+starting fractal is always first one in file, even if inactive.
+
+Add ways to interactivly
+	reload the config file
+	make systems inactive or active
+	Set drawmethod to or from midpoint
+	Use alternate starting rule
+
+midpoint drawmethod a property of the whole system? Yes, I believe so.
+
+rule option list should just put stuff in a map, and cache for efficiency some values.
+Could a Context go back to being just var->double map? I think so. So do syntax 
+checking (warnings for rule names that are otherwise reserved (midpoint, drawmethod, etc.))
+and this as you read the L-system (or just after, I guess).
+Things that don't pass syntax check or otherwise throw while reading should just not
+be put in the list...
+See Efficiency above.
+
+invis standard rule?
+
+How should a context be passed to a rulerunner. By value seems to be inefficient
+(copying the whole thing) but by const reference is dangerous unless the user is
+careful to not invalidate the context... (Or is it the Context itself that should
+be careful to take it's Consttype and Exprtype parts by value?) Given the fact that
+we're cacheing values, we can probably pass by const reference, since we never use
+it after constructor time!
+
+:: or % to implement rule that doesn't increment depth count
+--------------------------------------------
+Discuss with Glenn
+--------------------------------------------
+Animation and/or double buffering?
+--------------------------------------------
+
+
+
+
+crashes (seg fault) if run with no config file

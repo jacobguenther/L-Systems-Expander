@@ -1,0 +1,153 @@
+huh
+	a : left 30 |a 1/sqrt(3) |~a 1/sqrt(3) right 120 |a 1/sqrt(3) left 90
+	s : [ a 1 ] \
+	    left 60 [ a 1 ] \
+	    left 60 [ a 1 ] \
+	    left 60 [ a 1 ] \
+	    left 60 [ a 1 ] \
+	    left 60 [ a 1 ]
+	#a ? drawmethod midpoint
+	
+huh2
+	a : left 30 |a 1/sqrt(3) ~a 1/sqrt(3) right 120 |a 1/sqrt(3) left 90
+	#a ? drawmethod midpoint
+
+"Sierpinkski curve"
+	a : a 1 left 90 a 1 right 180 a 1 left 90 a 1
+	a ? localscale 1/2
+	#a ? drawmethod midpoint
+
+Tromino #63.43... is acos(sqrt(5)/2)
+	s : lc 1
+	start : right 90 invis .8 left 90 \
+			line 1 left 90 line 1 left 90 line 1/2 left 90 line 1/2 right 90 line 1/2 \
+			left 90 line 1/2 left 90 startlc 1
+    startlt : left 63.43494882 lt sqrt(5)/2
+    startlm : left 45 lm 1/sqrt(2)
+    startlc : lc 1
+    startll : left 45 ll sqrt(2)
+    startct : invis 1 left 180-63.43494882 ct sqrt(5)/2
+	ll : right 45 ~|lc 1/(2*sqrt(2)) \
+	     left 45 lm 1/4 \
+	     left 135-63.43494882 ct sqrt(5/32) \
+	     right 90 ~ct sqrt(5/32) left 63.43494882-45
+	tt : right 90 ll 1 left 90 lm 1/2 left 45 ~|lc 1/sqrt(2) left 45 ~|lm  1/2 right 90
+	ct : left 63.43494882 ~lc 1/sqrt(5) \
+		 right 63.43494882 |lt 1/2 \
+		 right 90 ~|lt 1/2 \
+		 left 63.43494882+45 ~|lm 1/sqrt(10) right 63.43494882-45
+	lm : right 45 ~|lc sqrt(2)/2 left 45 ll 1 left 90 lm 1/2 left 90 |lm 1/2 right 180
+	lc : left 63.43494882 |ct sqrt(5)/4 \
+	     right 63.43494882-45 tt sqrt(2)/4 \
+	     right 135-63.43494882 ~lt sqrt(5)/4 \
+	     right 63.43494882 |lc 1/2 left 90	     
+	lt : right 63.43494882 ~|lc 1/sqrt(5) \
+		 left 45 lm 1/sqrt(10) \ 
+		 left 45 ~|lc 1/sqrt(5) \
+		 left 45 ~|lm 1/sqrt(10) right 135-63.43494882
+	line : line 1
+	invis : invis 1
+	invis ? drawmethod invisible
+	#ll ? drawmetdrawmethodhod midpoint
+	#tt ?  midpoint
+	#ct ? drawmethod midpoint
+	#lm ? drawmethod midpoint
+	#lc ? drawmethod midpoint
+	#lt ? drawmethod midpoint
+
+"Tree test"
+	start : left 90 A 1
+	A : [ left 49 B 1 ] [ right 68 B 1 ] B 1 A 1/2
+	B : B 1
+
+"Less elegant Menger sponge"
+	A : A 1/3 A     1/3 A 1/3 left 90 invis 1/3 left 90 \
+	  | A 1/3 invis 1/3 A 1/3 left 90 invis 1/3 left 90 \
+	  | A 1/3 A     1/3 A 1/3 right 90 invis 2/3 left 90
+	invis : invis 1
+	invis ? drawmethod invisible
+	#A ? drawmethod midpoint
+	
+"Menger sponge"
+	A : B 1/3 left 90 A 1/3 A 1/3 A 1/3 right 90 |A 1/3 right 90 \
+	    A 1/3 A 1/3 A 1/3 right 90 |A 1/3 right 180 B 2/3
+    B : B 1
+    B ? drawmethod invisible
+   
+"twisty with reverse"
+	A : left  30 ~A 1/sqrt(3) A 1/sqrt(3) right 120 A 1/sqrt(3) left 90
+	#A ? drawmethod midpoint
+	
+"Hartman Isle"
+	B : A 1 right 120 A 1 right 120 A 1 right 120
+	A : left  30 ~A 1/sqrt(3) A 1/sqrt(3) right 120 A 1/sqrt(3) left 90
+	#A ? drawmethod midpoint
+
+"twisty using two rules and no reverse"
+	A : left  30 B 1/sqrt(3) A 1/sqrt(3) right 120 A 1/sqrt(3) left 90 
+	B : right 90 B 1/sqrt(3) left 120 B 1/sqrt(3)  A 1/sqrt(3) right 30 
+
+"Sierpinski gasket"
+	A : left $ang ~A $cosang right $ang A 1-2*$cosang*$cosang right $ang ~A $cosang left $ang
+	$ang = (p1*45+45)
+	$cosang = cosd($ang)
+	#A ? drawmethod midpoint 
+
+"\"Flipped\" Sierpinski gasket"
+	A : | left 60 ~A 1/2 right 60 A 1/2 right 60 ~A 1/2 left 60 |
+
+Terdragon
+	A : left 30 A 1/sqrt(3) right 120 A 1/sqrt(3) left 120 A 1/sqrt(3) right 30 
+
+Terdragon*3
+	B : A 1 right 120 A 1 right 120 A 1
+	A : left 30 A 1/sqrt(3) right 120 A 1/sqrt(3) left 120 A 1/sqrt(3) right 30 
+
+"Terdragon with midpoints"
+	A : left 30 A 1/sqrt(3) right 120 A 1/sqrt(3) left 120 A 1/sqrt(3) right 30 
+	A ? drawmethod midpoint
+
+"Terdragon with midpoints *3"
+	B : A 1 right 120 A 1 right 120 A 1
+	A : left 30 A 1/sqrt(3) right 120 A 1/sqrt(3) left 120 A 1/sqrt(3) right 30 
+	A ? drawmethod midpoint
+
+
+Neat
+	A : left 30 | ~A 1/sqrt(3) | right 120 A 1/sqrt(3) left 120 | ~A 1/sqrt(3) | right 30 
+
+"Neat with midpoints"
+	A : left 30 | ~A 1/sqrt(3) | right 120 A 1/sqrt(3) left 120 | ~A 1/sqrt(3) | right 30 
+	A ? drawmethod midpoint
+
+"Koch curve"
+    seg : seg 1/3 left 60 seg 1/3 right 120 seg 1/3 left 60 seg 1/3
+
+"Koch 8 segment curve"
+	A :          A 1/4 \
+		left  90 A 1/4 \
+		right 90 A 1/4 \
+ 		right 90 A 1/4 A 1/4 \
+		left  90 A 1/4 \
+		left  90 A 1/4 \
+		right 90 A 1/4
+	# A ? localscale 1/4
+
+"dragon with midpoints"
+	A : left 45 A 1/sqrt(2) right 90 ~A 1/sqrt(2) left 45
+	A ? drawmethod midpoint
+
+dragon
+	A : left 45 A 1/sqrt(2) right 90 ~A 1/sqrt(2) left 45
+
+"Hilbert curve"
+    seg : left 90 | seg 1/2 | right 90 seg 1/2 seg 1/2 right 90 | seg 1/2 | left 90
+    seg ? drawmethod normal dropangle 45 dropdistance 1/sqrt(2)
+
+"tree"
+	start : left 90 seg 1
+    seg : localscale 1/2 trunk 1 [ left 30 seg 1 ] seg 1
+    seg ? drawmethod normal # color green
+    trunk : trunk 1
+    trunk ? drawmethod rectangle # color brown
+    seg ? info "This is a tree designed by Chris Hartman on 4/16/03"
