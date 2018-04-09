@@ -6,6 +6,10 @@
 
 using std::string;
 using std::isspace;
+
+//!!! Should Lexer us char or int? ifstream.get() returns int (for EOF)
+// but ifstream.get(c) takes char &. (What happens if that gets the ASCII 255 char?)
+// probably char is correct, and always test ifstream for failure after a get.
 /*
 The Lexer module implements the following:
 Tokens are EOL (end of line), EOF (end of file) and DATA (any other
@@ -65,26 +69,26 @@ if (next == '"')   return NORMQ;
 if (next == '\n')  return EOLTOKEN;
 if (next == std::char_traits<char>::eof()) return EOFTOKEN;
 //otherwise
-infile.putback(next); 
+infile.putback(char(next));
 return NORMN;
 }
 
 State Lexer::bsspq()
 {
-char next = infile.get();
-while(isspace(next)) infile.get(next);
+auto next = infile.get();
+while(isspace(next)) next = infile.get();
 if (next == '\\')             return BSQ;
 if (next == '"')              return NORMN;
 if (next == std::char_traits<char>::eof()) return DATATOKEN;
 //otherwise (including #)
-thetoken.push_back(next);
+thetoken.push_back(char(next));
 return NORMQ;
 }
 
 State Lexer::bsspn()
 {
-char next = infile.get();
-while(isspace(next)) infile.get(next);
+auto next = infile.get();
+while(isspace(next)) next = infile.get();
 if (next == '\\')             return BSN;
 if (next == '#')              {infile.ignore(9999,'\n'); ; infile.putback('\n'); return DATATOKEN;}
 if (next == '"')              return NORMQ;
