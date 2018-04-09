@@ -13,7 +13,7 @@ public:
    Token nexttoken();
    
 private:
-   void escapedalpha(char);
+   void escapedalpha(int);
    State iws();
    State bsn();
    State bsq();

@@ -45,7 +45,7 @@ States:
    DATATOKEN - final state, return built up DATA token
 */
 
-void Lexer::escapedalpha(char next)
+void Lexer::escapedalpha(int next)
 {
    switch(next)
       {
@@ -57,7 +57,7 @@ void Lexer::escapedalpha(char next)
 
 State Lexer::iws()
 {
-char next = infile.get();
+auto next = infile.get();
 while(isspace(next) && next != '\n') next = infile.get();
 if (next == '\\')  return BSN;
 if (next == '#')   {infile.ignore(9999,'\n'); return EOLTOKEN;}
@@ -98,7 +98,7 @@ State Lexer::normq()
 {
 while(1)
    {
-   char next = infile.get();
+   auto next = infile.get();
    if (next == std::char_traits<char>::eof()) return DATATOKEN;
    if (next == '\\')             return BSQ;
    if (next == '"')              return NORMN;
@@ -112,7 +112,7 @@ State Lexer::normn()
 {
 while(1)
    {
-   char next = infile.get();
+   auto next = infile.get();
    if (next == std::char_traits<char>::eof()) return DATATOKEN;
    if (next == '\\')             return BSN;
    if (next == '#')              {infile.ignore(9999,'\n'); infile.putback('\n'); return DATATOKEN;}
@@ -126,7 +126,7 @@ while(1)
 
 State Lexer::bsq()
 {
-char next = infile.get();
+auto next = infile.get();
 if (next == std::char_traits<char>::eof()) return DATATOKEN;
 if (isspace(next)) return BSSPQ;
 if (isalpha(next))
