@@ -161,10 +161,6 @@ else switch(dakey) {
    }
 }
 
-void special(int , int , int )
-{ //!!! remove
-}
-
 void reshape(int w, int h)
 {
    glViewport(0, 0, GLsizei (w), GLsizei (h));
@@ -219,7 +215,6 @@ try {
     init();
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
-    glutSpecialFunc(special);
     glutReshapeFunc(reshape);
     main_menu_id = glutCreateMenu(handle_main_menu);
     readtheconfigfile();
