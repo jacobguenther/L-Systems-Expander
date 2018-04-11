@@ -5,6 +5,8 @@
 #endif
 
 #include <iostream>
+using std::cout;
+using std::endl;
 #include <sstream>
 #include "Rulerunner.h"
 #include "Lsystem.h"
@@ -203,34 +205,37 @@ catch (std::exception &error)
 }
 int main(int argc, char** argv)
 try {
-glutInit(&argc, argv);
-glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-	// Technically, our window is always double-buffered.
-	// To simulate single buffering, we draw into the front buffer,
-	// and don't swap.
-glutInitWindowSize (801, 801); 
-glutInitWindowPosition (100, 100);
-glutCreateWindow ("L' Systems ");
-init();
-glutDisplayFunc(display);
-glutKeyboardFunc(keyboard);
-glutSpecialFunc(special);
-glutReshapeFunc(reshape);
-main_menu_id = glutCreateMenu(handle_main_menu);
-readtheconfigfile();
-glutAddMenuEntry("Reread config file",103); // Fractal, set up by change_main_menu
-
-//glutAddMenuEntry("",101); // Fractal, set up by change_main_menu
-//glutAddMenuEntry("",102); // Level, set up by change_main_menu
-//glutAddMenuEntry("---------------------------",103);
-for(unsigned int ii=0;ii<systems.size();++ii)
-	if(systems[ii].isactive()) 
-	   glutAddMenuEntry(systems[ii].getname().c_str(),int(ii));
-glutAttachMenu(GLUT_RIGHT_BUTTON);
-// change_main_menu();
-handle_frac_menu(0);
-glutIdleFunc(idle);
-glutMainLoop();
-return 0;
+    cout << "Use <, > (no shift necessary) to change fractal level." << endl;
+    cout << "Use i,j,k,l to translate. Use u and y to change parameter." << endl;
+    cout << "Use [ and ] to change threshold for dynamic level drawing." << endl;
+    glutInit(&argc, argv);
+    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
+    // Technically, our window is always double-buffered.
+    // To simulate single buffering, we draw into the front buffer,
+    // and don't swap.
+    glutInitWindowSize (801, 801); 
+    glutInitWindowPosition (100, 100);
+    glutCreateWindow ("L' Systems ");
+    init();
+    glutDisplayFunc(display);
+    glutKeyboardFunc(keyboard);
+    glutSpecialFunc(special);
+    glutReshapeFunc(reshape);
+    main_menu_id = glutCreateMenu(handle_main_menu);
+    readtheconfigfile();
+    glutAddMenuEntry("Reread config file",103); // Fractal, set up by change_main_menu
+    
+    //glutAddMenuEntry("",101); // Fractal, set up by change_main_menu
+    //glutAddMenuEntry("",102); // Level, set up by change_main_menu
+    //glutAddMenuEntry("---------------------------",103);
+    for(unsigned int ii=0;ii<systems.size();++ii)
+    if(systems[ii].isactive()) 
+    glutAddMenuEntry(systems[ii].getname().c_str(),int(ii));
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+    // change_main_menu();
+    handle_frac_menu(0);
+    glutIdleFunc(idle);
+    glutMainLoop();
+    return 0;
 }
 catch (std::exception &error) {std::cerr << error.what() << std::endl;}
