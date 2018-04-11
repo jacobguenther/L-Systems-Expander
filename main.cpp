@@ -18,6 +18,7 @@ using std::vector;
 
 namespace {
 
+unsigned int TIMERMSECS = 1000/60;
 int main_menu_id;
 enum buffer_type {SINGLE, DOUBLE};
 buffer_type bufferstate = DOUBLE;
@@ -56,8 +57,9 @@ void display()
         std::cerr << gluErrorString(jj) << endl;
 }
 
-void idle()
+void idle(int)
 {
+    glutTimerFunc(TIMERMSECS, idle, 0);
     glDrawBuffer(GL_FRONT);
     if(!globalrunnerptr || globalrunnerptr->done())
         return;
@@ -257,7 +259,7 @@ int main(int argc, char** argv)
         glutAttachMenu(GLUT_RIGHT_BUTTON);
         
         handle_frac_menu(0);
-        glutIdleFunc(idle);
+        glutTimerFunc(TIMERMSECS, idle, 0);
         glutMainLoop();
         return 0;
     }
