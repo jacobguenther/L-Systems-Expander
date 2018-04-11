@@ -1,35 +1,37 @@
+#include <iostream>
+using std::cout;
+using std::endl;
+#include <vector>
+using std::vector;
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
 
-#include <iostream>
-using std::cout;
-using std::endl;
 #include <sstream>
 #include "Rulerunner.h"
 #include "Lsystem.h"
 #include "Context.h"
-#include <vector>
 #include "Cmd.h"
-using std::vector;
 
 namespace {
 
 int main_menu_id;
 enum buffer_type {SINGLE, DOUBLE};
-buffer_type bufferstate = DOUBLE; // For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
+buffer_type bufferstate = DOUBLE;
+// For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
 GLdouble tx=-0.5,ty=0,sc=1; //!!!!"class"ify this
 Rulerunner *globalrunnerptr=nullptr;
 unsigned int level=1;
 vector<Lsystem> systems;
-int curfractal=-1; //!!! change to optional
+int curfractal=-1; //!!! change to optional or add a bool haveCurrentFractal
 double p1=0;
 double thresh = 0.003;
 const double THRESHMAX=1.0;
 const double THRESHMIN=.0001;
-#define INTERACTIVEDISPLAYSTEPS 50000
+#define INTERACTIVEDISPLAYSTEPS 500000
 
 void display()
 {
@@ -50,7 +52,8 @@ void display()
     }
     else
         glFlush();
-    while (auto jj=glGetError()) std::cerr << gluErrorString(jj) << std::endl;
+    while (auto jj=glGetError())
+        std::cerr << gluErrorString(jj) << endl;
 }
 
 void idle()
@@ -231,6 +234,7 @@ int main(int argc, char** argv)
         cout << "Use <, > (no shift necessary) to change fractal level." << endl;
         cout << "Use i,j,k,l to translate. Use u and y to change parameter." << endl;
         cout << "Use [ and ] to change threshold for dynamic level drawing." << endl;
+        cout << "Use u and v to change parameter for paramerized fractals." << endl;
         glutInit(&argc, argv);
         glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
         // Technically, our window is always double-buffered.
@@ -258,6 +262,6 @@ int main(int argc, char** argv)
         return 0;
     }
     catch (std::exception &error) {
-        std::cerr << error.what() << std::endl;
+        std::cerr << error.what() << endl;
     }
 }
