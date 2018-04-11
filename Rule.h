@@ -1,21 +1,18 @@
 #ifndef RULE_H
 #define RULE_H
 
-#include "Lexer.h"
 #include <memory>
 using std::shared_ptr;
-
 #include <stdexcept>
 using std::logic_error;
-
-//#include "Cmd.h"
-class Cmd;
 #include <list>
 using std::list;
 
-typedef list<shared_ptr<Cmd> > Cmdcont;
-
+#include "Lexer.h"
+class Cmd;
 #include "Parser.h"
+
+typedef list<shared_ptr<Cmd> > Cmdcont;
 
 class Rule
 {
