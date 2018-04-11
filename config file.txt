@@ -1,44 +1,3 @@
-"Matt Standard Flake"
-    seg : seg right 90 seg1 right 180 seg1 seg1 right 180 seg1 left 90 seg
-    seg1 : seg
-    seg ? localscale 1/2
-    seg1 ? localscale 2/3
-
-cubeslawlor
-        a : left 60 a right 120 a left 60 a left 120 a left 60 a left 120 a right 60 a left 120 a left 60 a right 60 a
-        a ? localscale 1/3
- 
-"Littlehouses Webb"
-    a : a left 90 a right 45 a right 90 a right 45 a left 90 a
-    a ? localscale 1/(2+sqrt(2))
-
-"Growingspinyspiral Webb"
-B : B right 90 B right 90 
-A : B left 30 A right 120 A left 120 B right 30 
-A ? localscale 1/sqrt(3)
-
-# somewhat like a fancy koch curve
-# dimension: 4*(1/(sqrt(2)/2+2))^d + 2*((1/(sqrt(2)/2+2)/2)^d = 1 => d=1.2807
-templelawlor
-        a : a left 90 a right 45 a@ 0.5 right 90 a@ 0.5 right 45 a left 90 a
-        a ? localscale 1/(sqrt(2)/2+2)
-
-"mean - Ben Hartman"
-    a : left 15 a ~a a left 90 a left 90 a right 30 a left 90 a left 90 a ~a a left 15
-    a ? localscale 1/sqrt(11)
-
-"Repeditive Triangle Curly - Ben Hartman"
-    a : a left 60 a left 60 a left 120 a right 120 a right 120 a left 120 a right 120
-    a ? localscale 1/sqrt(7)
-
-DenJack1
-    A : A left 90 A right 90 A right 90 A@ 2 left 90 A left 90 A right 90 A
-    A ? localscale 1/4
-
-DenJack2
-    A : right 90 |A left 90 A A left 90 A left 90 A right 90 A right 90 A A right 90 |A left 90
-    A ? localscale 1/3
-
 AltTerdragon2-p
     $a = 180*p1
     $len1 = 2/3*sind($a/2)
@@ -70,7 +29,6 @@ bisquare
 	a ? localscale 1/3 drawmethod drop dropdistance sqrt(2)/2 dropangle 45
 	b : left 90 |b@ 2 right 90 a a a right 90 |a ~a left 90
 	b ? localscale 1/3 drawmethod drop dropdistance sqrt(2)/4 dropangle 45
-
 
 Terdragon
 	A : left 30 A right 120 A left 120 A right 30
@@ -281,7 +239,7 @@ Goodmidpt inactive
 	a ? localscale 1/2 drawmethod midpoint 
 	#s : a left 120 a left 120 a left 120
 
-Good inactive
+Good
 	a : left 60 a right 120 a a left 120 a right 60
 	a ? localscale 1/2
 	#s : a left 120 a left 120 a left 120
@@ -549,5 +507,6 @@ Hilbert2
 	A : left 90 B forward right 90 A forward A right 90 forward B left 90
     B : right 90 A forward left 90 B forward B left 90 forward A right 90
     A ? localscale 1/2
-    B ? localscale 1/2
+    B ? localscale 1/1
+    forward ? localscale 2
 
