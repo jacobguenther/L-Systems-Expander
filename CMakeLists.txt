@@ -3,6 +3,29 @@ set(CMAKE_CXX_STANDARD 17) #Use c++17
 set(CMAKE_CXX_STANDARD_REQUIRED ON) #require the above (otherwise allows fallback to earlier version)
 set(CMAKE_CXX_EXTENSIONS OFF) #Don't use non-standard compiler extensions
 
+project (LSystems)
+set(SOURCES
+Cmd.h
+Context.h
+Graphic.cpp
+Graphic.h
+Lexer.cpp
+Lexer.h
+Lsystem.cpp
+Lsystem.h
+Parsenode.h
+Parser.cpp
+Parser.h
+PointMotion.h
+Rule.cpp
+Rule.h
+Rulerunner.cpp
+Rulerunner.h
+Token.h
+Turtle.h
+main.cpp
+)
+
 #turn on all warnings, minus some that are not useful
 set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Weverything \
@@ -10,38 +33,16 @@ set(CMAKE_CXX_FLAGS
     -Wno-global-constructors -Wno-exit-time-destructors -Wno-deprecated-declarations \
     ")
 
-#explicitly set some warnings that Xcode has flags for
-#(otherwise these are set to Xcode defaults, *after* the above)
+#explicitly set/clear some warnings that Xcode has flags for
+#(otherwise these are set to Xcode defaults, despite -Weverything, etc.)
+#This list is probably actually longer, these are just the ones I have caught by
+#using Unix Makefiles as well as Xcode
 set(CMAKE_CXX_FLAGS
-"${CMAKE_CXX_FLAGS} \
--Wconversion -Wcomma\
+"${CMAKE_CXX_FLAGS} -Wconversion -Wcomma \
 ")
 
-project (LSystems)
-set(SOURCES 
-    Cmd.h
-    Context.h
-    Graphic.cpp
-    Graphic.h
-    Lexer.cpp
-    Lexer.h
-    Lsystem.cpp
-    Lsystem.h
-    Parsenode.h
-    Parser.cpp
-    Parser.h
-    PointMotion.h
-    Rule.cpp
-    Rule.h
-    Rulerunner.cpp
-    Rulerunner.h
-    Token.h
-    Turtle.h
-    main.cpp
-    )
 
 add_executable(lsystems ${SOURCES} "config file.txt")
-message ("${EXECUTABLE_OUTPUT_PATH}/config\ file.txt")
 configure_file("config file.txt" "config file.txt" COPYONLY)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
