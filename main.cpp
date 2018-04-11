@@ -13,30 +13,17 @@
 #include "Cmd.h"
 using std::vector;
 
+namespace {
 
-//All these externs are for avoiding a warning, this should get fixed
-// with anonymous namespaces or static something like that.
-//Globals? Really? 4/8/18 CMH This whole section!!!
-extern int main_menu_id,frac_menu_id,level_menu_id;
-int main_menu_id,frac_menu_id,level_menu_id;
+int main_menu_id;
 enum buffer_type {SINGLE, DOUBLE};
-extern buffer_type bufferstate; // For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
 buffer_type bufferstate = DOUBLE; // For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
-extern GLdouble tx,ty,sc,gh; //!!!!"class"ify this
-GLdouble tx=-0.5,ty=0,sc=1,gh=.5; //!!!!"class"ify this
-extern Rulerunner *globalrunnerptr;
+GLdouble tx=-0.5,ty=0,sc=1; //!!!!"class"ify this
 Rulerunner *globalrunnerptr=nullptr;
-extern unsigned int level;
 unsigned int level=1;
-//Rule seg;
-//Ruletable table;
-extern vector<Lsystem> systems;
 vector<Lsystem> systems;
-extern int curfractal;
 int curfractal=-1; //!!! change to optional
-extern double p1;
 double p1=0;
-extern double thresh;
 double thresh = 0.003;
 const double THRESHMAX=1.0;
 const double THRESHMIN=.0001;
@@ -63,7 +50,7 @@ if (bufferstate == DOUBLE)
    }
 else
   glFlush();
-if (auto jj=glGetError()) std::cerr << gluErrorString(jj) << std::endl;
+while (auto jj=glGetError()) std::cerr << gluErrorString(jj) << std::endl;
 }
 
 void idle()
@@ -96,19 +83,6 @@ void change_window_title()
 glutSetWindowTitle(os1.str().c_str());
 }
 
-void change_main_menu(void)
-{
-	glutSetMenu(main_menu_id);
-
-	std::ostringstream os1;
-	os1 << "Fractal: " << systems[size_t(curfractal)].getname();
-	glutChangeToMenuEntry(1, os1.str().c_str(),101); // Use symbolic constants!!
-
-	std::ostringstream os2;
-	os2 << "Level: " << level;
-	glutChangeToMenuEntry(2, os2.str().c_str(),102);
-}
-
 void adjust_level(unsigned int newlevel)
 {
 level=newlevel;
@@ -116,16 +90,10 @@ change_window_title();
 glutPostRedisplay();
 }
 
-void handle_level_menu(unsigned int value)
-{
-adjust_level(value);
-}
-
 void handle_frac_menu(int value)
 {
 curfractal = value;
 adjust_level(0);
-// change_main_menu(); // Called by adjust_level()
 glutPostRedisplay();
 }
 
@@ -232,6 +200,7 @@ catch (std::exception &error)
    }
 }
 
+}
 int main(int argc, char** argv)
 try {
 glutInit(&argc, argv);
