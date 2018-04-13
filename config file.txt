@@ -506,7 +506,7 @@ Peano
 Hilbert2
 	A : left 90 B forward right 90 A forward A right 90 forward B left 90
     B : right 90 A forward left 90 B forward B left 90 forward A right 90
-    A ? localscale 1/2
-    B ? localscale 1/1
-    forward ? localscale 2
+    forward :
+    A ? localscale 1/2 drawmethod invisible
+    B ? localscale 1/2 drawmethod invisible
 

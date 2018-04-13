@@ -1,11 +1,11 @@
+#include "Lexer.h"
+#include <cctype>
 #include <iostream>
 #include <string>
-#include <cctype>
-#include "Lexer.h"
 #include "Token.h"
 
-using std::string;
 using std::isspace;
+using std::string;
 
 //!!! Should Lexer us char or int? ifstream.get() returns int (for EOF)
 // but ifstream.get(c) takes char &. (What happens if that gets the ASCII 255 char?)
@@ -49,133 +49,153 @@ States:
    DATATOKEN - final state, return built up DATA token
 */
 
-void Lexer::escapedalpha(int next)
-{
-   switch(next)
-      {
-      case 'n' : thetoken.push_back('\n'); break;
-      case 't' : thetoken.push_back('\t'); break;
-      default  : ;//throw "undefined escape"?!!!
-      }
+void Lexer::escapedalpha(int next) {
+    switch (next) {
+        case 'n':
+            thetoken.push_back('\n');
+            break;
+        case 't':
+            thetoken.push_back('\t');
+            break;
+        default:;  //throw "undefined escape"?!!!
+    }
 }
 
-State Lexer::iws()
-{
-auto next = infile.get();
-while(isspace(next) && next != '\n') next = infile.get();
-if (next == '\\')  return BSN;
-if (next == '#')   {infile.ignore(9999,'\n'); return EOLTOKEN;}
-if (next == '"')   return NORMQ;
-if (next == '\n')  return EOLTOKEN;
-if (next == std::char_traits<char>::eof()) return EOFTOKEN;
-//otherwise
-infile.putback(char(next));
-return NORMN;
+State Lexer::iws() {
+    auto next = infile.get();
+    while (isspace(next) && next != '\n') next = infile.get();
+    if (next == '\\') return BSN;
+    if (next == '#') {
+        infile.ignore(9999, '\n');
+        return EOLTOKEN;
+    }
+    if (next == '"') return NORMQ;
+    if (next == '\n') return EOLTOKEN;
+    if (next == std::char_traits<char>::eof()) return EOFTOKEN;
+    //otherwise
+    infile.putback(char(next));
+    return NORMN;
 }
 
-State Lexer::bsspq()
-{
-auto next = infile.get();
-while(isspace(next)) next = infile.get();
-if (next == '\\')             return BSQ;
-if (next == '"')              return NORMN;
-if (next == std::char_traits<char>::eof()) return DATATOKEN;
-//otherwise (including #)
-thetoken.push_back(char(next));
-return NORMQ;
+State Lexer::bsspq() {
+    auto next = infile.get();
+    while (isspace(next)) next = infile.get();
+    if (next == '\\') return BSQ;
+    if (next == '"') return NORMN;
+    if (next == std::char_traits<char>::eof()) return DATATOKEN;
+    //otherwise (including #)
+    thetoken.push_back(char(next));
+    return NORMQ;
 }
 
-State Lexer::bsspn()
-{
-auto next = infile.get();
-while(isspace(next)) next = infile.get();
-if (next == '\\')             return BSN;
-if (next == '#')              {infile.ignore(9999,'\n'); ; infile.putback('\n'); return DATATOKEN;}
-if (next == '"')              return NORMQ;
-if (next == std::char_traits<char>::eof()) return DATATOKEN;
-//otherwise
-thetoken.push_back(char(next));
-return NORMN;
+State Lexer::bsspn() {
+    auto next = infile.get();
+    while (isspace(next)) next = infile.get();
+    if (next == '\\') return BSN;
+    if (next == '#') {
+        infile.ignore(9999, '\n');
+        ;
+        infile.putback('\n');
+        return DATATOKEN;
+    }
+    if (next == '"') return NORMQ;
+    if (next == std::char_traits<char>::eof()) return DATATOKEN;
+    //otherwise
+    thetoken.push_back(char(next));
+    return NORMN;
 }
 
-State Lexer::normq()
-{
-while(1)
-   {
-   auto next = infile.get();
-   if (next == std::char_traits<char>::eof()) return DATATOKEN;
-   if (next == '\\')             return BSQ;
-   if (next == '"')              return NORMN;
-   if (next == '\n')             {infile.putback('\n'); return DATATOKEN;} //throw "newline in string"?!!!
-   //otherwise (including #)
-   thetoken.push_back(char(next));
-   }
+State Lexer::normq() {
+    while (1) {
+        auto next = infile.get();
+        if (next == std::char_traits<char>::eof()) return DATATOKEN;
+        if (next == '\\') return BSQ;
+        if (next == '"') return NORMN;
+        if (next == '\n') {
+            infile.putback('\n');
+            return DATATOKEN;
+        }  //throw "newline in string"?!!!
+        //otherwise (including #)
+        thetoken.push_back(char(next));
+    }
 }
 
-State Lexer::normn()
-{
-while(1)
-   {
-   auto next = infile.get();
-   if (next == std::char_traits<char>::eof()) return DATATOKEN;
-   if (next == '\\')             return BSN;
-   if (next == '#')              {infile.ignore(9999,'\n'); infile.putback('\n'); return DATATOKEN;}
-   if (next == '"')              return NORMQ;
-   if (next == '\n')             {infile.putback('\n'); return DATATOKEN;} //throw "newline in string"?!!!
-   if (isspace(next))            return DATATOKEN;
-   //otherwise
-   thetoken.push_back(char(next));
-   }
+State Lexer::normn() {
+    while (1) {
+        auto next = infile.get();
+        if (next == std::char_traits<char>::eof()) return DATATOKEN;
+        if (next == '\\') return BSN;
+        if (next == '#') {
+            infile.ignore(9999, '\n');
+            infile.putback('\n');
+            return DATATOKEN;
+        }
+        if (next == '"') return NORMQ;
+        if (next == '\n') {
+            infile.putback('\n');
+            return DATATOKEN;
+        }  //throw "newline in string"?!!!
+        if (isspace(next)) return DATATOKEN;
+        //otherwise
+        thetoken.push_back(char(next));
+    }
 }
 
-State Lexer::bsq()
-{
-auto next = infile.get();
-if (next == std::char_traits<char>::eof()) return DATATOKEN;
-if (isspace(next)) return BSSPQ;
-if (isalpha(next))
-   {
-   escapedalpha(next);
-   return NORMQ;
-   }
-//otherwise
-   thetoken.push_back(char(next));
-   return NORMQ;
+State Lexer::bsq() {
+    auto next = infile.get();
+    if (next == std::char_traits<char>::eof()) return DATATOKEN;
+    if (isspace(next)) return BSSPQ;
+    if (isalpha(next)) {
+        escapedalpha(next);
+        return NORMQ;
+    }
+    //otherwise
+    thetoken.push_back(char(next));
+    return NORMQ;
 }
 
-State Lexer::bsn()
-{
-auto next = infile.get();
-if (next == std::char_traits<char>::eof()) return DATATOKEN;
-if (isspace(next)) return BSSPN;
-if (isalpha(next))
-   {
-   escapedalpha(next);
-   return NORMN;
-   }
-//otherwise
-   thetoken.push_back(char(next));
-   return NORMN;
+State Lexer::bsn() {
+    auto next = infile.get();
+    if (next == std::char_traits<char>::eof()) return DATATOKEN;
+    if (isspace(next)) return BSSPN;
+    if (isalpha(next)) {
+        escapedalpha(next);
+        return NORMN;
+    }
+    //otherwise
+    thetoken.push_back(char(next));
+    return NORMN;
 }
 
-Token Lexer::nexttoken()
-{
-thetoken.clear();
-State thestate=iws();
-while(1)
-   {
-   switch(thestate)
-      {
-      case BSSPQ:     thestate=bsspq(); break;
-      case BSSPN:     thestate=bsspn(); break;
-      case NORMQ:     thestate=normq(); break;
-      case NORMN:     thestate=normn(); break;
-      case BSQ:       thestate=bsq();   break;
-      case BSN:       thestate=bsn();   break;
-      case EOLTOKEN:  return Token(string(),Token::EOLT);
-      case EOFTOKEN:  return Token(string(),Token::EOFT);
-      case DATATOKEN: return Token(thetoken,Token::DATAT);
-      }
-   }
+Token Lexer::nexttoken() {
+    thetoken.clear();
+    State thestate = iws();
+    while (1) {
+        switch (thestate) {
+            case BSSPQ:
+                thestate = bsspq();
+                break;
+            case BSSPN:
+                thestate = bsspn();
+                break;
+            case NORMQ:
+                thestate = normq();
+                break;
+            case NORMN:
+                thestate = normn();
+                break;
+            case BSQ:
+                thestate = bsq();
+                break;
+            case BSN:
+                thestate = bsn();
+                break;
+            case EOLTOKEN:
+                return Token(string(), Token::EOLT);
+            case EOFTOKEN:
+                return Token(string(), Token::EOFT);
+            case DATATOKEN:
+                return Token(thetoken, Token::DATAT);
+        }
+    }
 }
-
