@@ -17,7 +17,7 @@ if ( rulestates.size() >= maxdepth || localscale*turtles.top().getscale() < mins
    {
    Motion temp;
    temp.frompt = turtles.top().getposition();
-   turtles.top().forward(localscale);
+       turtles.top().forward(localscale);//!!!  Here is where we fix issue #5
    temp.topt = turtles.top().getposition();
    switch(therules[rr].drawmethod) 
       { //!!!Use a factory here!
