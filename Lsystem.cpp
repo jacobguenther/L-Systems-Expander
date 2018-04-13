@@ -14,61 +14,54 @@ using std::runtime_error;
 #include <fstream>
 using std::ifstream;
 
-void assertdatatoken(const Token &t)
-{
+void assertdatatoken(const Token &t) {
 if(t.iseof()) throw runtime_error("Unexpected end of file");
 if(t.iseol()) throw runtime_error("Unexpected end of line"); 
 }
 
 Cmdcont readrule(Lexer &lex)
 {
-Cmdcont retval;
-Token t=lex.nexttoken();
-while(!t.iseol())
-   {
-   assertdatatoken(t);
-   if (t.getdata()=="left")
-      {
-      t=lex.nexttoken();
-      assertdatatoken(t);
-      retval.push_back(shared_ptr<Cmd>(new Rotatecmd(Parser(t.getdata()).parse())));
-      }
-   else if (t.getdata() == "right")
-      {
-      t=lex.nexttoken();
-      assertdatatoken(t);
-         retval.push_back(shared_ptr<Cmd>(new Rotatecmd(Parser("-("+t.getdata()+")").parse())));
-      }
-   else if (t.getdata() == "|" || t.getdata() == "flip")
-         retval.push_back(shared_ptr<Cmd>(new Flipcmd));
-   else if (t.getdata() == "[" || t.getdata() == "push")
-         retval.push_back(shared_ptr<Cmd>(new Pushcmd));
-   else if (t.getdata() == "]" || t.getdata() == "pop")
-      retval.push_back(shared_ptr<Cmd>(new Popcmd));
-   else //A rule
-      {
-      bool rev=false;
-      bool flip=false;
-      string thisrule=t.getdata();
-      while (thisrule[0]=='~' || thisrule[0]=='|')
-         {
-         if(thisrule[0]=='~') rev=true;
-         if(thisrule[0]=='|') flip=true;
-         thisrule=thisrule.substr(1); //all but first character
-         }
-      if(thisrule[thisrule.length()-1]=='@')
-         {
-         thisrule = thisrule.substr(0,thisrule.length()-1);
-         t=lex.nexttoken();
-         assertdatatoken(t);
-         retval.push_back(shared_ptr<Cmd>(new Rulecmd(thisrule,rev,flip,Parser(t.getdata()).parse())));
-         }
-      else
-         retval.push_back(shared_ptr<Cmd>(new Rulecmd(thisrule,rev,flip)));
-      }
-   t = lex.nexttoken();
-   }
-return retval;
+    Cmdcont retval;
+    Token t=lex.nexttoken();
+    while(!t.iseol()) {
+        assertdatatoken(t);
+        if (t.getdata()=="left") {
+            t=lex.nexttoken();
+            assertdatatoken(t);
+            retval.push_back(make_shared<Rotatecmd>(Parser(t.getdata()).parse()));
+        }
+        else if (t.getdata() == "right"){
+            t=lex.nexttoken();
+            assertdatatoken(t);
+            retval.push_back(make_shared<Rotatecmd>(Parser("-("+t.getdata()+")").parse()));
+        }
+        else if (t.getdata() == "|" || t.getdata() == "flip")
+            retval.push_back(make_shared<Flipcmd>());
+        else if (t.getdata() == "[" || t.getdata() == "push")
+            retval.push_back(make_shared<Pushcmd>());
+        else if (t.getdata() == "]" || t.getdata() == "pop")
+            retval.push_back(make_shared<Popcmd>());
+        else { //A rule
+            bool rev=false;
+            bool flip=false;
+            string thisrule=t.getdata();
+            while (thisrule[0]=='~' || thisrule[0]=='|') {
+                if(thisrule[0]=='~') rev=true;
+                if(thisrule[0]=='|') flip=true;
+                thisrule=thisrule.substr(1); //all but first character
+            }
+            if(thisrule[thisrule.length()-1]=='@') {
+                thisrule = thisrule.substr(0,thisrule.length()-1);
+                t=lex.nexttoken();
+                assertdatatoken(t);
+                retval.push_back(make_shared<Rulecmd>(thisrule,rev,flip,Parser(t.getdata()).parse()));
+            }
+            else
+                retval.push_back(make_shared<Rulecmd>(thisrule,rev,flip));
+        }
+        t = lex.nexttoken();
+    }
+    return retval;
 }
 
 void readruleoptions(Lexer &lex, Rule &r)

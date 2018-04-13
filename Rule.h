@@ -3,6 +3,7 @@
 
 #include <memory>
 using std::shared_ptr;
+using std::make_shared;
 #include <stdexcept>
 using std::logic_error;
 #include <list>
