@@ -79,16 +79,6 @@ public:
     void handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale);
     void makeapoint();
     
-    void reset(){//use instead of initializer list in constructor?
-        //!!! I now suspect reset is bad period, we should just get a new rulerunner
-        rulestates = stack<Rulestate>();
-        turtles = stack<Turtle>();
-        for(Ruletable::iterator ii=therules.begin(); ii != therules.end(); ++ii)
-            ii->second.cachevalues(context);
-        turtles.push(Turtle());
-        agraphic.reset();
-        finished = false;
-    }
     void graphic(const Motion &);
     ~Rulerunner(){Dropgraphic::haveapt=false;}
     //   void adjustcontext(const string &varname,double val)
