@@ -8,7 +8,7 @@
 
 #include "Rule.h"
 
-typedef std::map<std::string, Rule> Ruletable;
+using Ruletable = std::map<std::string, Rule>;
 
 #include "Context.h"
 

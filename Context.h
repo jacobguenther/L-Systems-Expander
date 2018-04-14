@@ -8,8 +8,8 @@
 
 class Parsenode;
 
-typedef std::map<std::string, double> Consttype;
-typedef std::map<std::string, std::shared_ptr<Parsenode> > Exprtype;
+using Consttype = std::map<std::string, double>;
+using Exprtype = std::map<std::string, std::shared_ptr<Parsenode>>;
 
 class Context {
    public:

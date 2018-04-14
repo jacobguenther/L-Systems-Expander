@@ -41,6 +41,6 @@ class Rule {
     //Color
 };
 
-typedef std::map<std::string, Rule> Ruletable;
+using Ruletable = std::map<std::string, Rule>;
 
 #endif
