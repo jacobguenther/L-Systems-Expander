@@ -15,14 +15,14 @@ class Graphic  //how do I make SURE this is an abstract base class?!!!
 {
    public:
     Graphic(const Motion &_m) : m(_m) {}
-    Graphic() {}
+    Graphic()=default;
     virtual void draw() {
         glBegin(GL_LINES);
         glVertex2d(m.frompt.x, m.frompt.y);
         glVertex2d(m.topt.x, m.topt.y);
         glEnd();
     }
-    virtual ~Graphic() {}
+    virtual ~Graphic() =default;
 
    protected:
     Motion m;  //not base class because Invisgraphic doesn't need it?!!!

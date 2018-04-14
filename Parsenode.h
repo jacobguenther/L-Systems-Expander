@@ -18,9 +18,8 @@ using std::vector;
 
 class Parsenode {
    public:
-    Parsenode() {}
     virtual double eval(const Context &) = 0;
-    virtual ~Parsenode() {}
+    virtual ~Parsenode()=default;
 
    private:
     static bool lastconstruct;
