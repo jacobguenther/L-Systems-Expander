@@ -41,10 +41,11 @@ void display() {
     glDrawBuffer(bufferstate == SINGLE ? GL_FRONT : GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    delete globalrunnerptr;
     vars["p1"] = p1;
-    if (curfractal != -1)
+    if (curfractal != -1) {
+        delete globalrunnerptr;
         globalrunnerptr = new Rulerunner(systems[size_t(curfractal)], level, thresh, vars);
+    }
     if (bufferstate == DOUBLE) {
         int steps = 0;
         while (!globalrunnerptr->done() && ++steps < INTERACTIVEDISPLAYSTEPS)
