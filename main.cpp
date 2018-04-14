@@ -18,14 +18,8 @@ using std::vector;
 
 namespace {
 
-unsigned int TIMERMSECS = 1000 / 60;
 int main_menu_id;
-enum buffer_type { SINGLE,
-                   DOUBLE }; //!!! which one do we really want?
-buffer_type bufferstate = DOUBLE;
-// For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
 GLdouble tx = -0.5, ty = 0, sc = 1;  //!!!!"class"ify this
-Rulerunner *globalrunnerptr = nullptr;
 unsigned int level = 1;
 vector<Lsystem> systems;
 int curfractal = -1;  //!!! change to optional or add a bool haveCurrentFractal
@@ -33,38 +27,21 @@ double p1 = 0;
 double thresh = 0.003;
 const double THRESHMAX = 1.0;
 const double THRESHMIN = .0001;
-#define INTERACTIVEDISPLAYSTEPS 500000
 
 void display() {
     Consttype vars;
 
-    glDrawBuffer(bufferstate == SINGLE ? GL_FRONT : GL_BACK);
+    glDrawBuffer(GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    if (curfractal == -1)
+        return;
     vars["p1"] = p1;
-    if (curfractal != -1) {
-        delete globalrunnerptr;
-        globalrunnerptr = new Rulerunner(systems[size_t(curfractal)], level, thresh, vars);
-    }
-    if (bufferstate == DOUBLE) {
-        int steps = 0;
-        while (!globalrunnerptr->done() && ++steps < INTERACTIVEDISPLAYSTEPS)
-            globalrunnerptr->drawnextpoint();
-        glutSwapBuffers();
-    } else
-        glFlush();
+    Rulerunner runner(systems[size_t(curfractal)], level, thresh, vars);
+    while (!runner.done())
+        runner.drawnextpoint();
+    glutSwapBuffers();
     while (auto jj = glGetError())
         std::cerr << gluErrorString(jj) << endl;
-}
-
-void idle(int /*unused*/) {
-    glutTimerFunc(TIMERMSECS, idle, 0);
-    glDrawBuffer(GL_FRONT);
-    if (!globalrunnerptr || globalrunnerptr->done())
-        return;
-    globalrunnerptr->drawnextpoint();
-    //!!!glBegin->glEnd a C++ class constructor destructor resource aquisition?
-    glFlush();
 }
 
 void init() {
@@ -248,7 +225,6 @@ int main(int argc, char **argv) {
         glutAttachMenu(GLUT_RIGHT_BUTTON);
 
         handle_frac_menu(0);
-        glutTimerFunc(TIMERMSECS, idle, 0);
         glutMainLoop();
         return 0;
     } catch (std::exception &error) {
