@@ -8,15 +8,10 @@
 #include "Turtle.h"
 
 #include <stack>
-using std::stack;
 #include <list>
-using std::list;
 #include <map>
-using std::map;
 #include <string>
-using std::string;
 #include <stdexcept>
-using std::logic_error;
 
 #include "Rule.h"
 
@@ -81,10 +76,10 @@ class Rulerunner {
    private:
     void pushturtle() { turtles.push(turtles.top()); }
     void popturtle() { turtles.pop(); }
-    stack<Rulestate> rulestates;
+    std::stack<Rulestate> rulestates;
     Ruletable therules;
     unsigned int maxdepth;
-    stack<Turtle> turtles;
+    std::stack<Turtle> turtles;
     bool finished;
     std::shared_ptr<Graphic> agraphic;
     string startrule;
