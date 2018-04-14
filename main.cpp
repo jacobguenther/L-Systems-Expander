@@ -222,7 +222,7 @@ void reshape(int w, int h) {
 int main(int argc, char **argv) {
     try {
         cout << "Use <, > (no shift necessary) to change fractal level." << endl;
-        cout << "Use i,j,k,l to translate. Use u and y to change parameter." << endl;
+        cout << "Use i,j,k,l to translate." << endl;
         cout << "Use [ and ] to change threshold for dynamic level drawing." << endl;
         cout << "Use u and v to change parameter for paramerized fractals." << endl;
         glutInit(&argc, argv);
