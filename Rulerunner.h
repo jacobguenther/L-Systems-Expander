@@ -55,7 +55,9 @@ class Rulerunner {
     // friend class Rulecmd; // !!! similar question here, is handlerule() public?
    public:
     Rulerunner(const Lsystem &_l, unsigned int _maxdepth, double _minscale, const Consttype &_c)
-    : therules(_l.table), maxdepth(_maxdepth), finished(false), agraphic(), startrule(_l.startrule), context(_c, _l.expressions), backwards(false), minscale(_minscale) {
+        : therules(_l.table), maxdepth(_maxdepth), finished(false), startrule(_l.startrule)
+            ,context(_c, _l.expressions), backwards(false), minscale(_minscale)
+    {
         Dropgraphic::haveapt = false;
         for (auto & therule : therules)
             therule.second.cachevalues(context);
