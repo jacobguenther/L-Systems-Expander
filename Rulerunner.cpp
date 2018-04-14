@@ -1,6 +1,7 @@
 #include "Rulerunner.h"
 #include "Cmd.h"
 
+#include <memory>
 #include <stdexcept>
 using std::logic_error;
 
@@ -19,22 +20,22 @@ void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
         temp.topt = turtles.top().getposition();
         switch (therules[rr].drawmethod) {  //!!!Use a factory here!
             case Rule::NORM:
-                agraphic.reset(new Linegraphic(temp));
+                agraphic = std::make_shared<Linegraphic>(temp);
                 break;
             case Rule::MIDPT:
-                agraphic.reset(new Dropgraphic(temp, 0, .5));
+                agraphic = std::make_shared<Dropgraphic>(temp, 0, .5);
                 break;
             case Rule::INVIS:
-                agraphic.reset(new Invisgraphic);
+                agraphic = std::make_shared<Invisgraphic>();
                 break;
             case Rule::RECT:
-                agraphic.reset(new Linegraphic(temp));
+                agraphic = std::make_shared<Linegraphic>(temp);
                 break;  //!!!
             case Rule::DROP:
                 double ffac = (willflip ? -1 : 1) * turtles.top().getflip();
-                agraphic.reset(new Dropgraphic(temp,
+                agraphic = std::make_shared<Dropgraphic>(temp,
                                                ffac * therules[rr].cacheddropangle,
-                                               therules[rr].cacheddropdistance));
+                                               therules[rr].cacheddropdistance);
                 break;  //!!!
         }
     } else {
