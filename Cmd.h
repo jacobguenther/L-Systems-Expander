@@ -23,7 +23,7 @@ typedef std::list<std::shared_ptr<Cmd> > Cmdcont;
 
 class Rotatecmd : public Cmd {
    public:
-    Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(_a) {}
+    explicit Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(_a) {}
     virtual void execute(Rulerunner *master) { master->turtles.top().rotate(cachedangle); }
     virtual void cachevalue(const Context &cc) { cachedangle = angle->eval(cc); }
 
@@ -52,7 +52,7 @@ class Popcmd : public Cmd {
 
 class Rulecmd : public Cmd {
    public:
-    Rulecmd(const string &_m, bool _r = false, bool _f = false,
+    explicit Rulecmd(const string &_m, bool _r = false, bool _f = false,
             std::shared_ptr<Parsenode> _s = Parser("1").parse())
         : myrule(_m), rev(_r), flip(_f), scale(_s) {}
     virtual void execute(Rulerunner *master) { master->handlerule(myrule, rev, flip, cachedscale); }

@@ -14,7 +14,7 @@
 class Graphic  //how do I make SURE this is an abstract base class?!!!
 {
    public:
-    Graphic(const Motion &_m) : m(_m) {}
+    explicit Graphic(const Motion &_m) : m(_m) {}
     Graphic()=default;
     virtual void draw() {
         glBegin(GL_LINES);
@@ -59,7 +59,7 @@ class Dropgraphic : public Graphic {
 
 class Linegraphic : public Graphic {
    public:
-    Linegraphic(const Motion &_m) : Graphic(_m) {}
+    explicit Linegraphic(const Motion &_m) : Graphic(_m) {}
 };
 
 class Invisgraphic : public Graphic {

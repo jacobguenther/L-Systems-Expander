@@ -6,7 +6,7 @@
 class Lexer {
 
 public:
-    Lexer(std::istream &_in) : infile(_in) {}
+    explicit Lexer(std::istream &_in) : infile(_in) {}
     Token nexttoken();
 
    private:

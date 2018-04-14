@@ -9,7 +9,7 @@ using std::istringstream;
 
 class Parser {
    public:
-    Parser(const string& _w) : input(_w) {}
+    explicit Parser(const string& _w) : input(_w) {}
     std::shared_ptr<Parsenode> parse();
 
    private:
