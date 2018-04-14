@@ -9,7 +9,7 @@ using std::logic_error;
 using namespace std;
 #endif
 
-void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip,
+void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
                             double localscale) {
     bool willflip = rulerev ^ ruleflip;
     if (rulestates.size() >= maxdepth || localscale * turtles.top().getscale() < minscale) {
@@ -55,7 +55,7 @@ void Rulestate::doit(Rulerunner *towho) {
 }
 
 std::shared_ptr<Graphic> Rulerunner::nextpoint() {
-    if (agraphic.get() == 0)
+    if (agraphic == 0)
         throw logic_error("Called nextpoint() on a Rulerunner with no graphic ready\n");
     std::shared_ptr<Graphic> temp(agraphic);
     makeapoint();

@@ -46,7 +46,7 @@ Cmdcont readrule(Lexer &lex) {
         else {  //A rule
             bool rev = false;
             bool flip = false;
-            string thisrule = t.getdata();
+            auto thisrule = t.getdata();
             while (thisrule[0] == '~' || thisrule[0] == '|') {
                 if (thisrule[0] == '~') rev = true;
                 if (thisrule[0] == '|') flip = true;
@@ -112,7 +112,7 @@ void readruleoptions(Lexer &lex, Rule &r) {
     }
 }
 
-vector<Lsystem> readlsystemfile(const string &configfilename) {
+vector<Lsystem> readlsystemfile(const std::string &configfilename) {
     ifstream in(configfilename);
     if (!in.good()) {
         in.clear();
@@ -124,10 +124,10 @@ vector<Lsystem> readlsystemfile(const string &configfilename) {
 
     vector<Lsystem> thelsystems;
     while (1) {
-        string systemname;
+        std::string systemname;
         bool activerule = true;
         Ruletable table;
-        string startrule;
+        std::string startrule;
         Exprtype expressions;
 
         Token t;
@@ -155,7 +155,7 @@ vector<Lsystem> readlsystemfile(const string &configfilename) {
         t = lex.nexttoken();
         while (t.isdata())  //read (rule, rule option, or expression) line
         {
-            string rulename = t.getdata();
+            std::string rulename = t.getdata();
             try {
                 if (rulename[0] == '$') {
                     t = lex.nexttoken();
@@ -180,7 +180,7 @@ vector<Lsystem> readlsystemfile(const string &configfilename) {
                         throw runtime_error("Expected option line or rule definition");
                 }
             } catch (runtime_error &error) {
-                throw runtime_error(string(error.what()) + " in " + systemname + " rule " + rulename);
+                throw runtime_error(std::string(error.what()) + " in " + systemname + " rule " + rulename);
             }
             t = lex.nexttoken();
         }

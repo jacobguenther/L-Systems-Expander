@@ -65,7 +65,7 @@ class Rulerunner {
     std::shared_ptr<Graphic> nextpoint();
     void drawnextpoint();
     bool done() { return finished; }
-    void handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale);
+    void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
     void makeapoint();
 
     void graphic(const Motion &);
@@ -82,7 +82,7 @@ class Rulerunner {
     std::stack<Turtle> turtles;
     bool finished;
     std::shared_ptr<Graphic> agraphic;
-    string startrule;
+    std::string startrule;
     const Context context;
     bool backwards;
     double minscale;

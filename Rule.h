@@ -37,10 +37,10 @@ class Rule {
     double cacheddropdistance;
     double cachedrectwidth;
     double cachedscalefac;
-    string info;
+    std::string info;
     //Color
 };
 
-typedef std::map<string, Rule> Ruletable;
+typedef std::map<std::string, Rule> Ruletable;
 
 #endif

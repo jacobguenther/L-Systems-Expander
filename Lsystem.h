@@ -27,6 +27,6 @@ class Lsystem {
     Exprtype expressions;
 };
 
-std::vector<Lsystem> readlsystemfile(const string &configfilename = "config file.txt");
+std::vector<Lsystem> readlsystemfile(const std::string &configfilename = "config file.txt");
 
 #endif

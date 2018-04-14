@@ -52,14 +52,14 @@ class Popcmd : public Cmd {
 
 class Rulecmd : public Cmd {
    public:
-    explicit Rulecmd(const string &_m, bool _r = false, bool _f = false,
+    explicit Rulecmd(const std::string &_m, bool _r = false, bool _f = false,
             std::shared_ptr<Parsenode> _s = Parser("1").parse())
         : myrule(_m), rev(_r), flip(_f), scale(_s) {}
     virtual void execute(Rulerunner *master) { master->handlerule(myrule, rev, flip, cachedscale); }
     virtual void cachevalue(const Context &cc) { cachedscale = scale->eval(cc); }
 
    private:
-    const string myrule;
+    const std::string myrule;
     bool rev;
     bool flip;
     std::shared_ptr<Parsenode> scale;

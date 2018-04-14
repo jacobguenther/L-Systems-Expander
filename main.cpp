@@ -21,7 +21,7 @@ namespace {
 unsigned int TIMERMSECS = 1000 / 60;
 int main_menu_id;
 enum buffer_type { SINGLE,
-                   DOUBLE };
+                   DOUBLE }; //!!! which one do we really want?
 buffer_type bufferstate = DOUBLE;
 // For DOUBLE: draw into back & swap. For SINGLE: draw into front, no swap.
 GLdouble tx = -0.5, ty = 0, sc = 1;  //!!!!"class"ify this

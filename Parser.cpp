@@ -5,6 +5,7 @@
 using std::logic_error;
 using std::runtime_error;
 using std::vector;
+using std::string;
 
 std::shared_ptr<Parsenode> Parser::parse() {
     Parsenode *val = value();
@@ -157,7 +158,7 @@ Parsenode *Parser::term() {
 }
 
 Parsenode *Parser::idexpr() {
-    string idname = getidname();
+    std::string idname = getidname();
     vector<Parsenode *> params;
     if (nextchar() == '(') {
         match('(');
@@ -175,8 +176,8 @@ Parsenode *Parser::idexpr() {
     return new Idnode(idname, params);
 }
 
-string Parser::getidname() {
-    string name;
+std::string Parser::getidname() {
+    std::string name;
     while (isalnum(nextchar()) || nextchar() == '$') {
         name.push_back(nextchar());
         match(nextchar());
@@ -190,7 +191,7 @@ double Parser::number() {
     return val;
 }
 
-void Parser::error(const string &text) {
+void Parser::error(const std::string &text) {
     throw runtime_error(input.str() + "\n" +
                         string(input.eof() ? input.str().length() : static_cast<unsigned int>(input.tellg()), '-') + "^\n" + text);
 }
