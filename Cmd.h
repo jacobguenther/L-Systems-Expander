@@ -23,8 +23,8 @@ typedef std::list<std::shared_ptr<Cmd> > Cmdcont;
 class Rotatecmd : public Cmd {
    public:
     explicit Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(_a) {}
-    virtual void execute(Rulerunner *master) { master->turtles.top().rotate(cachedangle); }
-    virtual void cachevalue(const Context &cc) { cachedangle = angle->eval(cc); }
+    void execute(Rulerunner *master) override { master->turtles.top().rotate(cachedangle); }
+    void cachevalue(const Context &cc) override { cachedangle = angle->eval(cc); }
 
    private:
     std::shared_ptr<Parsenode> angle;
@@ -33,17 +33,17 @@ class Rotatecmd : public Cmd {
 
 class Flipcmd : public Cmd {
    public:
-    virtual void execute(Rulerunner *master) { master->turtles.top().flip(); }
+    void execute(Rulerunner *master) override { master->turtles.top().flip(); }
 };
 
 class Pushcmd : public Cmd {
    public:
-    virtual void execute(Rulerunner *master) { master->pushturtle(); }
+    void execute(Rulerunner *master) override { master->pushturtle(); }
 };
 
 class Popcmd : public Cmd {
    public:
-    virtual void execute(Rulerunner *master) {
+    void execute(Rulerunner *master) override {
         master->popturtle();
         Dropgraphic::haveapt = false;
     }
@@ -54,8 +54,8 @@ class Rulecmd : public Cmd {
     explicit Rulecmd(const std::string &_m, bool _r = false, bool _f = false,
             std::shared_ptr<Parsenode> _s = Parser("1").parse())
         : myrule(_m), rev(_r), flip(_f), scale(_s) {}
-    virtual void execute(Rulerunner *master) { master->handlerule(myrule, rev, flip, cachedscale); }
-    virtual void cachevalue(const Context &cc) { cachedscale = scale->eval(cc); }
+    void execute(Rulerunner *master) override { master->handlerule(myrule, rev, flip, cachedscale); }
+    void cachevalue(const Context &cc) override { cachedscale = scale->eval(cc); }
 
    private:
     const std::string myrule;

@@ -47,7 +47,7 @@ class Dropgraphic : public Graphic {
     }
     friend class Rulerunner;
     friend class Popcmd;
-    virtual void draw() {
+    void draw() override {
         if (draws) Graphic::draw();
     }
 
@@ -64,7 +64,7 @@ class Linegraphic : public Graphic {
 
 class Invisgraphic : public Graphic {
    public:
-    virtual void draw() {}
+    void draw() override {}
 };
 
 /*//!!! efficiency?

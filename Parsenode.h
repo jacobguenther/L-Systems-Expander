@@ -22,10 +22,10 @@ class Ternopnode : public Parsenode {
    public:
     Ternopnode(Parsenode *_p, Parsenode *_t, Parsenode *_f)
         : pred(_p), trueval(_t), falseval(_f) {}
-    double eval(const Context &cc) {
+    double eval(const Context &cc) override {
         return bool(pred->eval(cc)) ? trueval->eval(cc) : falseval->eval(cc);
     }
-    ~Ternopnode() {
+    ~Ternopnode() override {
         delete pred;
         delete trueval;
         delete falseval;
@@ -41,7 +41,7 @@ class Binopnode : public Parsenode {
    public:
     Binopnode(char _o, Parsenode *_l, Parsenode *_r)
         : op(_o), left(_l), right(_r) {}
-    double eval(const Context &cc) {
+    double eval(const Context &cc) override {
         double ll = left->eval(cc);
         double rr = right->eval(cc);
         switch (op) {
@@ -73,7 +73,7 @@ class Binopnode : public Parsenode {
                 throw std::runtime_error(std::string{"unrecognized binary operator "} + op);
         }
     }
-    ~Binopnode() {
+    ~Binopnode() override {
         delete left;
         delete right;
     }
@@ -88,13 +88,13 @@ class Unopnode : public Parsenode {
    public:
     Unopnode(char _o, Parsenode *_c)
         : op(_o), child(_c) {}
-    double eval(const Context &cc) {
+    double eval(const Context &cc) override {
         if (op == '!') return !static_cast<int>(child->eval(cc));
         if (op == '-') return -child->eval(cc);
         if (op == '+') return child->eval(cc);
         throw std::runtime_error(std::string("unrecognized unary operator ") + op);
     }
-    ~Unopnode() {
+    ~Unopnode() override {
         delete child;
     }
 
@@ -106,7 +106,7 @@ class Unopnode : public Parsenode {
 class Numnode : public Parsenode {
    public:
     explicit Numnode(double _v) : val(_v) {}
-    double eval(const Context &) { return val; }
+    double eval(const Context &) override { return val; }
 
    private:
     double val;
@@ -116,7 +116,7 @@ class Idnode : public Parsenode {
    public:
     Idnode(const std::string &_n, const std::vector<Parsenode *> &_p)
         : name(_n), pp(_p) {}
-    double eval(const Context &cc) {  //add RND, srand, rand?!!!
+    double eval(const Context &cc) override {  //add RND, srand, rand?!!!
         static const double DEG = 180 / M_PI;
         if (name == "acos") return acos(pp[0]->eval(cc));
         if (name == "acosd") return DEG * acos(pp[0]->eval(cc));
@@ -153,7 +153,7 @@ class Idnode : public Parsenode {
             throw std::runtime_error(name + ": undefined identifier.");
         // return 0;
     }
-    ~Idnode() {
+    ~Idnode() override {
         for (auto ii = pp.begin(); ii != pp.end(); ++ii)
             delete *ii;
     }
