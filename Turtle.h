@@ -10,7 +10,6 @@ const double DEG2RAD = M_PI / 180;
 
 class Turtle {
    public:
-    Turtle() : flipfac(1), position{0, 0}, angle(0), scalefac(1) {}
     void flip() {
         flipfac *= -1;
     }
@@ -41,10 +40,10 @@ class Turtle {
     Point getposition() { return position; }
 
    private:
-    int flipfac;
-    Point position;
-    double angle;
-    double scalefac;
+    int flipfac{1};
+    Point position{0, 0};
+    double angle{0};
+    double scalefac{1};
 };
 
 #endif
