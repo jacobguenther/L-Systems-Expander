@@ -57,19 +57,21 @@ class Binopnode : public Parsenode {
             case '%':
                 return static_cast<int>(ll) % static_cast<int>(rr);
             case '&':
-                return bool(ll) && bool(rr);
+              return static_cast<double>(bool(ll) && bool(rr));
             case '|':
-                return bool(ll) || bool(rr);
-                //         case '=': return ll==rr; // !!! Shouldn't compare doubles with ==
+              return static_cast<double>(bool(ll) || bool(rr));
+              //         case '=': return ll==rr; // !!! Shouldn't compare
+              //         doubles with ==
             case 'g':
-                return ll >= rr;
+              return static_cast<double>(ll >= rr);
             case 'l':
-                return ll <= rr;
-                //         case 'n': return ll!=rr; // !!! Shouldn't compare doubles with ==
+              return static_cast<double>(ll <= rr);
+              //         case 'n': return ll!=rr; // !!! Shouldn't compare
+              //         doubles with ==
             case '<':
-                return ll < rr;
+              return static_cast<double>(ll < rr);
             case '>':
-                return ll > rr;
+              return static_cast<double>(ll > rr);
             default:
                 throw std::runtime_error(std::string{"unrecognized binary operator "} + op);
         }
@@ -90,7 +92,8 @@ class Unopnode : public Parsenode {
     Unopnode(char _o, Parsenode *_c)
         : op(_o), child(_c) {}
     double eval(const Context &cc) override {
-        if (op == '!') return !static_cast<int>(child->eval(cc));
+        if (op == '!')
+          return static_cast<double>(!static_cast<bool>(child->eval(cc)));
         if (op == '-') return -child->eval(cc);
         if (op == '+') return child->eval(cc);
         throw std::runtime_error(std::string("unrecognized unary operator ") + op);

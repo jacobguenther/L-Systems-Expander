@@ -35,8 +35,7 @@ Parsenode *Parser::value() {
 
 Parsenode *Parser::boolexpr() {
     Parsenode *lhs = bexpr();
-    Parsenode *more = morebool(lhs);
-    if (more)
+    if (auto more = morebool(lhs))
         return more;
     return lhs;
 }
