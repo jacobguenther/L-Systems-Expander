@@ -69,14 +69,13 @@ class Rulerunner {
     void drawnextpoint();
     bool done() { return finished; }
     void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
-    void makeapoint();
 
-    void graphic(const Motion &);
-//    ~Rulerunner() { Dropgraphic::haveapt = false; }
     //   void adjustcontext(const string &varname,double val)
     //      {context[varname]=val;}
 
    private:
+    void graphic(const Motion &);
+    void makeapoint();
     void pushturtle() { turtles.push(turtles.top()); }
     void popturtle() { turtles.pop(); }
     std::stack<Rulestate> rulestates;
