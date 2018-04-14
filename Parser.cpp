@@ -38,8 +38,7 @@ Parsenode *Parser::boolexpr() {
     Parsenode *more = morebool(lhs);
     if (more)
         return more;
-    else
-        return lhs;
+    return lhs;
 }
 
 Parsenode *Parser::morebool(Parsenode *lhs)  //clean up??!!!
@@ -51,36 +50,37 @@ Parsenode *Parser::morebool(Parsenode *lhs)  //clean up??!!!
         if (op2 == '=') {
             match(op2);
             Parsenode *rhs = bexpr();
-            return new Binopnode('l', lhs, rhs);  // l means <=
-        } else {
-            Parsenode *rhs = bexpr();
-            return new Binopnode('<', lhs, rhs);
+            return new Binopnode('l', lhs, rhs); // l means <=
         }
-    } else if (op1 == '>') {
+        Parsenode *rhs = bexpr();
+        return new Binopnode('<', lhs, rhs);
+    }
+    if (op1 == '>') {
         match(op1);
         char op2 = nextchar();
         if (op2 == '=') {
             match(op2);
             Parsenode *rhs = bexpr();
             return new Binopnode('g', lhs, rhs);  // g means >=
-        } else {
-            Parsenode *rhs = bexpr();
-            return new Binopnode('>', lhs, rhs);
         }
-    } else if (op1 == '=') {
+        Parsenode *rhs = bexpr();
+        return new Binopnode('>', lhs, rhs);
+    }
+    if (op1 == '=') {
         match(op1);
         if (nextchar() != '=') error("Expected = (for == operator)");
         match('=');
         Parsenode *rhs = bexpr();
         return new Binopnode('=', lhs, rhs);
-    } else if (op1 == '!') {
+    }
+    if (op1 == '!') {
         match(op1);
         if (nextchar() != '=') error("Expected = (for != operator)");
         match('=');
         Parsenode *rhs = bexpr();
         return new Binopnode('n', lhs, rhs);  // n means !=
-    } else
-        return nullptr;
+    }
+    return nullptr;
 }
 
 Parsenode *Parser::bexpr() {

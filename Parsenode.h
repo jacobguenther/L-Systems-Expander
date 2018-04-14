@@ -150,9 +150,8 @@ class Idnode : public Parsenode {
         auto jj = cc.expressions.find(name);
         if (jj != cc.expressions.end())
             return jj->second->eval(cc);
-        else
-            throw std::runtime_error(name + ": undefined identifier.");
-        // return 0;
+        
+        throw std::runtime_error(name + ": undefined identifier.");
     }
     ~Idnode() override {
         for (auto & ii : pp)

@@ -134,8 +134,8 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
         if (t.iseof()) {
             if (thelsystems.empty())
                 throw runtime_error("No L systems in file " + configfilename);
-            else
-                return thelsystems;
+            
+            return thelsystems;
         }
         systemname = t.getdata();
         t = lex.nexttoken();
