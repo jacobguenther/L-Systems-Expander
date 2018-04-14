@@ -55,7 +55,8 @@ class Rulerunner {
     // friend class Rulecmd; // !!! similar question here, is handlerule() public?
    public:
     Rulerunner(const Lsystem &_l, unsigned int _maxdepth, double _minscale, const Consttype &_c)
-        : therules(_l.table), maxdepth(_maxdepth), finished(false), agraphic(), startrule(_l.startrule), context(_c, _l.expressions), backwards(false), minscale(_minscale) {
+    : therules(_l.table), maxdepth(_maxdepth), finished(false), agraphic(), startrule(_l.startrule), context(_c, _l.expressions), backwards(false), minscale(_minscale) {
+        Dropgraphic::haveapt = false;
         for (Ruletable::iterator ii = therules.begin(); ii != therules.end(); ++ii)
             ii->second.cachevalues(context);
         turtles.push(Turtle());
@@ -69,7 +70,7 @@ class Rulerunner {
     void makeapoint();
 
     void graphic(const Motion &);
-    ~Rulerunner() { Dropgraphic::haveapt = false; }
+//    ~Rulerunner() { Dropgraphic::haveapt = false; }
     //   void adjustcontext(const string &varname,double val)
     //      {context[varname]=val;}
 

@@ -10,9 +10,8 @@
 
 class Cmd {
    public:
-    Cmd() {}
     virtual void execute(Rulerunner *master) = 0;
-    virtual ~Cmd() {}
+    virtual ~Cmd()=default;
     virtual void cachevalue(const Context &) {}
 
    private:
