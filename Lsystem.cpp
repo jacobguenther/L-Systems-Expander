@@ -184,7 +184,7 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
             }
             t = lex.nexttoken();
         }
-        thelsystems.push_back(Lsystem(systemname, activerule, table, startrule, expressions));
+        thelsystems.emplace_back(systemname, activerule, table, startrule, expressions);
         if (t.iseof())
             return thelsystems;
     }
