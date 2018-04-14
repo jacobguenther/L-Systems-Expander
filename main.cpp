@@ -3,6 +3,15 @@ using std::cout;
 using std::endl;
 #include <vector>
 using std::vector;
+#ifdef __apple_build_version__ //using Xcode
+#include <experimental/optional>
+using std::experimental::optional;
+using std::experimental::nullopt;
+#else
+#include <optional>
+using std::optional;
+using std::nullopt;
+#endif
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -22,7 +31,7 @@ int main_menu_id;
 GLdouble tx = -0.5, ty = 0, sc = 1;
 unsigned int level = 1;
 vector<Lsystem> systems;
-int curfractal = -1;
+optional<size_t> curfractal;
 double p1 = 0;
 double thresh = 0.003;
 const double THRESHMAX = 1.0;
@@ -33,10 +42,10 @@ void display() {
 
     glDrawBuffer(GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT);
-    if (curfractal == -1)
+    if (!curfractal)
         return;
     vars["p1"] = p1;
-    Rulerunner runner(systems[size_t(curfractal)], level, thresh, vars);
+    Rulerunner runner(systems[*curfractal], level, thresh, vars);
     while (!runner.done())
         runner.drawnextpoint();
     glutSwapBuffers();
@@ -57,7 +66,7 @@ void init() {
 
 void change_window_title() {
     std::ostringstream os1;
-    os1 << "L' Systems Fractal: " << systems[size_t(curfractal)].getname()
+    os1 << "L' Systems Fractal: " << systems[*curfractal].getname()
         << " Level: " << level;
 
     glutSetWindowTitle(os1.str().c_str());
@@ -66,10 +75,10 @@ void change_window_title() {
 void readtheconfigfile() {
     try {
         systems = readlsystemfile();
-        curfractal = -1;
-        for (unsigned int ii = 0; ii < systems.size(); ++ii) {
+        curfractal = nullopt;
+        for (auto ii = 0u; ii < systems.size(); ++ii) {
             if (systems[ii].isactive()) {
-                curfractal = int(ii);
+                curfractal = ii;
                 break;
             }
         }
@@ -87,7 +96,7 @@ void adjust_level(unsigned int newlevel) {
 }
 
 void handle_frac_menu(int value) {
-    curfractal = value;
+    curfractal = size_t(value);
     adjust_level(0);
     glutPostRedisplay();
 }
