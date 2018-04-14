@@ -38,5 +38,5 @@ void Rule::cachevalues(const Context& cc) {
         case MIDPT:
             break;
     }
-    cachedscalefac = scalefac.get() ? scalefac->eval(cc) : 1;
+    cachedscalefac = scalefac ? scalefac->eval(cc) : 1;
 }
