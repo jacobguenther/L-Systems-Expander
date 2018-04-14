@@ -116,7 +116,7 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
         in.open("../" + configfilename);
     }
     if (!in.good())
-        throw runtime_error("Couldn't open file " + configfilename + "\n");
+        throw runtime_error("Couldn't open file " + configfilename);
     Lexer lex(in);
 
     vector<Lsystem> thelsystems;
@@ -177,7 +177,7 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
                         throw runtime_error("Expected option line or rule definition");
                 }
             } catch (runtime_error &error) {
-                throw runtime_error(std::string(error.what()) + " in " + systemname + " rule " + rulename);
+                throw runtime_error(std::string(error.what()).append(" in ").append(systemname).append(" rule ").append(rulename));
             }
             t = lex.nexttoken();
         }
