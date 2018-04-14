@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <utility>
 
 #include "Context.h"
 #include "Parser.h"
@@ -22,7 +23,7 @@ using Cmdcont = std::list<std::shared_ptr<Cmd> >;
 
 class Rotatecmd : public Cmd {
    public:
-    explicit Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(_a) {}
+    explicit Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(std::move(_a)) {}
     void execute(Rulerunner *master) override { master->turtles.top().rotate(cachedangle); }
     void cachevalue(const Context &cc) override { cachedangle = angle->eval(cc); }
 
@@ -51,9 +52,9 @@ class Popcmd : public Cmd {
 
 class Rulecmd : public Cmd {
    public:
-    explicit Rulecmd(const std::string &_m, bool _r = false, bool _f = false,
+    explicit Rulecmd(std::string _m, bool _r = false, bool _f = false,
             std::shared_ptr<Parsenode> _s = Parser("1").parse())
-        : myrule(_m), rev(_r), flip(_f), scale(_s) {}
+        : myrule(std::move(_m)), rev(_r), flip(_f), scale(std::move(_s)) {}
     void execute(Rulerunner *master) override { master->handlerule(myrule, rev, flip, cachedscale); }
     void cachevalue(const Context &cc) override { cachedscale = scale->eval(cc); }
 

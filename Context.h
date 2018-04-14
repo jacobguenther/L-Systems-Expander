@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <utility>
 
 class Parsenode;
 
@@ -12,7 +13,7 @@ typedef std::map<std::string, std::shared_ptr<Parsenode> > Exprtype;
 
 class Context {
    public:
-    Context(const Consttype &_c, const Exprtype &_e) : constants(_c), expressions(_e) {}
+    Context(Consttype _c, Exprtype _e) : constants(std::move(_c)), expressions(std::move(_e)) {}
     const Consttype constants;
     const Exprtype expressions;
 };

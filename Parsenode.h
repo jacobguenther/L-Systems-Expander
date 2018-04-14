@@ -4,6 +4,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 #include <iostream>
 #include "Context.h"
@@ -114,8 +115,8 @@ class Numnode : public Parsenode {
 
 class Idnode : public Parsenode {
    public:
-    Idnode(const std::string &_n, const std::vector<Parsenode *> &_p)
-        : name(_n), pp(_p) {}
+    Idnode(std::string _n, std::vector<Parsenode *> _p)
+        : name(std::move(_n)), pp(std::move(_p)) {}
     double eval(const Context &cc) override {  //add RND, srand, rand?!!!
         static const double DEG = 180 / M_PI;
         if (name == "acos") return acos(pp[0]->eval(cc));

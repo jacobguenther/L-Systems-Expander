@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <utility>
 #include <vector>
 
 #include "Rule.h"
@@ -15,7 +16,7 @@ class Lsystem {
     friend class Rulerunner;
 
    public:
-    Lsystem(std::string _n, bool _a, const Ruletable &_t, std::string _s, Exprtype _e) : name(_n), active(_a), table(_t), startrule(_s), expressions(_e) {}
+    Lsystem(std::string _n, bool _a, Ruletable _t, std::string _s, Exprtype _e) : name(std::move(_n)), active(_a), table(std::move(_t)), startrule(std::move(_s)), expressions(std::move(_e)) {}
     const std::string &getname() { return name; }
     bool isactive() const { return active; }
 
