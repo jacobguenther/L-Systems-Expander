@@ -7,9 +7,6 @@
 
 using std::vector;
 
-#include <algorithm>
-using std::find;
-
 #include <stdexcept>
 using std::runtime_error;
 
