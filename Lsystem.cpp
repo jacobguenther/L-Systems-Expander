@@ -6,6 +6,7 @@
 #include "Token.h"
 
 using std::vector;
+using std::string;
 
 #include <stdexcept>
 using std::runtime_error;
@@ -111,20 +112,20 @@ void readruleoptions(Lexer &lex, Rule &r) {
 
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
     ifstream in(configfilename);
-    if (!in.good()) {
+    if (!in) {
         in.clear();
         in.open("../" + configfilename);
     }
-    if (!in.good())
+    if (!in)
         throw runtime_error("Couldn't open file " + configfilename);
     Lexer lex(in);
 
     vector<Lsystem> thelsystems;
     while (true) {
-        std::string systemname;
+        string systemname;
         bool activerule = true;
         Ruletable table;
-        std::string startrule;
+        string startrule;
         Exprtype expressions;
 
         Token t;
@@ -144,7 +145,7 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
                 activerule = false;
                 t = lex.nexttoken();
             } else
-                throw runtime_error("unrecognized option after system name: " + systemname);
+                throw runtime_error("Unrecognized option after system name: " + systemname);
         }
         if (t.iseof())
             throw runtime_error("Unexpected end of file during " + systemname);
