@@ -19,10 +19,10 @@ using std::vector;
 namespace {
 
 int main_menu_id;
-GLdouble tx = -0.5, ty = 0, sc = 1;  //!!!!"class"ify this
+GLdouble tx = -0.5, ty = 0, sc = 1;
 unsigned int level = 1;
 vector<Lsystem> systems;
-int curfractal = -1;  //!!! change to optional or add a bool haveCurrentFractal
+int curfractal = -1;
 double p1 = 0;
 double thresh = 0.003;
 const double THRESHMAX = 1.0;
@@ -76,7 +76,6 @@ void readtheconfigfile() {
         change_window_title();
         glutPostRedisplay();
     } catch (std::exception &error) {
-        //!!! Some errors (like can't read config file) are terminal, others we can proceed
         std::cerr << error.what() << std::endl;
     }
 }
@@ -205,9 +204,7 @@ int main(int argc, char **argv) {
         cout << "Use u and v to change parameter for paramerized fractals." << endl;
         glutInit(&argc, argv);
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-        // Technically, our window is always double-buffered.
-        // To simulate single buffering, we draw into the front buffer,
-        // and don't swap.
+        
         glutInitWindowSize(801, 801);
         glutInitWindowPosition(100, 100);
         glutCreateWindow("L' Systems ");
