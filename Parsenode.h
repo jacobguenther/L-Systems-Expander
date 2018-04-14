@@ -155,8 +155,8 @@ class Idnode : public Parsenode {
         // return 0;
     }
     ~Idnode() override {
-        for (auto ii = pp.begin(); ii != pp.end(); ++ii)
-            delete *ii;
+        for (auto & ii : pp)
+            delete ii;
     }
 
    private:

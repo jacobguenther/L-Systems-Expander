@@ -57,8 +57,8 @@ class Rulerunner {
     Rulerunner(const Lsystem &_l, unsigned int _maxdepth, double _minscale, const Consttype &_c)
     : therules(_l.table), maxdepth(_maxdepth), finished(false), agraphic(), startrule(_l.startrule), context(_c, _l.expressions), backwards(false), minscale(_minscale) {
         Dropgraphic::haveapt = false;
-        for (auto ii = therules.begin(); ii != therules.end(); ++ii)
-            ii->second.cachevalues(context);
+        for (auto & therule : therules)
+            therule.second.cachevalues(context);
         turtles.push(Turtle());
         handlerule(startrule, false, false, 1);
         makeapoint();

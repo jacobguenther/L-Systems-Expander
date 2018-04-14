@@ -23,8 +23,8 @@ void Rule::setdrawmethod(Method m) {
 }
 
 void Rule::cachevalues(const Context& cc) {
-    for (auto ii = cmds.begin(); ii != cmds.end(); ++ii)
-        (*ii)->cachevalue(cc);
+    for (auto & cmd : cmds)
+        cmd->cachevalue(cc);
     switch (drawmethod) {
         case DROP:
             cacheddropangle = dropangle->eval(cc) * M_PI / 180.0;  //!!! cache sin and cos instead?
