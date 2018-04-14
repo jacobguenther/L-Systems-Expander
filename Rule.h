@@ -9,7 +9,7 @@
 class Cmd;
 #include "Parser.h"
 
-typedef std::list<std::shared_ptr<Cmd> > Cmdcont;
+using Cmdcont = std::list<std::shared_ptr<Cmd> >;
 
 class Rule {
     friend class Rulestate;

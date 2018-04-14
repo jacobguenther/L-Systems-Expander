@@ -18,7 +18,7 @@ class Cmd {
     static bool lastconstruct;
 };
 
-typedef std::list<std::shared_ptr<Cmd> > Cmdcont;
+using Cmdcont = std::list<std::shared_ptr<Cmd> >;
 
 class Rotatecmd : public Cmd {
    public:
