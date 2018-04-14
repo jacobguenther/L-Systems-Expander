@@ -22,13 +22,13 @@ class Rule {
                    MIDPT } ;
    public:
     void setcmds(const Cmdcont &newcmds) { cmds = newcmds; }  //!!!need smart ptr here, delete old cmds
-    Rule() : drawmethod(NORM) {}                              //!!! initialize scalefac, or fix it later when syntax checking?
+    //!!! initialize scalefac, or fix it later when syntax checking?
     void setdrawmethod(Method m);
     void cachevalues(const Context &cc);
 
    private:
     Cmdcont cmds;
-    Method drawmethod;
+    Method drawmethod=NORM;
     std::shared_ptr<Parsenode> dropangle;
     std::shared_ptr<Parsenode> dropdistance;
     std::shared_ptr<Parsenode> rectwidth;
