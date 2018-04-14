@@ -143,10 +143,10 @@ class Idnode : public Parsenode {
         if (name == "sqrt") return sqrt(pp[0]->eval(cc));
         if (name == "tan") return tan(pp[0]->eval(cc));
         if (name == "tand") return tan(pp[0]->eval(cc) / DEG);
-        Consttype::const_iterator ii = cc.constants.find(name);
+        auto ii = cc.constants.find(name);
         if (ii != cc.constants.end())
             return ii->second;
-        Exprtype::const_iterator jj = cc.expressions.find(name);
+        auto jj = cc.expressions.find(name);
         if (jj != cc.expressions.end())
             return jj->second->eval(cc);
         else
@@ -154,7 +154,7 @@ class Idnode : public Parsenode {
         // return 0;
     }
     ~Idnode() {
-        for (std::vector<Parsenode *>::const_iterator ii = pp.begin(); ii != pp.end(); ++ii)
+        for (auto ii = pp.begin(); ii != pp.end(); ++ii)
             delete *ii;
     }
 

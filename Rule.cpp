@@ -23,7 +23,7 @@ void Rule::setdrawmethod(Method m) {
 }
 
 void Rule::cachevalues(const Context& cc) {
-    for (Cmdcont::iterator ii = cmds.begin(); ii != cmds.end(); ++ii)
+    for (auto ii = cmds.begin(); ii != cmds.end(); ++ii)
         (*ii)->cachevalue(cc);
     switch (drawmethod) {
         case DROP:

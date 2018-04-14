@@ -15,7 +15,7 @@ std::shared_ptr<Parsenode> Parser::parse() {
 }
 
 void Parser::match(char x) {     //should never be called unless you KNOW it's going to succeed
-    char y = char(input.get());  //!!!Check for EOF? (probably not given precondition) CMH 4/8/18
+    auto y = char(input.get());  //!!!Check for EOF? (probably not given precondition) CMH 4/8/18
     if (x != y)
         throw logic_error(string("Called match(") + x + ") but got " + y + "!");
 }
