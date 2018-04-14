@@ -6,13 +6,13 @@ void Rule::setdrawmethod(Method m) {
         case NORM:
             break;
         case DROP:
-            if (!dropangle.get())
+            if (!dropangle)
                 dropangle = Parser("0").parse();
-            if (!dropdistance.get())
+            if (!dropdistance)
                 dropdistance = Parser("1").parse();
             break;
         case RECT:
-            if (!rectwidth.get())
+            if (!rectwidth)
                 rectwidth = Parser("0.1").parse();
             break;
         case INVIS:
