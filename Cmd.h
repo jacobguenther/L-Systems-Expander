@@ -13,7 +13,7 @@ class Cmd {
    public:
     virtual void execute(Rulerunner *master) = 0;
     virtual ~Cmd()=default;
-    virtual void cachevalue(const Context &) {}
+    virtual void cachevalue(const Context & /*unused*/) {}
 
    private:
     static bool lastconstruct;

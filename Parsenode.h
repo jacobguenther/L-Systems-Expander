@@ -107,7 +107,7 @@ class Unopnode : public Parsenode {
 class Numnode : public Parsenode {
    public:
     explicit Numnode(double _v) : val(_v) {}
-    double eval(const Context &) override { return val; }
+    double eval(const Context & /*unused*/) override { return val; }
 
    private:
     double val;

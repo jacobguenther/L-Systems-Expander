@@ -14,7 +14,7 @@ using Cmdcont = std::list<std::shared_ptr<Cmd> >;
 class Rule {
     friend class Rulestate;
     friend class Rulerunner;  //!!!be careful with friends?
-    friend void readruleoptions(Lexer &, Rule &);
+    friend void readruleoptions(Lexer & /*lex*/, Rule & /*r*/);
     enum Method { NORM,
                    DROP,
                    RECT,

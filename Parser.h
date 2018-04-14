@@ -16,7 +16,7 @@ class Parser {
     void match(char x);
     char nextchar() { return char(input.peek()); }  //!!!check for eof?
     double number();
-    [[noreturn]] void error(const std::string&);
+    [[noreturn]] void error(const std::string& /*text*/);
     Parsenode* value();
     Parsenode* ternop(Parsenode* pred);
     Parsenode* boolexpr();

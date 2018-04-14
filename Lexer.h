@@ -20,7 +20,7 @@ public:
         EOFTOKEN,
         DATATOKEN } ;
 
-    void escapedalpha(int);
+    void escapedalpha(int next);
     State iws();
     State bsn();
     State bsq();

@@ -57,7 +57,7 @@ void display() {
         std::cerr << gluErrorString(jj) << endl;
 }
 
-void idle(int) {
+void idle(int /*unused*/) {
     glutTimerFunc(TIMERMSECS, idle, 0);
     glDrawBuffer(GL_FRONT);
     if (!globalrunnerptr || globalrunnerptr->done())
@@ -123,7 +123,7 @@ void handle_main_menu(int value) {
         readtheconfigfile();
 }
 
-void keyboard(unsigned char dakey, int, int) {
+void keyboard(unsigned char dakey, int /*unused*/, int /*unused*/) {
     const GLdouble SCALEAMOUNT = 1.4;
     const double MOVESIZE = .01;
     if (dakey >= '0' && dakey <= '9')
