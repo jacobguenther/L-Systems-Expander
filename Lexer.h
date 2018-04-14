@@ -3,22 +3,23 @@
 #include <iosfwd>
 #include "Token.h"
 
-enum State { BSSPQ,
-               BSSPN,
-               NORMQ,
-               NORMN,
-               BSQ,
-               BSN,
-               EOLTOKEN,
-               EOFTOKEN,
-               DATATOKEN } ;
-
 class Lexer {
-   public:
+
+public:
     Lexer(std::istream &_in) : infile(_in) {}
     Token nexttoken();
 
    private:
+    enum State { BSSPQ,
+        BSSPN,
+        NORMQ,
+        NORMN,
+        BSQ,
+        BSN,
+        EOLTOKEN,
+        EOFTOKEN,
+        DATATOKEN } ;
+
     void escapedalpha(int);
     State iws();
     State bsn();

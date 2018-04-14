@@ -61,10 +61,10 @@ void Lexer::escapedalpha(int next) {
     }
 }
 
-State Lexer::iws() {
+Lexer::State Lexer::iws() {
     auto next = infile.get();
     while (isspace(next) && next != '\n') next = infile.get();
-    if (next == '\\') return BSN;
+    if (next == '\\') return State::BSN;
     if (next == '#') {
         infile.ignore(9999, '\n');
         return EOLTOKEN;
@@ -77,7 +77,7 @@ State Lexer::iws() {
     return NORMN;
 }
 
-State Lexer::bsspq() {
+Lexer::State Lexer::bsspq() {
     auto next = infile.get();
     while (isspace(next)) next = infile.get();
     if (next == '\\') return BSQ;
@@ -88,7 +88,7 @@ State Lexer::bsspq() {
     return NORMQ;
 }
 
-State Lexer::bsspn() {
+Lexer::State Lexer::bsspn() {
     auto next = infile.get();
     while (isspace(next)) next = infile.get();
     if (next == '\\') return BSN;
@@ -105,7 +105,7 @@ State Lexer::bsspn() {
     return NORMN;
 }
 
-State Lexer::normq() {
+Lexer::State Lexer::normq() {
     while (1) {
         auto next = infile.get();
         if (next == std::char_traits<char>::eof()) return DATATOKEN;
@@ -120,7 +120,7 @@ State Lexer::normq() {
     }
 }
 
-State Lexer::normn() {
+Lexer::State Lexer::normn() {
     while (1) {
         auto next = infile.get();
         if (next == std::char_traits<char>::eof()) return DATATOKEN;
@@ -141,7 +141,7 @@ State Lexer::normn() {
     }
 }
 
-State Lexer::bsq() {
+Lexer::State Lexer::bsq() {
     auto next = infile.get();
     if (next == std::char_traits<char>::eof()) return DATATOKEN;
     if (isspace(next)) return BSSPQ;
@@ -154,7 +154,7 @@ State Lexer::bsq() {
     return NORMQ;
 }
 
-State Lexer::bsn() {
+Lexer::State Lexer::bsn() {
     auto next = infile.get();
     if (next == std::char_traits<char>::eof()) return DATATOKEN;
     if (isspace(next)) return BSSPN;
