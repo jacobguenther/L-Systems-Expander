@@ -3,22 +3,20 @@
 
 #include <string>
 #include "Parsenode.h"
-using std::string;
 #include <sstream>
-using std::istringstream;
 
 class Parser {
    public:
-    explicit Parser(const string& _w) : input(_w) {}
+    explicit Parser(const std::string& _w) : input(_w) {}
     std::shared_ptr<Parsenode> parse();
 
    private:
-    istringstream input;
+    std::istringstream input;
 
     void match(char x);
     char nextchar() { return char(input.peek()); }  //!!!check for eof?
     double number();
-    [[noreturn]] void error(const string&);
+    [[noreturn]] void error(const std::string&);
     Parsenode* value();
     Parsenode* ternop(Parsenode* pred);
     Parsenode* boolexpr();
@@ -33,7 +31,7 @@ class Parser {
     Parsenode* morefactors(Parsenode* lhs);
     Parsenode* factor();
     Parsenode* idexpr();
-    string getidname();
+    std::string getidname();
 };
 
 #endif
