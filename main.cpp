@@ -3,15 +3,8 @@ using std::cout;
 using std::endl;
 #include <vector>
 using std::vector;
-#ifdef __apple_build_version__ //using Xcode
-#include <experimental/optional>
-using std::experimental::optional;
-using std::experimental::nullopt;
-#else
-#include <optional>
-using std::optional;
-using std::nullopt;
-#endif
+#include <algorithm>
+using std::find_if;
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -24,6 +17,7 @@ using std::nullopt;
 #include "Context.h"
 #include "Lsystem.h"
 #include "Rulerunner.h"
+using std::runtime_error;
 
 namespace {
 
@@ -31,7 +25,7 @@ int main_menu_id;
 GLdouble tx = -0.5, ty = 0, sc = 1;
 unsigned int level = 1;
 vector<Lsystem> systems;
-optional<size_t> curfractal;
+auto curfractal=systems.end();
 double p1 = 0;
 double thresh = 0.003;
 const double THRESHMAX = 1.0;
@@ -42,10 +36,8 @@ void display() {
 
     glDrawBuffer(GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT);
-    if (!curfractal)
-        return;
     vars["p1"] = p1;
-    Rulerunner runner(systems[*curfractal], level, thresh, vars);
+    Rulerunner runner(*curfractal, level, thresh, vars);
     while (!runner.done())
         runner.drawnextpoint();
     glutSwapBuffers();
@@ -66,7 +58,7 @@ void init() {
 
 void change_window_title() {
     std::ostringstream os1;
-    os1 << "L' Systems Fractal: " << systems[*curfractal].getname()
+    os1 << "L' Systems Fractal: " << curfractal->getname()
         << " Level: " << level;
 
     glutSetWindowTitle(os1.str().c_str());
@@ -75,13 +67,9 @@ void change_window_title() {
 void readtheconfigfile() {
     try {
         systems = readlsystemfile();
-        curfractal = nullopt;
-        for (auto ii = 0u; ii < systems.size(); ++ii) {
-            if (systems[ii].isactive()) {
-                curfractal = ii;
-                break;
-            }
-        }
+        curfractal = find_if(systems.begin(),systems.end(),[](const auto &f){return f.isactive();});
+        if (curfractal==systems.end())
+            throw(runtime_error("No active fractals in config file"));
         change_window_title();
         glutPostRedisplay();
     } catch (std::exception &error) {
@@ -96,7 +84,7 @@ void adjust_level(unsigned int newlevel) {
 }
 
 void handle_frac_menu(int value) {
-    curfractal = size_t(value);
+    curfractal = systems.begin()+value;
     adjust_level(0);
     glutPostRedisplay();
 }
@@ -208,15 +196,15 @@ void reshape(int w, int h) {
 int main(int argc, char **argv) {
     try {
         cout << "Use <, > (no shift necessary) to change fractal level." << endl;
-        cout << "Use i,j,k,l to translate." << endl;
+        cout << "Use i,j,k,l to translate and -,= to scale" << endl;
         cout << "Use [ and ] to change threshold for dynamic level drawing." << endl;
-        cout << "Use u and v to change parameter for paramerized fractals." << endl;
+        cout << "Use u and v to change parameter for parameterized fractals." << endl;
         glutInit(&argc, argv);
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
         
         glutInitWindowSize(801, 801);
         glutInitWindowPosition(100, 100);
-        glutCreateWindow("L' Systems ");
+        glutCreateWindow("L' Systems");
         init();
         glutDisplayFunc(display);
         glutKeyboardFunc(keyboard);
@@ -225,7 +213,7 @@ int main(int argc, char **argv) {
         readtheconfigfile();
         glutAddMenuEntry("Reread config file", 103);
 
-        for (unsigned int ii = 0; ii < systems.size(); ++ii)
+        for (auto ii = 0u; ii < systems.size(); ++ii)
             if (systems[ii].isactive())
                 glutAddMenuEntry(systems[ii].getname().c_str(), int(ii));
         glutAttachMenu(GLUT_RIGHT_BUTTON);
