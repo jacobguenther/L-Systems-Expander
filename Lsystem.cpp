@@ -120,7 +120,7 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
     Lexer lex(in);
 
     vector<Lsystem> thelsystems;
-    while (1) {
+    while (true) {
         std::string systemname;
         bool activerule = true;
         Ruletable table;

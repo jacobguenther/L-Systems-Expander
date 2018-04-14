@@ -162,7 +162,7 @@ Parsenode *Parser::idexpr() {
     vector<Parsenode *> params;
     if (nextchar() == '(') {
         match('(');
-        while (1) {
+        while (true) {
             params.push_back(value());
             if (nextchar() == ',')
                 match(',');

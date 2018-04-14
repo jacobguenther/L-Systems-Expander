@@ -106,7 +106,7 @@ Lexer::State Lexer::bsspn() {
 }
 
 Lexer::State Lexer::normq() {
-    while (1) {
+    while (true) {
         auto next = infile.get();
         if (next == std::char_traits<char>::eof()) return DATATOKEN;
         if (next == '\\') return BSQ;
@@ -121,7 +121,7 @@ Lexer::State Lexer::normq() {
 }
 
 Lexer::State Lexer::normn() {
-    while (1) {
+    while (true) {
         auto next = infile.get();
         if (next == std::char_traits<char>::eof()) return DATATOKEN;
         if (next == '\\') return BSN;
@@ -170,7 +170,7 @@ Lexer::State Lexer::bsn() {
 Token Lexer::nexttoken() {
     thetoken.clear();
     State thestate = iws();
-    while (1) {
+    while (true) {
         switch (thestate) {
             case BSSPQ:
                 thestate = bsspq();
