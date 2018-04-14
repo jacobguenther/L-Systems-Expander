@@ -55,7 +55,7 @@ void Rulestate::doit(Rulerunner *towho) {
 }
 
 std::shared_ptr<Graphic> Rulerunner::nextpoint() {
-    if (agraphic == 0)
+    if (agraphic == nullptr)
         throw logic_error("Called nextpoint() on a Rulerunner with no graphic ready\n");
     std::shared_ptr<Graphic> temp(agraphic);
     makeapoint();

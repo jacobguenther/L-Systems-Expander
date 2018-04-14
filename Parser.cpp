@@ -80,7 +80,7 @@ Parsenode *Parser::morebool(Parsenode *lhs)  //clean up??!!!
         Parsenode *rhs = bexpr();
         return new Binopnode('n', lhs, rhs);  // n means !=
     } else
-        return 0;
+        return nullptr;
 }
 
 Parsenode *Parser::bexpr() {
