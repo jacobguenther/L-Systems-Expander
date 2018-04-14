@@ -7,7 +7,7 @@ class Token {
     enum Type { DATAT,
                    EOLT,
                    EOFT };
-    Token() {}
+    Token()=default;
     Token(const std::string& _d, Type _t) : data(_d), mytype(_t) {}
     const std::string& getdata() const { return data; }
     bool isdata() const { return mytype == DATAT; }
