@@ -10,7 +10,7 @@ using std::istringstream;
 class Parser {
    public:
     Parser(const string& _w) : input(_w) {}
-    shared_ptr<Parsenode> parse();
+    std::shared_ptr<Parsenode> parse();
 
    private:
     istringstream input;

@@ -67,7 +67,7 @@ class Rulerunner {
         handlerule(startrule, false, false, 1);
         makeapoint();
     }
-    shared_ptr<Graphic> nextpoint();
+    std::shared_ptr<Graphic> nextpoint();
     void drawnextpoint();
     bool done() { return finished; }
     void handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale);
@@ -86,7 +86,7 @@ class Rulerunner {
     unsigned int maxdepth;
     stack<Turtle> turtles;
     bool finished;
-    shared_ptr<Graphic> agraphic;
+    std::shared_ptr<Graphic> agraphic;
     string startrule;
     const Context context;
     bool backwards;

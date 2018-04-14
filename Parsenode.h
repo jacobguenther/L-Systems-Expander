@@ -2,16 +2,9 @@
 #define PARSENODE_H
 
 #include <cmath>
-
 #include <stdexcept>
-using std::runtime_error;
-
 #include <string>
-using std::string;
-
 #include <vector>
-using std::vector;
-
 #include <iostream>
 #include "Context.h"
 //!!! Maybe turn off warnings in this file wrt using double as bool and comparing double ==
@@ -77,7 +70,7 @@ class Binopnode : public Parsenode {
             case '>':
                 return ll > rr;
             default:
-                throw runtime_error(string("unrecognized binary operator ") + op);
+                throw std::runtime_error(std::string{"unrecognized binary operator "} + op);
         }
     }
     ~Binopnode() {
@@ -99,7 +92,7 @@ class Unopnode : public Parsenode {
         if (op == '!') return !static_cast<int>(child->eval(cc));
         if (op == '-') return -child->eval(cc);
         if (op == '+') return child->eval(cc);
-        throw runtime_error(string("unrecognized unary operator ") + op);
+        throw std::runtime_error(std::string("unrecognized unary operator ") + op);
     }
     ~Unopnode() {
         delete child;
@@ -121,7 +114,7 @@ class Numnode : public Parsenode {
 
 class Idnode : public Parsenode {
    public:
-    Idnode(const string &_n, const vector<Parsenode *> &_p)
+    Idnode(const std::string &_n, const std::vector<Parsenode *> &_p)
         : name(_n), pp(_p) {}
     double eval(const Context &cc) {  //add RND, srand, rand?!!!
         static const double DEG = 180 / M_PI;
@@ -157,16 +150,16 @@ class Idnode : public Parsenode {
         if (jj != cc.expressions.end())
             return jj->second->eval(cc);
         else
-            throw runtime_error(name + ": undefined identifier.");
+            throw std::runtime_error(name + ": undefined identifier.");
         // return 0;
     }
     ~Idnode() {
-        for (vector<Parsenode *>::const_iterator ii = pp.begin(); ii != pp.end(); ++ii)
+        for (std::vector<Parsenode *>::const_iterator ii = pp.begin(); ii != pp.end(); ++ii)
             delete *ii;
     }
 
    private:
-    string name;
-    vector<Parsenode *> pp;
+    std::string name;
+    std::vector<Parsenode *> pp;
 };
 #endif

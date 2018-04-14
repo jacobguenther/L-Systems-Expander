@@ -4,11 +4,12 @@
 
 using std::logic_error;
 using std::runtime_error;
+using std::vector;
 
-shared_ptr<Parsenode> Parser::parse() {
+std::shared_ptr<Parsenode> Parser::parse() {
     Parsenode *val = value();
     if (input.get() == std::char_traits<char>::eof())
-        return shared_ptr<Parsenode>(val);
+        return std::shared_ptr<Parsenode>(val);
     error("Expected end of input");  //throws
 }
 

@@ -2,18 +2,14 @@
 #define RULE_H
 
 #include <memory>
-using std::make_shared;
-using std::shared_ptr;
 #include <stdexcept>
-using std::logic_error;
 #include <list>
-using std::list;
 
 #include "Lexer.h"
 class Cmd;
 #include "Parser.h"
 
-typedef list<shared_ptr<Cmd> > Cmdcont;
+typedef std::list<std::shared_ptr<Cmd> > Cmdcont;
 
 class Rule {
     friend class Rulestate;
@@ -34,10 +30,10 @@ class Rule {
    private:
     Cmdcont cmds;
     Method drawmethod;
-    shared_ptr<Parsenode> dropangle;
-    shared_ptr<Parsenode> dropdistance;
-    shared_ptr<Parsenode> rectwidth;
-    shared_ptr<Parsenode> scalefac;
+    std::shared_ptr<Parsenode> dropangle;
+    std::shared_ptr<Parsenode> dropdistance;
+    std::shared_ptr<Parsenode> rectwidth;
+    std::shared_ptr<Parsenode> scalefac;
     double cacheddropangle;
     double cacheddropdistance;
     double cachedrectwidth;
@@ -46,6 +42,6 @@ class Rule {
     //Color
 };
 
-typedef map<string, Rule> Ruletable;
+typedef std::map<string, Rule> Ruletable;
 
 #endif

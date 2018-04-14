@@ -2,14 +2,8 @@
 #define CMD_H
 
 #include <string>
-using std::string;
-
 #include <list>
-using std::list;
 
-using std::shared_ptr;  //no usings in .h!!! CMH 4/8/18
-
-//class Parsenode;
 #include "Context.h"
 #include "Parser.h"
 #include "Rulerunner.h"
@@ -25,16 +19,16 @@ class Cmd {
     static bool lastconstruct;
 };
 
-typedef list<shared_ptr<Cmd> > Cmdcont;
+typedef std::list<std::shared_ptr<Cmd> > Cmdcont;
 
 class Rotatecmd : public Cmd {
    public:
-    Rotatecmd(shared_ptr<Parsenode> _a) : angle(_a) {}
+    Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(_a) {}
     virtual void execute(Rulerunner *master) { master->turtles.top().rotate(cachedangle); }
     virtual void cachevalue(const Context &cc) { cachedangle = angle->eval(cc); }
 
    private:
-    shared_ptr<Parsenode> angle;
+    std::shared_ptr<Parsenode> angle;
     double cachedangle;
 };
 
@@ -59,7 +53,7 @@ class Popcmd : public Cmd {
 class Rulecmd : public Cmd {
    public:
     Rulecmd(const string &_m, bool _r = false, bool _f = false,
-            shared_ptr<Parsenode> _s = Parser("1").parse())
+            std::shared_ptr<Parsenode> _s = Parser("1").parse())
         : myrule(_m), rev(_r), flip(_f), scale(_s) {}
     virtual void execute(Rulerunner *master) { master->handlerule(myrule, rev, flip, cachedscale); }
     virtual void cachevalue(const Context &cc) { cachedscale = scale->eval(cc); }
@@ -68,7 +62,7 @@ class Rulecmd : public Cmd {
     const string myrule;
     bool rev;
     bool flip;
-    shared_ptr<Parsenode> scale;
+    std::shared_ptr<Parsenode> scale;
     double cachedscale;
 };
 #endif

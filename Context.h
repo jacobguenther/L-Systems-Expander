@@ -4,15 +4,11 @@
 #include <map>
 #include <memory>
 #include <string>
-using std::shared_ptr;
-
-using std::map;
-using std::string;
 
 class Parsenode;
 
-typedef map<string, double> Consttype;
-typedef map<string, shared_ptr<Parsenode> > Exprtype;
+typedef std::map<std::string, double> Consttype;
+typedef std::map<std::string, std::shared_ptr<Parsenode> > Exprtype;
 
 class Context {
    public:

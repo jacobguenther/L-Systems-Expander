@@ -3,9 +3,7 @@
 #include <iosfwd>
 #include "Token.h"
 
-using std::istream;
-
-typedef enum { BSSPQ,
+enum State { BSSPQ,
                BSSPN,
                NORMQ,
                NORMN,
@@ -13,11 +11,11 @@ typedef enum { BSSPQ,
                BSN,
                EOLTOKEN,
                EOFTOKEN,
-               DATATOKEN } State;
+               DATATOKEN } ;
 
 class Lexer {
    public:
-    Lexer(istream &_in) : infile(_in) {}
+    Lexer(std::istream &_in) : infile(_in) {}
     Token nexttoken();
 
    private:
@@ -30,8 +28,8 @@ class Lexer {
     State normn();
     State normq();
 
-    istream &infile;
-    string thetoken;
+    std::istream &infile;
+    std::string thetoken;
 };
 
 #endif

@@ -54,10 +54,10 @@ void Rulestate::doit(Rulerunner *towho) {
         (*mypos++)->execute(towho);
 }
 
-shared_ptr<Graphic> Rulerunner::nextpoint() {
+std::shared_ptr<Graphic> Rulerunner::nextpoint() {
     if (agraphic.get() == 0)
         throw logic_error("Called nextpoint() on a Rulerunner with no graphic ready\n");
-    shared_ptr<Graphic> temp(agraphic);
+    std::shared_ptr<Graphic> temp(agraphic);
     makeapoint();
     return temp;
 }

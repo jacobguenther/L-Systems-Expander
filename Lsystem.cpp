@@ -5,6 +5,8 @@
 #include "Rule.h"  //#include "Rule.h" will be enough, when I write it!!!
 #include "Token.h"
 
+using std::vector;
+
 #include <algorithm>
 using std::find;
 
@@ -13,6 +15,9 @@ using std::runtime_error;
 
 #include <fstream>
 using std::ifstream;
+
+#include <memory>
+using std::make_shared;
 
 void assertdatatoken(const Token &t) {
     if (t.iseof()) throw runtime_error("Unexpected end of file");
