@@ -15,12 +15,11 @@ class Rule {
     friend class Rulestate;
     friend class Rulerunner;  //!!!be careful with friends?
     friend void readruleoptions(Lexer &, Rule &);
-    typedef enum { NORM,
+    enum Method { NORM,
                    DROP,
                    RECT,
                    INVIS,
-                   MIDPT } Method;
-
+                   MIDPT } ;
    public:
     void setcmds(const Cmdcont &newcmds) { cmds = newcmds; }  //!!!need smart ptr here, delete old cmds
     Rule() : drawmethod(NORM) {}                              //!!! initialize scalefac, or fix it later when syntax checking?
