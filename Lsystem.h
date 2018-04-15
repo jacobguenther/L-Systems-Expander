@@ -8,8 +8,6 @@
 
 #include "Rule.h"
 
-using Ruletable = std::map<std::string, Rule>;
-
 #include "Context.h"
 
 class Lsystem {
