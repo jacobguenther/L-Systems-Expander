@@ -7,9 +7,11 @@
 
 #include "Lexer.h"
 class Cmd;
+using Cmdcont = std::list<std::shared_ptr<Cmd> >; //!!!rationalize includes, shouldn't need to forward declare here
+//and Cmdcont is defined again in Cmd.h, bad form!!!
+
 #include "Parser.h"
 
-using Cmdcont = std::list<std::shared_ptr<Cmd> >;
 
 class Rule {
     friend class Rulestate;
@@ -21,7 +23,7 @@ class Rule {
                    INVIS,
                    MIDPT } ;
    public:
-    void setcmds(const Cmdcont &newcmds) { cmds = newcmds; }  //!!!need smart ptr here, delete old cmds
+    void setcmds(Cmdcont &&newcmds) { cmds = std::move(newcmds); }
     //!!! initialize scalefac, or fix it later when syntax checking?
     void setdrawmethod(Method m);
     void cachevalues(const Context &cc);
@@ -41,6 +43,6 @@ class Rule {
     //Color
 };
 
-using Ruletable = std::map<std::string, Rule>;
+using Ruletable = std::map<std::string, Rule >; //!!!Should be reference, not copy
 
 #endif
