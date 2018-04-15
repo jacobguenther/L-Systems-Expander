@@ -67,7 +67,8 @@ void Rulerunner::makeapoint() {
     while (!rulestates.empty() && !agraphic.get()) {  //Go until we hit a turtle forward, or we're done
         if (rulestates.top().done()) {
             turtles.top().setscale(rulestates.top().oldscale);
-            if (rulestates.top().flipped) turtles.top().flip();
+            if (rulestates.top().flipped)
+                turtles.top().flip();
             rulestates.pop();
         } else
             rulestates.top().doit(this);
