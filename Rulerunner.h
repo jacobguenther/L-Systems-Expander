@@ -30,8 +30,8 @@ class Rulestate {
     friend class Rulerunner;
 
    public:
-    Rulestate(Rule *_m, bool _b, double _os, bool _f)
-        : backwards(_b), flipped(_f), myrule(_m), mypos(backwards ? myrule->cmds.end() : myrule->cmds.begin()), oldscale(_os) {}
+    Rulestate(const Rule *_m, bool _b, double _os, bool _f)
+        : backwards(_b), flipped(_f), myrule(_m), mypos(backwards ? myrule->cmds.cend() : myrule->cmds.cbegin()), oldscale(_os) {}
 
     bool done() {
         return mypos == (backwards ? myrule->cmds.begin() : myrule->cmds.end());
@@ -42,8 +42,8 @@ class Rulestate {
    private:
     bool backwards;
     bool flipped;
-    Rule *myrule;
-    Cmdcont::iterator mypos;
+    const Rule *myrule;
+    Cmdcont::const_iterator mypos;
     double oldscale;
 };
 

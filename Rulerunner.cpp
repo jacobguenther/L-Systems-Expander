@@ -12,13 +12,14 @@ using namespace std;
 
 void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
                             double localscale) {
+    const auto & rule = _therules[rr]; //!!!eventually decorate with reverse and flip?
     bool willflip = rulerev ^ ruleflip;
     if (_rulestates.size() >= _maxdepth || localscale * _turtle.getscale() < _minscale) {
         Motion temp;
         temp.frompt = _turtle.getposition();
         _turtle.forward(localscale);  //!!!  Here is where we fix issue #5
         temp.topt = _turtle.getposition();
-        switch (_therules[rr].drawmethod) {  //!!!Use a factory here!
+        switch (rule.drawmethod) {  //!!!Use a factory here!
             case Rule::NORM:
                 _agraphic = std::make_shared<Linegraphic>(temp);
                 break;
@@ -34,15 +35,14 @@ void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
             case Rule::DROP:
                 double ffac = (willflip ? -1 : 1) * _turtle.getflip();
                 _agraphic = std::make_shared<Dropgraphic>(temp,
-                                                          ffac * _therules[rr].cacheddropangle,
-                                                          _therules[rr].cacheddropdistance);
+                                                          ffac * rule.cacheddropangle,
+                                                          rule.cacheddropdistance);
                 break;  //!!!
         }
     } else {
         bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards;
-        _rulestates.push(Rulestate(&_therules[rr], currentlybw ^ rulerev,
-                                  _turtle.getscale(), willflip));
-        double newscalefac = localscale * _therules[rr].cachedscalefac; //localscale is A@ 2 notation, cachedscalefac is A ? localscale 1/sqrt(2) notation
+        _rulestates.push(Rulestate(&rule, currentlybw ^ rulerev, _turtle.getscale(), willflip));
+        double newscalefac = localscale * rule.cachedscalefac; //localscale is A@ 2 notation, cachedscalefac is A ? localscale 1/sqrt(2) notation
         _turtle.scaleby(newscalefac);
         if (willflip) _turtle.flip();
     }
