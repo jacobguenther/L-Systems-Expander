@@ -24,7 +24,7 @@ using Cmdcont = std::list<std::shared_ptr<Cmd> >;
 class Rotatecmd : public Cmd {
    public:
     explicit Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(std::move(_a)) {}
-    void execute(Rulerunner *master) override { master->turtles.top().rotate(cachedangle); }
+    void execute(Rulerunner *master) override { master->_turtles.top().rotate(cachedangle); }
     void cachevalue(const Context &cc) override { cachedangle = angle->eval(cc); }
 
    private:
@@ -34,7 +34,7 @@ class Rotatecmd : public Cmd {
 
 class Flipcmd : public Cmd {
    public:
-    void execute(Rulerunner *master) override { master->turtles.top().flip(); }
+    void execute(Rulerunner *master) override { master->_turtles.top().flip(); }
 };
 
 class Pushcmd : public Cmd {

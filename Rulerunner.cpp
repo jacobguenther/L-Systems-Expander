@@ -13,38 +13,38 @@ using namespace std;
 void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
                             double localscale) {
     bool willflip = rulerev ^ ruleflip;
-    if (rulestates.size() >= maxdepth || localscale * turtles.top().getscale() < minscale) {
+    if (_rulestates.size() >= _maxdepth || localscale * _turtles.top().getscale() < _minscale) {
         Motion temp;
-        temp.frompt = turtles.top().getposition();
-        turtles.top().forward(localscale);  //!!!  Here is where we fix issue #5
-        temp.topt = turtles.top().getposition();
-        switch (therules[rr].drawmethod) {  //!!!Use a factory here!
+        temp.frompt = _turtles.top().getposition();
+        _turtles.top().forward(localscale);  //!!!  Here is where we fix issue #5
+        temp.topt = _turtles.top().getposition();
+        switch (_therules[rr].drawmethod) {  //!!!Use a factory here!
             case Rule::NORM:
-                agraphic = std::make_shared<Linegraphic>(temp);
+                _agraphic = std::make_shared<Linegraphic>(temp);
                 break;
             case Rule::MIDPT:
-                agraphic = std::make_shared<Dropgraphic>(temp, 0, .5);
+                _agraphic = std::make_shared<Dropgraphic>(temp, 0, .5);
                 break;
             case Rule::INVIS:
-                agraphic = std::make_shared<Invisgraphic>();
+                _agraphic = std::make_shared<Invisgraphic>();
                 break;
             case Rule::RECT:
-                agraphic = std::make_shared<Linegraphic>(temp);
+                _agraphic = std::make_shared<Linegraphic>(temp);
                 break;  //!!!
             case Rule::DROP:
-                double ffac = (willflip ? -1 : 1) * turtles.top().getflip();
-                agraphic = std::make_shared<Dropgraphic>(temp,
-                                               ffac * therules[rr].cacheddropangle,
-                                               therules[rr].cacheddropdistance);
+                double ffac = (willflip ? -1 : 1) * _turtles.top().getflip();
+                _agraphic = std::make_shared<Dropgraphic>(temp,
+                                                          ffac * _therules[rr].cacheddropangle,
+                                                          _therules[rr].cacheddropdistance);
                 break;  //!!!
         }
     } else {
-        bool currentlybw = rulestates.empty() ? false : rulestates.top().backwards;
-        rulestates.push(Rulestate(&therules[rr], currentlybw ^ rulerev,
-                                  turtles.top().getscale(), willflip));
-        double newscalefac = localscale * therules[rr].cachedscalefac;
-        turtles.top().scaleby(newscalefac);
-        if (willflip) turtles.top().flip();
+        bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards;
+        _rulestates.push(Rulestate(&_therules[rr], currentlybw ^ rulerev,
+                                  _turtles.top().getscale(), willflip));
+        double newscalefac = localscale * _therules[rr].cachedscalefac;
+        _turtles.top().scaleby(newscalefac);
+        if (willflip) _turtles.top().flip();
     }
 }
 
@@ -56,25 +56,25 @@ void Rulestate::doit(Rulerunner *towho) {
 }
 
 std::shared_ptr<Graphic> Rulerunner::nextpoint() {
-    if (agraphic == nullptr)
+    if (_agraphic == nullptr)
         throw logic_error("Called nextpoint() on a Rulerunner with no graphic ready\n");
-    std::shared_ptr<Graphic> temp(agraphic);
+    std::shared_ptr<Graphic> temp(_agraphic);
     makeapoint();
     return temp;
 }
 
 void Rulerunner::makeapoint() {
-    while (!rulestates.empty() && !agraphic.get()) {  //Go until we hit a turtle forward, or we're done
-        if (rulestates.top().done()) {
-            turtles.top().setscale(rulestates.top().oldscale);
-            if (rulestates.top().flipped)
-                turtles.top().flip();
-            rulestates.pop();
+    while (!_rulestates.empty() && !_agraphic.get()) {  //Go until we hit a turtle forward, or we're done
+        if (_rulestates.top().done()) {
+            _turtles.top().setscale(_rulestates.top().oldscale);
+            if (_rulestates.top().flipped)
+                _turtles.top().flip();
+            _rulestates.pop();
         } else
-            rulestates.top().doit(this);
+            _rulestates.top().doit(this);
     }
-    if (rulestates.empty() && !agraphic.get())
-        finished = true;
+    if (_rulestates.empty() && !_agraphic.get())
+        _finished = true;
 }
 
 void Rulerunner::drawnextpoint() {
@@ -82,7 +82,7 @@ void Rulerunner::drawnextpoint() {
     if (agraphic.get() == 0)
         throw logic_error("Called drawnextpoint() on a Rulerunner with no graphic ready\n");
 #endif
-    agraphic->draw();
-    agraphic.reset();
+    _agraphic->draw();
+    _agraphic.reset();
     makeapoint();
 }
