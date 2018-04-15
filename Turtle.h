@@ -27,17 +27,15 @@ class Turtle {
     double getscale() const {
         return scalefac;
     }
-    double getflip() const { return flipfac; }
+    int getflip() const {
+        return flipfac;
+    }
     void setscale(double s) {
         scalefac = s;
     }
-    void reset() {
-        position = Point();
-        scalefac = flipfac = 1;
-        angle = 0;
+    Point getposition() {
+        return position;
     }
-    //!!! See rulerunner comments, reseting is probably a bad idea.
-    Point getposition() { return position; }
 
    private:
     int flipfac{1};
