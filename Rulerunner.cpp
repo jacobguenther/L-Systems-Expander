@@ -42,7 +42,7 @@ void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
         bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards;
         _rulestates.push(Rulestate(&_therules[rr], currentlybw ^ rulerev,
                                   _turtle.getscale(), willflip));
-        double newscalefac = localscale * _therules[rr].cachedscalefac;
+        double newscalefac = localscale * _therules[rr].cachedscalefac; //localscale is A@ 2 notation, cachedscalefac is A ? localscale 1/sqrt(2) notation
         _turtle.scaleby(newscalefac);
         if (willflip) _turtle.flip();
     }
