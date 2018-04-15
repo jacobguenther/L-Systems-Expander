@@ -13,11 +13,11 @@ using namespace std;
 void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
                             double localscale) {
     bool willflip = rulerev ^ ruleflip;
-    if (_rulestates.size() >= _maxdepth || localscale * _turtles.top().getscale() < _minscale) {
+    if (_rulestates.size() >= _maxdepth || localscale * _turtle.getscale() < _minscale) {
         Motion temp;
-        temp.frompt = _turtles.top().getposition();
-        _turtles.top().forward(localscale);  //!!!  Here is where we fix issue #5
-        temp.topt = _turtles.top().getposition();
+        temp.frompt = _turtle.getposition();
+        _turtle.forward(localscale);  //!!!  Here is where we fix issue #5
+        temp.topt = _turtle.getposition();
         switch (_therules[rr].drawmethod) {  //!!!Use a factory here!
             case Rule::NORM:
                 _agraphic = std::make_shared<Linegraphic>(temp);
@@ -32,7 +32,7 @@ void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
                 _agraphic = std::make_shared<Linegraphic>(temp);
                 break;  //!!!
             case Rule::DROP:
-                double ffac = (willflip ? -1 : 1) * _turtles.top().getflip();
+                double ffac = (willflip ? -1 : 1) * _turtle.getflip();
                 _agraphic = std::make_shared<Dropgraphic>(temp,
                                                           ffac * _therules[rr].cacheddropangle,
                                                           _therules[rr].cacheddropdistance);
@@ -41,10 +41,10 @@ void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
     } else {
         bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards;
         _rulestates.push(Rulestate(&_therules[rr], currentlybw ^ rulerev,
-                                  _turtles.top().getscale(), willflip));
+                                  _turtle.getscale(), willflip));
         double newscalefac = localscale * _therules[rr].cachedscalefac;
-        _turtles.top().scaleby(newscalefac);
-        if (willflip) _turtles.top().flip();
+        _turtle.scaleby(newscalefac);
+        if (willflip) _turtle.flip();
     }
 }
 
@@ -66,9 +66,9 @@ std::shared_ptr<Graphic> Rulerunner::nextpoint() {
 void Rulerunner::makeapoint() {
     while (!_rulestates.empty() && !_agraphic.get()) {  //Go until we hit a turtle forward, or we're done
         if (_rulestates.top().done()) {
-            _turtles.top().setscale(_rulestates.top().oldscale);
+            _turtle.setscale(_rulestates.top().oldscale);
             if (_rulestates.top().flipped)
-                _turtles.top().flip();
+                _turtle.flip();
             _rulestates.pop();
         } else
             _rulestates.top().doit(this);

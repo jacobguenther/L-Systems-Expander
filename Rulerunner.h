@@ -61,7 +61,7 @@ class Rulerunner {
         Dropgraphic::haveapt = false;
         for (auto & therule : _therules)
             therule.second.cachevalues(_context);
-        _turtles.push(Turtle());
+        _turtle.push();
         handlerule(_startrule, false, false, 1);
         makeapoint();
     }
@@ -73,13 +73,11 @@ class Rulerunner {
    private:
     void graphic(const Motion &);
     void makeapoint();
-    void pushturtle() { _turtles.push(_turtles.top()); }
-    void popturtle() { _turtles.pop(); }
     
     std::stack<Rulestate> _rulestates;
     Ruletable _therules;
     unsigned int _maxdepth;
-    std::stack<Turtle> _turtles;
+    Turtle _turtle;
     bool _finished;
     std::shared_ptr<Graphic> _agraphic;
     std::string _startrule;
