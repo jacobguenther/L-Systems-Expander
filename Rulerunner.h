@@ -54,40 +54,38 @@ class Rulerunner {
     friend class Pushcmd;
     // friend class Rulecmd; // !!! similar question here, is handlerule() public?
    public:
-    Rulerunner(const Lsystem &_l, unsigned int _maxdepth, double _minscale, const Consttype &_c)
-        : therules(_l.table), maxdepth(_maxdepth), finished(false), startrule(_l.startrule)
-            ,context(_c, _l.expressions), backwards(false), minscale(_minscale)
+    Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
+        : _therules(l.table), _maxdepth(maxdepth), _finished(false), _startrule(l.startrule)
+            ,_context(c, l.expressions), _backwards(false), _minscale(minscale)
     {
         Dropgraphic::haveapt = false;
-        for (auto & therule : therules)
-            therule.second.cachevalues(context);
-        turtles.push(Turtle());
-        handlerule(startrule, false, false, 1);
+        for (auto & therule : _therules)
+            therule.second.cachevalues(_context);
+        _turtles.push(Turtle());
+        handlerule(_startrule, false, false, 1);
         makeapoint();
     }
     std::shared_ptr<Graphic> nextpoint();
     void drawnextpoint();
-    bool done() { return finished; }
+    bool done() { return _finished; }
     void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
-
-    //   void adjustcontext(const string &varname,double val)
-    //      {context[varname]=val;}
 
    private:
     void graphic(const Motion &);
     void makeapoint();
-    void pushturtle() { turtles.push(turtles.top()); }
-    void popturtle() { turtles.pop(); }
-    std::stack<Rulestate> rulestates;
-    Ruletable therules;
-    unsigned int maxdepth;
-    std::stack<Turtle> turtles;
-    bool finished;
-    std::shared_ptr<Graphic> agraphic;
-    std::string startrule;
-    const Context context;
-    bool backwards;
-    double minscale;
+    void pushturtle() { _turtles.push(_turtles.top()); }
+    void popturtle() { _turtles.pop(); }
+    
+    std::stack<Rulestate> _rulestates;
+    Ruletable _therules;
+    unsigned int _maxdepth;
+    std::stack<Turtle> _turtles;
+    bool _finished;
+    std::shared_ptr<Graphic> _agraphic;
+    std::string _startrule;
+    const Context _context;
+    bool _backwards;
+    double _minscale;
 };
 
 #endif
