@@ -33,8 +33,7 @@ class Dropgraphic : public Graphic {
     Dropgraphic(const Motion &_m, double da, double dd)
         : Graphic(_m), draws(haveapt) {
         Motion todraw;
-        if (haveapt)
-            todraw.frompt = storedpt;
+        todraw.frompt = storedpt;
         double dx = m.topt.x - m.frompt.x;
         double dy = m.topt.y - m.frompt.y;
         storedpt.x = m.frompt.x + dd * (cos(da) * dx - sin(da) * dy);
