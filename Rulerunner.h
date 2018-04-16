@@ -61,7 +61,6 @@ class Rulerunner {
         Dropgraphic::haveapt = false;
         for (auto & therule : _therules)
             therule.second.cachevalues(_context);
-        _turtle.push();
         handlerule(_startrule, false, false, 1);
         makeapoint();
     }
