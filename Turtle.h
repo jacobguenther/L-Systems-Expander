@@ -8,6 +8,8 @@
 const double DEG2RAD = M_PI / 180;
 
 #include "PointMotion.h"
+#include "Rule.h"
+#include "Graphic.h"
 
 class Turtle {
    public:
@@ -43,6 +45,7 @@ class Turtle {
     void pop() {
         _states.pop();
     }
+    std::shared_ptr<Graphic> draw(const Rule &rule);
    private:
 
     struct TurtleState {

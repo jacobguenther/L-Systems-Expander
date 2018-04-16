@@ -10,45 +10,23 @@ using std::logic_error;
 using namespace std;
 #endif
 
-void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip,
-                            double localscale) {
+void Rulerunner::handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale) {
     const auto & rule = _therules[rr]; //!!!eventually decorate with reverse and flip?
-    bool willflip = rulerev ^ ruleflip;
-    if (_rulestates.size() >= _maxdepth || localscale * _turtle.getscale() < _minscale) {
-        Motion temp;
-        temp.frompt = _turtle.getposition();
-        _turtle.forward(localscale);  //!!!  Here is where we fix issue #5
-        temp.topt = _turtle.getposition();
-        switch (rule.drawmethod) {  //!!!Use a factory here!
-            case Rule::NORM:
-                _agraphic = std::make_shared<Linegraphic>(temp);
-                break;
-            case Rule::MIDPT:
-                _agraphic = std::make_shared<Dropgraphic>(temp, 0, .5);
-                break;
-            case Rule::INVIS:
-                _agraphic = std::make_shared<Invisgraphic>();
-                break;
-            case Rule::RECT:
-                _agraphic = std::make_shared<Linegraphic>(temp);
-                break;  //!!!
-            case Rule::DROP:
-                double ffac = (willflip ? -1 : 1) * _turtle.getflip();
-                _agraphic = std::make_shared<Dropgraphic>(temp,
-                                                          ffac * rule.cacheddropangle,
-                                                          rule.cacheddropdistance);
-                break;  //!!!
-        }
+    if (_rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale) {
+        _agraphic = _turtle.draw(rule);
     } else {
-        bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards;
+        bool willflip = rulerev ^ ruleflip;
+        _turtle.scaleby(localscale);
+        if (willflip)
+            _turtle.flip();
+        bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here
         _rulestates.push(Rulestate(&rule, currentlybw ^ rulerev, _turtle.getscale(), willflip));
         double newscalefac = localscale * rule.cachedscalefac; //localscale is A@ 2 notation, cachedscalefac is A ? localscale 1/sqrt(2) notation
         _turtle.scaleby(newscalefac);
-        if (willflip) _turtle.flip();
     }
 }
 
-void Rulestate::doit(Rulerunner *towho) {
+void Rulestate::doit(Rulerunner *towho) {//!!! Need to wrap rule so this can use reverse iterators
     if (backwards)
         (*--mypos)->execute(towho);
     else
@@ -56,7 +34,7 @@ void Rulestate::doit(Rulerunner *towho) {
 }
 
 std::shared_ptr<Graphic> Rulerunner::nextpoint() {
-    if (_agraphic == nullptr)
+    if (_agraphic == nullptr) //!!! Should this be an assert?
         throw logic_error("Called nextpoint() on a Rulerunner with no graphic ready\n");
     std::shared_ptr<Graphic> temp(_agraphic);
     makeapoint();
@@ -79,7 +57,7 @@ void Rulerunner::makeapoint() {
 
 void Rulerunner::drawnextpoint() {
 #ifdef _DEBUG
-    if (agraphic.get() == 0)
+    if (agraphic == nullptr)
         throw logic_error("Called drawnextpoint() on a Rulerunner with no graphic ready\n");
 #endif
     _agraphic->draw();

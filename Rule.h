@@ -14,6 +14,7 @@ using Cmdcont = std::list<std::shared_ptr<Cmd> >; //!!!rationalize includes, sho
 
 
 class Rule {
+    friend class Turtle;
     friend class Rulestate;
     friend class Rulerunner;  //!!!be careful with friends?
     friend void readruleoptions(Lexer &lex, Rule &r);
