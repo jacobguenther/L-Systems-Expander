@@ -16,7 +16,6 @@ class Cmd {
     virtual void cachevalue(const Context & /*unused*/) {}
 
    private:
-    static bool lastconstruct;
 };
 
 using Cmdcont = std::list<std::shared_ptr<Cmd> >;
