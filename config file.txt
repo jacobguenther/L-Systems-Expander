@@ -1,3 +1,7 @@
+scaleTester
+A : A@ 2 left 60 A right 120 A left 60
+A ? localscale 1/3
+
 dragon
 A : left 45 A right 90 ~A left 45
 A ? localscale 1/sqrt(2)
@@ -399,9 +403,9 @@ Tromino #63.43... is acos(1/sqrt(5))
 	A : invis left 90 A A A right 90 |A right 90 \
 	    A A A right 90 |A left 180 invis invis
 	invis : invis
-	invis ? drawmethod invisible
     A ? localscale 1/3
-   
+    invis ? drawmethod invisible
+
 "Menger sponge 2"
 	A : invis left 90 A A A right 180 invis left 90 A left 90 |A \
 		right 180 invis A A right 180 invis left 90 A right 180 \
