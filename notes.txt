@@ -5,7 +5,7 @@ can we make a C++ base class for glut programs? And/or CAVE programs?
 
 How about a camera zoom class based on transvecpos.hpp?
 
-dont forget curve inside penrose tilings
+don't forget curve inside penrose tilings
 
 Use this projects parser, context, etc. as master versions
 
@@ -54,11 +54,6 @@ and make ALL functions go into .cpp files
 
 .h files should include only needed header files, forward declaring when necessary
 
-address virtual constructor issue. EH? What the heck did I mean. Desctructor, maybe?
-
-version number and date all files
-copyright notice
-
 --------------------------------------------
 Things to do
 --------------------------------------------
@@ -77,18 +72,14 @@ lexer needs a little help with comment lines. Seems that
 	2) lines with nothing but whitespace and then a comment shouldn't get eol after comment
 This should be solved by Haskell style layout rules.
 
-Need starting position for turtle. Starting size, too?
+Need starting position for turtle. Starting scale, too?
 
 info and startrule are wierd. Info needs to be a system option, and startrule looks like a
 rule option but is really a system option. Should also have a way to display the info.
 
-starting fractal is always first one in file, even if inactive.
-
 Add ways to interactivly
-	reload the config file
 	make systems inactive or active
 	Set drawmethod to or from midpoint
-	Use alternate starting rule
 
 midpoint drawmethod a property of the whole system? Yes, I believe so.
 
@@ -111,12 +102,25 @@ it after constructor time!
 
 :: or % to implement rule that doesn't increment depth count
 --------------------------------------------
-Discuss with Glenn
+Notes from main.cpp
+  //!!!!"class"ify this (wrt a tx, ty translation pair and a sc scale
+    //!!!glBegin->glEnd a C++ class constructor destructor resource acquisition?
+int curfractal = -1;  //!!! change to optional or add a bool haveCurrentFractal
+    } catch (std::exception &error) {
+        //!!! Some errors (like can't read config file) are terminal, others we can proceed
+        std::cerr << error.what() << std::endl;
+    }
+
+
 --------------------------------------------
-Animation and/or double buffering?
+Consider parser type any<T> instead of double?
 --------------------------------------------
 
 
+We cache things because they can't be evaluated until parameter value is known, but this seems prone to error. Maybe no cache at all? But then we're parsing every time. Hmmmmm.
 
+What's the deal with rules in a system in the config file that aren't defined, or refer to themselves only, or are defined as empty? 
 
-crashes (seg fault) if run with no config file
+"reverse" is really "reflect", yes? At least for users.
+
+Maybe rules with a "start" symbol should go one lever further? (So they don't automatically start with a unit line.)
