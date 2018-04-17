@@ -68,7 +68,7 @@ class Rulerunner {
     void drawnextpoint();
     bool done() { return _finished; }
     void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
-
+    bool isDeepEnough();
    private:
     void graphic(const Motion &);
     void makeapoint();

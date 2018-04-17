@@ -12,13 +12,17 @@ using std::logic_error;
 using namespace std;
 #endif
 
+bool Rulerunner::isDeepEnough() {
+    return _rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale;
+}
+
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale) {
-    const auto & rule = _therules[rr]; //!!!eventually decorate with reverse and maybe flip?
-    if (_rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale) {
+    const auto & rule = _therules[rr];
+    if (isDeepEnough()) {
         _agraphic = _turtle.draw(rule,rulerev ^ ruleflip,localscale);
     } else {
         bool willflip = rulerev ^ ruleflip;
-        bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here
+        bool currentlybw = !_rulestates.empty() && _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here
         _rulestates.push(Rulestate(&rule, currentlybw ^ rulerev, _turtle.getscale(), willflip));
         if (willflip)
             _turtle.flip();
