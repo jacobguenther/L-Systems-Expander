@@ -18,10 +18,10 @@ bool Rulerunner::isDeepEnough() {
 
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale) {
     const auto & rule = _therules[rr];
+    bool willflip = rulerev ^ ruleflip;
     if (isDeepEnough()) {
-        _agraphic = _turtle.draw(rule,rulerev ^ ruleflip,localscale);
+        _agraphic = _turtle.draw(rule,willflip?-1.0:1.0,localscale);
     } else {
-        bool willflip = rulerev ^ ruleflip;
         bool currentlybw = !_rulestates.empty() && _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here
         _rulestates.push(Rulestate(&rule, currentlybw ^ rulerev, _turtle.getscale(), willflip));
         if (willflip)
