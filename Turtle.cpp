@@ -1,22 +1,24 @@
 #include "Turtle.h"
 
-std::shared_ptr<Graphic> Turtle::draw(const Rule &rule) {
+using std::make_unique;
+
+std::unique_ptr<Graphic> Turtle::draw(const Rule &rule, double flipFactor, double distance) {
     Motion temp;
     temp.frompt = getposition();
-    forward(1);  //!!!  Here is where we fix issue #5
+    forward(distance);
     temp.topt = getposition();
     switch (rule.drawmethod) {  //!!!Use a factory here!
         case Rule::NORM:
-            return std::make_shared<Linegraphic>(temp);
+            return make_unique<Linegraphic>(temp);
         case Rule::MIDPT:
-            return std::make_shared<Dropgraphic>(temp, 0, .5);
+            return make_unique<Dropgraphic>(temp, 0, .5);
         case Rule::INVIS:
-            return std::make_shared<Invisgraphic>();
+            return make_unique<Invisgraphic>();
         case Rule::RECT:
-            return std::make_shared<Linegraphic>(temp);
+            return make_unique<Linegraphic>(temp);
         case Rule::DROP:
-            return std::make_shared<Dropgraphic>(temp,
-                                                      getflip() * rule.cacheddropangle,
-                                                      rule.cacheddropdistance);
+            return make_unique<Dropgraphic>(temp,
+                                            flipFactor* getflip() * rule.cacheddropangle,
+                                            rule.cacheddropdistance);
     }
 }

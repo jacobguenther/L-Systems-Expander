@@ -15,13 +15,7 @@ using namespace std;
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale) {
     const auto & rule = _therules[rr]; //!!!eventually decorate with reverse and maybe flip?
     if (_rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale) {
-        if(rulerev ^ ruleflip)
-            _turtle.flip();
-        _turtle.scaleby(localscale);
-        _agraphic = _turtle.draw(rule);
-        _turtle.scaleby(1.0/localscale);
-        if(rulerev ^ ruleflip)
-            _turtle.flip();
+        _agraphic = _turtle.draw(rule,rulerev ^ ruleflip,localscale);
     } else {
         bool willflip = rulerev ^ ruleflip;
         bool currentlybw = _rulestates.empty() ? false : _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here

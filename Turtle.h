@@ -45,7 +45,7 @@ class Turtle {
     void pop() {
         _states.pop();
     }
-    std::shared_ptr<Graphic> draw(const Rule &rule);
+    std::unique_ptr<Graphic> draw(const Rule &rule, double flipFactor, double distance);
    private:
 
     struct TurtleState {
