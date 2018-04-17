@@ -53,7 +53,7 @@ void init() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glLineWidth(2.0);
-    glColor3d(.8, .2, .5);
+    glColor3d(.8, .8, .5);
 }
 
 void change_window_title() {

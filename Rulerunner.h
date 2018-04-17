@@ -55,14 +55,15 @@ class Rulerunner {
     // friend class Rulecmd; // !!! similar question here, is handlerule() public?
    public:
     Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
-    : _therules(l.table), _startrule(l.startrule)
-    ,_rulestates{{Rulestate{&_therules[_startrule],false,1.0,false}}}
-    ,_maxdepth(maxdepth),_context(c, l.expressions), _minscale(minscale)
+    : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
+//    ,_rulestates{{Rulestate{&_therules[_startrule],false,1.0,false}}}
+    ,_maxdepth(maxdepth), _minscale(minscale)
     {
         Dropgraphic::haveapt = false;
         for (auto & therule : _therules)
             therule.second.cachevalues(_context);
-//        handlerule(_startrule, false, false, 1);
+//        _turtle.scaleby(_therules[_startrule].cachedscalefac);
+        handlerule(_startrule, false, false, 1.0);
         makeapoint();
     }
     std::shared_ptr<Graphic> nextpoint();
@@ -76,12 +77,12 @@ class Rulerunner {
     
     Ruletable _therules;
     std::string _startrule;
+    const Context _context;
     std::stack<Rulestate> _rulestates;
     unsigned int _maxdepth;
     Turtle _turtle;
     bool _finished=false;
     std::shared_ptr<Graphic> _agraphic;
-    const Context _context;
     bool _backwards=false;
     double _minscale;
 };
