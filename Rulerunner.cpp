@@ -13,16 +13,16 @@ using namespace std;
 #endif
 
 bool Rulerunner::isDeepEnough() {
-    return _rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale;
+    return _rulestates.size() > _maxdepth || _turtle.getscale() < _minscale;
 }
 
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale) {
     const auto & rule = _therules[rr];
     bool willflip = rulerev ^ ruleflip;
     if (isDeepEnough()) {
-        _agraphic = _turtle.draw(rule,willflip?-1.0:1.0,localscale);
+        _agraphic = _turtle.draw(rule,willflip?-1.0:1.0,localscale*rule.cachedscalefac);
     } else {
-        bool currentlybw = !_rulestates.empty() && _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here
+        bool currentlybw = _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here
         _rulestates.push(Rulestate(&rule, currentlybw ^ rulerev, _turtle.getscale(), willflip));
         if (willflip)
             _turtle.flip();
