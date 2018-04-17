@@ -80,6 +80,8 @@ void readruleoptions(Lexer &lex, Rule &r) {
                 r.setdrawmethod(Rule::INVIS);
             else if (t.getdata() == "midpoint")
                 r.setdrawmethod(Rule::MIDPT);
+            else if (t.getdata() == "write")
+                r.setdrawmethod(Rule::WRITE);
             else
                 throw runtime_error("Unexpected draw method " + t.getdata());
         } else if (t.getdata() == "dropangle") {

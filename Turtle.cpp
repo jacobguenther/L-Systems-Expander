@@ -1,6 +1,9 @@
 #include "Turtle.h"
 
 using std::make_unique;
+#include <iostream>
+using std::cout;
+using std::endl;
 
 std::unique_ptr<Graphic> Turtle::draw(const Rule &rule, double flipFactor, double distance) {
     Motion temp;
@@ -20,5 +23,8 @@ std::unique_ptr<Graphic> Turtle::draw(const Rule &rule, double flipFactor, doubl
             return make_unique<Dropgraphic>(temp,
                                             flipFactor* getflip() * rule.cacheddropangle,
                                             rule.cacheddropdistance);
+        case Rule::WRITE:
+            cout << "[" << getflip() << "," << getscale() << "] " << rule.info << " distance: " << distance << " flipFactor: " << flipFactor << endl;
+            return make_unique<Linegraphic>(temp);
     }
 }

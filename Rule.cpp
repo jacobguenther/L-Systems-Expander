@@ -17,6 +17,7 @@ void Rule::setdrawmethod(Method m) {
             break;
         case INVIS:
         case MIDPT:
+        case WRITE:
             break;
     }
     drawmethod = m;
@@ -36,6 +37,7 @@ void Rule::cachevalues(const Context& cc) {
         case NORM:
         case INVIS:
         case MIDPT:
+        case WRITE:
             break;
     }
     cachedscalefac = scalefac ? scalefac->eval(cc) : 1;

@@ -22,7 +22,9 @@ class Rule {
                    DROP,
                    RECT,
                    INVIS,
-                   MIDPT } ;
+                   MIDPT,
+                  WRITE
+    } ;
    public:
     void setcmds(Cmdcont &&newcmds) { cmds = std::move(newcmds); }
     //!!! initialize scalefac, or fix it later when syntax checking?
