@@ -2,7 +2,8 @@
 #define POINTMOTION_H
 
 struct Point {
-    double x, y;
+    double x=0.0;
+    double y=0.0;
 };
 
 struct Motion {
