@@ -16,18 +16,17 @@ bool Rulerunner::isDeepEnough() {
     return _rulestates.size() > _maxdepth || _turtle.getscale() < _minscale;
 }
 
-void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double localscale) {
+void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double atScale) {
     const auto & rule = _therules[rr];
     bool willflip = rulerev ^ ruleflip;
     if (isDeepEnough()) {
-        _agraphic = _turtle.draw(rule,willflip?-1.0:1.0,localscale);
+        _agraphic = _turtle.draw(rule,willflip?-1.0:1.0,atScale);
     } else {
         _backwards ^= rulerev;
         _rulestates.push(Rulestate(&rule, _backwards, _turtle.getscale(), willflip));
-
         if (willflip)
             _turtle.flip();
-        _turtle.scaleby(localscale * rule.cachedscalefac);//localscale is A@ 2 notation, cachedscalefac is A ? localscale 1/sqrt(2) notation
+        _turtle.scaleby(atScale * rule._localScale);
     }
 }
 

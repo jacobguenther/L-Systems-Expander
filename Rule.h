@@ -41,7 +41,7 @@ class Rule {
     double cacheddropangle;
     double cacheddropdistance;
     double cachedrectwidth;
-    double cachedscalefac;
+    double _localScale;
     std::string info;
     //Color
 };

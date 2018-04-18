@@ -40,5 +40,5 @@ void Rule::cachevalues(const Context& cc) {
         case WRITE:
             break;
     }
-    cachedscalefac = scalefac ? scalefac->eval(cc) : 1;
+    _localScale = scalefac ? scalefac->eval(cc) : 1;
 }
