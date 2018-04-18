@@ -24,7 +24,6 @@ Rulerunner.h
 Token.h
 Turtle.h
 Turtle.cpp
-main.cpp
 )
 
 #turn on all warnings, minus some that are not useful
@@ -42,10 +41,15 @@ set(CMAKE_CXX_FLAGS
 "${CMAKE_CXX_FLAGS} -Wconversion -Wcomma \
 ")
 
-
-add_executable(lsystems ${SOURCES} "config file.txt")
-configure_file("config file.txt" "config file.txt" COPYONLY)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+
+add_executable(testsuite ${SOURCES} catchmain.cpp tests.cpp )
+target_link_libraries(testsuite ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+
+add_executable(lsystems ${SOURCES} main.cpp "config file.txt")
+configure_file("config file.txt" "config file.txt" COPYONLY)
 target_link_libraries(lsystems ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+
+
