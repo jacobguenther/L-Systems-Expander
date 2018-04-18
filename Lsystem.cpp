@@ -63,55 +63,6 @@ Cmdcont readrule(Lexer &lex) {
     return retval;
 }
 
-void readruleoptions(Lexer &lex, Rule &r) {
-    Token t = lex.nexttoken();
-
-    while (t.isdata()) {
-        if (t.getdata() == "drawmethod") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            if (t.getdata() == "drop")
-                r.setdrawmethod(Rule::DROP);
-            else if (t.getdata() == "normal")
-                r.setdrawmethod(Rule::NORM);
-            else if (t.getdata() == "rectangle")
-                r.setdrawmethod(Rule::RECT);
-            else if (t.getdata() == "invisible")
-                r.setdrawmethod(Rule::INVIS);
-            else if (t.getdata() == "midpoint")
-                r.setdrawmethod(Rule::MIDPT);
-            else if (t.getdata() == "write")
-                r.setdrawmethod(Rule::WRITE);
-            else
-                throw runtime_error("Unexpected draw method " + t.getdata());
-        } else if (t.getdata() == "dropangle") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            r.dropangle = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
-        } else if (t.getdata() == "dropdistance") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            r.dropdistance = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
-        } else if (t.getdata() == "rectwidth") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            r.rectwidth = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
-        }                                               //!!!fix similarity of last three elseifs
-        else if (t.getdata() == "info") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            r.info = t.getdata();
-        }  //!!!even this is pretty similar,
-        else if (t.getdata() == "localscale") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            r.scalefac = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
-        } else
-            throw runtime_error("Unexpected option " + t.getdata());
-        t = lex.nexttoken();
-    }
-}
-
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
     ifstream in(configfilename);
     if (!in) {
@@ -175,7 +126,7 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
                     if (t.getdata() == ":")
                         table[rulename].setcmds(readrule(lex));
                     else if (t.getdata() == "?")
-                        readruleoptions(lex, table[rulename]);
+                        table[rulename].readruleoptions(lex);
                     else
                         throw runtime_error("Expected option line or rule definition");
                 }

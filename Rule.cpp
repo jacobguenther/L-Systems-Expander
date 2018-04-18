@@ -1,5 +1,6 @@
 #include "Rule.h"
 #include "Cmd.h"
+#include <exception>
 
 void Rule::setdrawmethod(Method m) {
     switch (m) {
@@ -21,6 +22,55 @@ void Rule::setdrawmethod(Method m) {
             break;
     }
     drawmethod = m;
+}
+
+void Rule::readruleoptions(Lexer &lex) {
+    Token t = lex.nexttoken();
+    
+    while (t.isdata()) {
+        if (t.getdata() == "drawmethod") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            if (t.getdata() == "drop")
+                setdrawmethod(Rule::DROP);
+            else if (t.getdata() == "normal")
+                setdrawmethod(Rule::NORM);
+            else if (t.getdata() == "rectangle")
+                setdrawmethod(Rule::RECT);
+            else if (t.getdata() == "invisible")
+                setdrawmethod(Rule::INVIS);
+            else if (t.getdata() == "midpoint")
+                setdrawmethod(Rule::MIDPT);
+            else if (t.getdata() == "write")
+                setdrawmethod(Rule::WRITE);
+            else
+                throw std::runtime_error("Unexpected draw method " + t.getdata());
+        } else if (t.getdata() == "dropangle") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            dropangle = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+        } else if (t.getdata() == "dropdistance") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            dropdistance = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+        } else if (t.getdata() == "rectwidth") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            rectwidth = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+        }                                               //!!!fix similarity of last three elseifs
+        else if (t.getdata() == "info") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            info = t.getdata();
+        }  //!!!even this is pretty similar,
+        else if (t.getdata() == "localscale") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            scalefac = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+        } else
+            throw std::runtime_error("Unexpected option " + t.getdata());
+        t = lex.nexttoken();
+    }
 }
 
 void Rule::calculateParameters(const Context& cc) {

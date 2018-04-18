@@ -33,4 +33,5 @@ public:
     std::string thetoken;
 };
 
+void assertdatatoken(const Token &t);
 #endif
