@@ -22,8 +22,9 @@ void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, doubl
     if (isDeepEnough()) {
         _agraphic = _turtle.draw(rule,willflip?-1.0:1.0,localscale);
     } else {
-        bool currentlybw = !_rulestates.empty() && _rulestates.top().backwards; //!!! Should start with start rule on stack, then not check for empty() here
-        _rulestates.push(Rulestate(&rule, currentlybw ^ rulerev, _turtle.getscale(), willflip));
+        _backwards ^= rulerev;
+        _rulestates.push(Rulestate(&rule, _backwards, _turtle.getscale(), willflip));
+
         if (willflip)
             _turtle.flip();
         _turtle.scaleby(localscale * rule.cachedscalefac);//localscale is A@ 2 notation, cachedscalefac is A ? localscale 1/sqrt(2) notation
@@ -46,18 +47,20 @@ std::shared_ptr<Graphic> Rulerunner::nextpoint() {
 }
 
 void Rulerunner::makeapoint() {
-    while (!_rulestates.empty() && !_agraphic.get()) {  //Go until we hit a turtle forward, or we're done
-        
+    while (_agraphic == nullptr) {
         if (_rulestates.top().done()) {
             _turtle.setscale(_rulestates.top().oldscale);
             if (_rulestates.top().flipped)
                 _turtle.flip();
             _rulestates.pop();
+            if (_rulestates.empty()) {
+                _finished = true;
+                return;
+            }
+            _backwards = !_rulestates.empty() && _rulestates.top().backwards;
         } else
             _rulestates.top().doit(this);
     }
-    if (_rulestates.empty() && !_agraphic.get())
-        _finished = true;
 }
 
 void Rulerunner::drawnextpoint() {
