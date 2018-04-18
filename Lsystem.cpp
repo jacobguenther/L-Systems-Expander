@@ -51,13 +51,13 @@ Commands readrule(Lexer &lex) {
             while (thisrule[0] == '~' || thisrule[0] == '|') {
                 if (thisrule[0] == '~') rev = true;
                 if (thisrule[0] == '|') flip = true;
-                thisrule = thisrule.substr(1);  //all but first character
+                thisrule.remove_prefix(1);
             }
             if (thisrule[thisrule.length() - 1] == '@') {
-                thisrule = thisrule.substr(0, thisrule.length() - 1);
-                t = lex.nexttoken();
-                assertdatatoken(t);
-                retval.push_back(make_shared<RuleCommand>(string(thisrule), rev, flip, Parser(t.getdata()).parse()));
+                thisrule.remove_suffix(1);
+                auto localScale = lex.nexttoken();
+                assertdatatoken(localScale);
+                retval.push_back(make_shared<RuleCommand>(string(thisrule), rev, flip, Parser(localScale.getdata()).parse()));
             } else
                 retval.push_back(make_shared<RuleCommand>(string(thisrule), rev, flip));
         }
