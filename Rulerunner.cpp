@@ -3,8 +3,6 @@ using std::string;
 #include "Cmd.h"
 
 #include <memory>
-#include <stdexcept>
-using std::logic_error;
 #include <cassert>
 
 bool Rulerunner::isDeepEnough() {
@@ -12,7 +10,7 @@ bool Rulerunner::isDeepEnough() {
 }
 
 void Rulerunner::push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy) {
-    _backwards ^= ruleRev;
+    _backwards ^= ruleRev; //NOLINT
     _rulestates.push(Rulestate(rule, _backwards, scaleBy, flipFactor));
     _turtle.scaleby(scaleBy);
     _turtle.flipBy(flipFactor);
