@@ -7,8 +7,12 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <memory>
 #include "Context.h"
+
 //!!! Maybe turn off warnings in this file wrt using double as bool and comparing double ==
+
+using ParsenodePtr = std::unique_ptr<Parsenode>;
 
 class Parsenode {
    public:
@@ -21,27 +25,22 @@ class Parsenode {
 
 class Ternopnode : public Parsenode {
    public:
-    Ternopnode(Parsenode *_p, Parsenode *_t, Parsenode *_f)
-        : pred(_p), trueval(_t), falseval(_f) {}
+    Ternopnode(ParsenodePtr _p, ParsenodePtr _t, ParsenodePtr _f)
+    : pred(std::move(_p)), trueval(std::move(_t)), falseval(std::move(_f)) {}
     double eval(const Context &cc) override {
         return bool(pred->eval(cc)) ? trueval->eval(cc) : falseval->eval(cc);
     }
-    ~Ternopnode() override {
-        delete pred;
-        delete trueval;
-        delete falseval;
-    }
 
    private:
-    Parsenode *pred;
-    Parsenode *trueval;
-    Parsenode *falseval;
+    ParsenodePtr pred;
+    ParsenodePtr trueval;
+    ParsenodePtr falseval;
 };
 
 class Binopnode : public Parsenode {
    public:
-    Binopnode(char _o, Parsenode *_l, Parsenode *_r)
-        : op(_o), left(_l), right(_r) {}
+    Binopnode(char _o, ParsenodePtr _l, ParsenodePtr _r)
+        : op(_o), left(std::move(_l)), right(std::move(_r)) {}
     double eval(const Context &cc) override {
         double ll = left->eval(cc);
         double rr = right->eval(cc);
@@ -76,21 +75,17 @@ class Binopnode : public Parsenode {
                 throw std::runtime_error(std::string{"unrecognized binary operator "} + op);
         }
     }
-    ~Binopnode() override {
-        delete left;
-        delete right;
-    }
 
    private:
     char op;
-    Parsenode *left;
-    Parsenode *right;
+    ParsenodePtr left;
+    ParsenodePtr right;
 };
 
 class Unopnode : public Parsenode {
    public:
-    Unopnode(char _o, Parsenode *_c)
-        : op(_o), child(_c) {}
+    Unopnode(char _o, ParsenodePtr _c)
+        : op(_o), child(std::move(_c)) {}
     double eval(const Context &cc) override {
         if (op == '!')
           return static_cast<double>(!static_cast<bool>(child->eval(cc)));
@@ -98,13 +93,10 @@ class Unopnode : public Parsenode {
         if (op == '+') return child->eval(cc);
         throw std::runtime_error(std::string("unrecognized unary operator ") + op);
     }
-    ~Unopnode() override {
-        delete child;
-    }
 
    private:
     char op;
-    Parsenode *child;
+    ParsenodePtr child;
 };
 
 class Numnode : public Parsenode {
@@ -118,7 +110,7 @@ class Numnode : public Parsenode {
 
 class Idnode : public Parsenode {
    public:
-    Idnode(std::string _n, std::vector<Parsenode *> _p)
+    Idnode(std::string _n, std::vector<ParsenodePtr> _p)
         : name(std::move(_n)), pp(std::move(_p)) {}
     double eval(const Context &cc) override {  //add RND, srand, rand?!!!
         static const double DEG = 180 / M_PI;
@@ -156,13 +148,9 @@ class Idnode : public Parsenode {
         
         throw std::runtime_error(name + ": undefined identifier.");
     }
-    ~Idnode() override {
-        for (auto & ii : pp)
-            delete ii;
-    }
 
    private:
     std::string name;
-    std::vector<Parsenode *> pp;
+    std::vector<ParsenodePtr> pp;
 };
 #endif

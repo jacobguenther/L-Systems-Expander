@@ -6,11 +6,13 @@ using std::logic_error;
 using std::runtime_error;
 using std::vector;
 using std::string;
+using std::move;
+using std::make_unique;
 
 std::shared_ptr<Parsenode> Parser::parse() {
-    Parsenode *val = value();
+    auto val = value();
     if (input.get() == std::char_traits<char>::eof())
-        return std::shared_ptr<Parsenode>(val);
+        return std::shared_ptr<Parsenode>(move(val));
     error("Expected end of input");  //throws
 }
 
@@ -20,27 +22,27 @@ void Parser::match(char x) {     //should never be called unless you KNOW it's g
         throw logic_error(string("Called match(") + x + ") but got " + y + "!");
 }
 
-Parsenode *Parser::value() {
-    Parsenode *pred = boolexpr();
+ParsenodePtr Parser::value() {
+    ParsenodePtr pred = boolexpr();
     if (nextchar() == '?') {
         match('?');
-        Parsenode *trueval = value();
+        ParsenodePtr trueval = value();
         if (nextchar() != ':') error("Expected : in ternary operator");
         match(':');
-        Parsenode *falseval = value();
-        return new Ternopnode(pred, trueval, falseval);
+        ParsenodePtr falseval = value();
+        return make_unique<Ternopnode>(move(pred), move(trueval), move(falseval));
     }
     return pred;
 }
 
-Parsenode *Parser::boolexpr() {
-    Parsenode *lhs = bexpr();
-    if (auto more = morebool(lhs))
+ParsenodePtr Parser::boolexpr() {
+    ParsenodePtr lhs = bexpr();
+    if (auto more = morebool(move(lhs)))
         return more;
     return lhs;
 }
 
-Parsenode *Parser::morebool(Parsenode *lhs)  //clean up??!!!
+ParsenodePtr Parser::morebool(ParsenodePtr lhs)  //clean up??!!!
 {
     char op1 = nextchar();
     if (op1 == '<') {
@@ -48,73 +50,73 @@ Parsenode *Parser::morebool(Parsenode *lhs)  //clean up??!!!
         char op2 = nextchar();
         if (op2 == '=') {
             match(op2);
-            Parsenode *rhs = bexpr();
-            return new Binopnode('l', lhs, rhs); // l means <=
+            ParsenodePtr rhs = bexpr();
+            return make_unique<Binopnode>('l', move(lhs), move(rhs)); // l means <=
         }
-        Parsenode *rhs = bexpr();
-        return new Binopnode('<', lhs, rhs);
+        ParsenodePtr rhs = bexpr();
+        return make_unique<Binopnode>('<', move(lhs), move(rhs));
     }
     if (op1 == '>') {
         match(op1);
         char op2 = nextchar();
         if (op2 == '=') {
             match(op2);
-            Parsenode *rhs = bexpr();
-            return new Binopnode('g', lhs, rhs);  // g means >=
+            ParsenodePtr rhs = bexpr();
+            return make_unique<Binopnode>('g', move(lhs), move(rhs));  // g means >=
         }
-        Parsenode *rhs = bexpr();
-        return new Binopnode('>', lhs, rhs);
+        ParsenodePtr rhs = bexpr();
+        return make_unique<Binopnode>('>', move(lhs), move(rhs));
     }
     if (op1 == '=') {
         match(op1);
         if (nextchar() != '=') error("Expected = (for == operator)");
         match('=');
-        Parsenode *rhs = bexpr();
-        return new Binopnode('=', lhs, rhs);
+        ParsenodePtr rhs = bexpr();
+        return make_unique<Binopnode>('=', move(lhs), move(rhs));
     }
     if (op1 == '!') {
         match(op1);
         if (nextchar() != '=') error("Expected = (for != operator)");
         match('=');
-        Parsenode *rhs = bexpr();
-        return new Binopnode('n', lhs, rhs);  // n means !=
+        ParsenodePtr rhs = bexpr();
+        return make_unique<Binopnode>('n', move(lhs), move(rhs));  // n means !=
     }
-    return nullptr;
+    return lhs;
 }
 
-Parsenode *Parser::bexpr() {
-    Parsenode *lhs = bterm();
+ParsenodePtr Parser::bexpr() {
+    ParsenodePtr lhs = bterm();
     while (nextchar() == '|') {
         match('|');
         if (nextchar() != '|') error("Expected | (for || operator)");
         match('|');
-        Parsenode *rhs = bterm();
-        lhs = new Binopnode('|', lhs, rhs);
+        ParsenodePtr rhs = bterm();
+        lhs = make_unique<Binopnode>('|', move(lhs), move(rhs));
     }
     return lhs;
 }
 
-Parsenode *Parser::bterm() {
-    Parsenode *lhs = expr();
+ParsenodePtr Parser::bterm() {
+    ParsenodePtr lhs = expr();
     while (nextchar() == '&') {
         match('&');
         if (nextchar() != '&') error("Expected & (for && operator)");
         match('&');
-        Parsenode *rhs = expr();
-        lhs = new Binopnode('&', lhs, rhs);
+        ParsenodePtr rhs = expr();
+        lhs = make_unique<Binopnode>('&', move(lhs), move(rhs));
     }
     return lhs;
 }
 
-Parsenode *Parser::factor() {
+ParsenodePtr Parser::factor() {
     char next = nextchar();
     if (next == '-' || next == '!' || next == '+') {
         match(next);
-        return new Unopnode(next, factor());
+        return make_unique<Unopnode>(next, factor());
     }
     if (next == '(') {
         match('(');
-        Parsenode *val = value();
+        ParsenodePtr val = value();
         if (nextchar() != ')') error(") expected");
         match(')');
         return val;
@@ -124,41 +126,40 @@ Parsenode *Parser::factor() {
         return idexpr();
 
     if (isdigit(nextchar()) || nextchar() == '.')
-        return new Numnode(number());
+        return make_unique<Numnode>(number());
 
-    error("Expected expression");  //throws
-    //return 0;
+    error("Expected expression");
 }
 
-Parsenode *Parser::expr() {
-    Parsenode *lhs = term();
+ParsenodePtr Parser::expr() {
+    ParsenodePtr lhs = term();
     while (nextchar() == '+' ||
            nextchar() == '-') {
         char addop = nextchar();
         match(addop);
-        Parsenode *rhs = term();
-        lhs = new Binopnode(addop, lhs, rhs);
+        ParsenodePtr rhs = term();
+        lhs = make_unique<Binopnode>(addop, move(lhs), move(rhs));
     }
     return lhs;
 }
 
-Parsenode *Parser::term() {
-    Parsenode *lhs = factor();
+ParsenodePtr Parser::term() {
+    ParsenodePtr lhs = factor();
 
     while (nextchar() == '*' ||
            nextchar() == '/' ||
            nextchar() == '%') {
         char mulop = nextchar();
         match(mulop);
-        Parsenode *rhs = factor();
-        lhs = new Binopnode(mulop, lhs, rhs);
+        ParsenodePtr rhs = factor();
+        lhs = make_unique<Binopnode>(mulop, move(lhs), move(rhs));
     }
     return lhs;
 }
 
-Parsenode *Parser::idexpr() {
+ParsenodePtr Parser::idexpr() {
     std::string idname = getidname();
-    vector<Parsenode *> params;
+    vector<ParsenodePtr > params;
     if (nextchar() == '(') {
         match('(');
         while (true) {
@@ -172,7 +173,7 @@ Parsenode *Parser::idexpr() {
         }
         match(')');
     }
-    return new Idnode(idname, params);
+    return make_unique<Idnode>(idname, move(params));
 }
 
 std::string Parser::getidname() {

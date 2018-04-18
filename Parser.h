@@ -17,20 +17,20 @@ class Parser {
     char nextchar() { return char(input.peek()); }  //!!!check for eof?
     double number();
     [[noreturn]] void error(const std::string& /*text*/);
-    Parsenode* value();
-    Parsenode* ternop(Parsenode* pred);
-    Parsenode* boolexpr();
-    Parsenode* bexpr();
-    Parsenode* bterm();
-    Parsenode* morebterms(Parsenode* lhs);
-    Parsenode* morebfactors(Parsenode* lhs);
-    Parsenode* morebool(Parsenode* lhs);
-    Parsenode* expr();
-    Parsenode* moreterms(Parsenode* lhs);
-    Parsenode* term();
-    Parsenode* morefactors(Parsenode* lhs);
-    Parsenode* factor();
-    Parsenode* idexpr();
+    ParsenodePtr value();
+    ParsenodePtr ternop(ParsenodePtr pred);
+    ParsenodePtr boolexpr();
+    ParsenodePtr bexpr();
+    ParsenodePtr bterm();
+    ParsenodePtr morebterms(ParsenodePtr lhs);
+    ParsenodePtr morebfactors(ParsenodePtr lhs);
+    ParsenodePtr morebool(ParsenodePtr lhs);
+    ParsenodePtr expr();
+    ParsenodePtr moreterms(ParsenodePtr lhs);
+    ParsenodePtr term();
+    ParsenodePtr morefactors(ParsenodePtr lhs);
+    ParsenodePtr factor();
+    ParsenodePtr idexpr();
     std::string getidname();
 };
 
