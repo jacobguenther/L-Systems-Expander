@@ -20,9 +20,9 @@ void Rulerunner::push(const Rule &rule, bool ruleRev, double flipFactor, double 
 
 void Rulerunner::pop() {
     _turtle.flipBy(_rulestates.top()._flipFactor);
-    _turtle.scaleby(1.0/_rulestates.top().scaleBy);
+    _turtle.scaleby(1.0/_rulestates.top()._scaleFactor);
     _rulestates.pop();
-    _backwards = !_rulestates.empty() && _rulestates.top().backwards;
+    _backwards = !_rulestates.empty() && _rulestates.top()._isReversed;
 }
 
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double atScale) {
@@ -35,18 +35,18 @@ void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, doubl
     }
 }
 
-void Rulestate::doit(Rulerunner *towho) {//!!! Need to wrap rule so this can use reverse iterators
-    if (backwards)
-        (*--mypos)->execute(towho);
+void Rulestate::runCurrentCommandOn(Rulerunner *toWho) {//!!! Need to wrap rule so this can use reverse iterators
+    if (_isReversed)
+        (*--_nextCommand)->execute(toWho);
     else
-        (*mypos++)->execute(towho);
+        (*_nextCommand++)->execute(toWho);
 }
 
 void Rulerunner::draw() {
     while (!_rulestates.empty()) {
-        if (_rulestates.top().done())
+        if (_rulestates.top().hasNoMoreCommands())
             pop();
         else
-            _rulestates.top().doit(this);
+            _rulestates.top().runCurrentCommandOn(this);
     }
 }

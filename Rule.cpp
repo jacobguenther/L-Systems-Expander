@@ -23,7 +23,7 @@ void Rule::setdrawmethod(Method m) {
     drawmethod = m;
 }
 
-void Rule::cachevalues(const Context& cc) {
+void Rule::calculateParameters(const Context& cc) {
     for (auto & cmd : cmds)
         cmd->cachevalue(cc);
     switch (drawmethod) {

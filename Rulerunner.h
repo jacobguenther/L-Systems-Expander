@@ -20,53 +20,56 @@ class Rulerunner;
 
 //class Rulestate
 //Member variables are
-//   Rule * myrule  = the currently running rule
-//   bool backwards = is the currently running rule reversed
-//   Cmdcont::iterator mypos = the position in the currently running rule
-//   double oldscale= what was our scale before we started this rule
-//   bool flipped   = did we flip the turtle when we started running this rule
+//   bool isReversed = is the currently running rule reversed
+//   double flipFactor = do we flip the turtle when we start running this rule
+//   const Rule & myRule  = the currently running rule
+//   Cmdcont::const_iterator _nextCommand = the next command to run
+//   double scaleFactor = what was our scale before we started this rule
 
 class Rulestate {
     friend class Rulerunner;
 
    public:
-    Rulestate(const Rule &_m, bool _b, double _os, double _f)
-        : backwards(_b), _flipFactor(_f), myrule(_m), mypos(backwards ? myrule.cmds.cend() : myrule.cmds.cbegin()), scaleBy(_os) {}
-
-    bool done() {
-        return mypos == (backwards ? myrule.cmds.begin() : myrule.cmds.end());
+    Rulestate(const Rule &myRule, bool isReversed, double scaleFactor, double flipFactor)
+        : _isReversed(isReversed), _flipFactor(flipFactor), _myRule(myRule)
+        ,_nextCommand(_isReversed ? _myRule.cmds.cend() : _myRule.cmds.cbegin())
+        , _scaleFactor(scaleFactor) {
     }
 
-    void doit(Rulerunner *towho);
+    bool hasNoMoreCommands() {
+        return _nextCommand == (_isReversed ? _myRule.cmds.begin() : _myRule.cmds.end());
+    }
+
+    void runCurrentCommandOn(Rulerunner *towho);
 
    private:
-    bool backwards;
+    bool _isReversed;
     double _flipFactor;
-    const Rule &myrule;
-    Cmdcont::const_iterator mypos;
-    double scaleBy;
+    const Rule &_myRule;
+    Cmdcont::const_iterator _nextCommand;
+    double _scaleFactor;
 };
 
 class Rulerunner {
-    friend class Rotatecmd;  //!!!need friends, or make a public turtle accessor?
-    friend class Flipcmd;
-    friend class Popcmd;
-    friend class Pushcmd;
-    friend class Rulecmd;
-   public:
+friend class Rotatecmd;  //!!!need friends, or make a public turtle accessor?
+friend class Flipcmd;
+friend class Popcmd;
+friend class Pushcmd;
+friend class Rulecmd;
+public:
     Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
     : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
     ,_maxdepth(maxdepth), _minscale(minscale)
     {
         Dropgraphic::haveapt = false;
-        for (auto & therule : _therules)
-            therule.second.cachevalues(_context);
+        for (auto & [name,rule] : _therules)
+            rule.calculateParameters(_context);
         handlerule(_startrule, false, false, 1.0);
     }
     std::shared_ptr<Graphic> nextpoint();
     void draw();
     bool isDeepEnough();
-   private:
+private:
     void push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy);
     void pop();
     void graphic(const Motion &);

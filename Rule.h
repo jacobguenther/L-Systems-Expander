@@ -29,7 +29,7 @@ class Rule {
     void setcmds(Cmdcont &&newcmds) { cmds = std::move(newcmds); }
     //!!! initialize scalefac, or fix it later when syntax checking?
     void setdrawmethod(Method m);
-    void cachevalues(const Context &cc);
+    void calculateParameters(const Context &cc);
 
    private:
     Cmdcont cmds;
