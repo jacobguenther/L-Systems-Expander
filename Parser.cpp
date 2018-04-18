@@ -23,7 +23,7 @@ void Parser::match(char x) {     //should never be called unless you KNOW it's g
 }
 
 ParsenodePtr Parser::value() {
-    ParsenodePtr pred = boolexpr();
+    ParsenodePtr pred = bexpr();
     if (nextchar() == '?') {
         match('?');
         ParsenodePtr trueval = value();
@@ -33,13 +33,6 @@ ParsenodePtr Parser::value() {
         return make_unique<Ternopnode>(move(pred), move(trueval), move(falseval));
     }
     return pred;
-}
-
-ParsenodePtr Parser::boolexpr() {
-    ParsenodePtr lhs = bexpr();
-    if (auto more = morebool(move(lhs)))
-        return more;
-    return lhs;
 }
 
 ParsenodePtr Parser::morebool(ParsenodePtr lhs)  //clean up??!!!
@@ -93,7 +86,7 @@ ParsenodePtr Parser::bexpr() {
         ParsenodePtr rhs = bterm();
         lhs = make_unique<Binopnode>('|', move(lhs), move(rhs));
     }
-    return lhs;
+    return morebool(move(lhs));
 }
 
 ParsenodePtr Parser::bterm() {
@@ -196,19 +189,17 @@ void Parser::error(const std::string &text) {
                         string(input.eof() ? input.str().length() : static_cast<unsigned int>(input.tellg()), '-') + "^\n" + text);
 }
 /*
-value -> boolexpr ternop
+value -> bexpr ternop
 ternop -> ? value : value
        -> eps
 
-boolexpr -> bexpr morebool
-
-morebool -> boolop bexpr
-		   -> eps
-
-bexpr -> bterm morebterms
+bexpr -> bterm morebterms morebool
 morebterms -> || bterm
            -> eps
 
+morebool -> boolop bexpr
+         -> eps
+ 
 bterm -> expr morebfactors
 morebfactors -> && bfactor morebfactors
              -> eps
