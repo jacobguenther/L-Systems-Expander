@@ -8,7 +8,7 @@ using std::logic_error;
 #include <cassert>
 
 bool Rulerunner::isDeepEnough() {
-    return _rulestates.size() > _maxdepth || _turtle.getscale() < _minscale;
+    return _rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale;
 }
 
 void Rulerunner::push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy) {

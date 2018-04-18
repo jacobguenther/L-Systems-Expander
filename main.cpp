@@ -84,7 +84,7 @@ void adjust_level(unsigned int newlevel) {
 
 void handle_frac_menu(int value) {
     curfractal = systems.begin()+value;
-    adjust_level(0);
+    adjust_level(1);
     glutPostRedisplay();
 }
 
