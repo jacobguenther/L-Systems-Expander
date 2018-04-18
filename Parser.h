@@ -8,7 +8,7 @@
 class Parser {
    public:
     explicit Parser(const std::string& _w) : input(_w) {}
-    std::shared_ptr<Parsenode> parse();
+    ParsenodePtr parse();
 
    private:
     std::istringstream input;

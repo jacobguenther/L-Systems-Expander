@@ -9,10 +9,10 @@ using std::string;
 using std::move;
 using std::make_unique;
 
-std::shared_ptr<Parsenode> Parser::parse() {
+ParsenodePtr Parser::parse() {
     auto val = value();
     if (input.get() == std::char_traits<char>::eof())
-        return std::shared_ptr<Parsenode>(move(val));
+        return val;
     error("Expected end of input");  //throws
 }
 

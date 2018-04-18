@@ -60,11 +60,11 @@ public:
 class RuleCommand : public Command {
 public:
     explicit RuleCommand(std::string_view ruleName, bool isReversed , bool isFlipped ,
-                     std::shared_ptr<Parsenode> scaleExpression = Parser("1").parse()) //NOLINT
+                     ParsenodePtr scaleExpression = Parser("1").parse())
     : _ruleName(ruleName)
     , _isReversed(isReversed)
     , _isFlipped(isFlipped)
-    , _scaleExpression(scaleExpression) //NOLINT
+    , _scaleExpression(std::move(scaleExpression))
     {}
     
     void execute(Rulerunner *ruleRunner) override {
@@ -79,7 +79,7 @@ private:
     const std::string _ruleName;
     bool _isReversed;
     bool _isFlipped;
-    const std::shared_ptr<Parsenode> _scaleExpression;
+    const ParsenodePtr _scaleExpression;
     double _scale;
 };
 #endif
