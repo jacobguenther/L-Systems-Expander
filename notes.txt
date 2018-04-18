@@ -120,7 +120,11 @@ Consider parser type any<T> instead of double?
 We cache things because they can't be evaluated until parameter value is known, but this seems prone to error. Maybe no cache at all? But then we're parsing every time. Hmmmmm.
 
 What's the deal with rules in a system in the config file that aren't defined, or refer to themselves only, or are defined as empty? 
+Answer: Not sure why I was confused. A rule that's not defined expands to nothing is the same as one defined as empty (so it will go away after one expansion.) If it's defined as itself only, it obviously doesn't go away.
 
 "reverse" is really "reflect", yes? At least for users.
 
-Maybe rules with a "start" symbol should go one lever further? (So they don't automatically start with a unit line.)
+Discuss with Glenn: what should commands take as a context? Most affect the turtle, but RuleCmd (of course) affects the RuleRunner. (And fix the names of the classes! Especially RuleRunner.)
+And simplification to parser?
+
+
