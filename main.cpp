@@ -38,8 +38,7 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     vars["p1"] = p1;
     Rulerunner runner(*curfractal, level, thresh, vars);
-    while (!runner.done())
-        runner.drawnextpoint();
+    runner.draw();
     glutSwapBuffers();
     while (auto jj = glGetError())
         std::cerr << gluErrorString(jj) << endl;

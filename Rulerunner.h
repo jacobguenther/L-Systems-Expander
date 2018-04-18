@@ -52,6 +52,7 @@ class Rulerunner {
     friend class Flipcmd;
     friend class Popcmd;
     friend class Pushcmd;
+    friend class Rulecmd;
    public:
     Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
     : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
@@ -61,26 +62,22 @@ class Rulerunner {
         for (auto & therule : _therules)
             therule.second.cachevalues(_context);
         handlerule(_startrule, false, false, 1.0);
-        makeapoint();
     }
     std::shared_ptr<Graphic> nextpoint();
-    void drawnextpoint();
-    bool done() { return _finished; }
-    void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
+    void draw();
     bool isDeepEnough();
    private:
     void push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy);
     void pop();
     void graphic(const Motion &);
-    void makeapoint();
-    
+    void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
+
     Ruletable _therules;
     std::string _startrule;
     const Context _context;
     std::stack<Rulestate> _rulestates;
     unsigned int _maxdepth;
     Turtle _turtle;
-    bool _finished=false;
     std::shared_ptr<Graphic> _agraphic;
     bool _backwards=false;
     double _minscale;
