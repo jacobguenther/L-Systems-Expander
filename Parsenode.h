@@ -16,7 +16,7 @@ using ParsenodePtr = std::unique_ptr<Parsenode>;
 
 class Parsenode {
    public:
-    virtual double eval(const Context &) = 0;
+    virtual double eval(const Context & =Context{}) = 0;
     virtual ~Parsenode()=default;
 
    private:
