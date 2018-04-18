@@ -21,20 +21,20 @@ private:
 class RotateCommand : public Command {
 public:
     explicit RotateCommand(std::shared_ptr<Parsenode> _a)
-    : angle(std::move(_a))
+    : _angleExpression(std::move(_a))
     {}
     
     void executeOn(Rulerunner *target) override {
-        target->_turtle.rotate(cachedangle);
+        target->_turtle.rotate(_angle);
     }
     
     void evaluateExpressions(const Context &cc) override {
-        cachedangle = angle->eval(cc);
+        _angle = _angleExpression->eval(cc);
     }
     
 private:
-    std::shared_ptr<Parsenode> angle;
-    double cachedangle;
+    std::shared_ptr<Parsenode> _angleExpression;
+    double _angle;
 };
 
 class FlipCommand : public Command {
