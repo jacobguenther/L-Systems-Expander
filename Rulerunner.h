@@ -30,11 +30,11 @@ class Rulestate {
     friend class Rulerunner;
 
    public:
-    Rulestate(const Rule *_m, bool _b, double _os, double _f)
-        : backwards(_b), _flipFactor(_f), myrule(_m), mypos(backwards ? myrule->cmds.cend() : myrule->cmds.cbegin()), scaleBy(_os) {}
+    Rulestate(const Rule &_m, bool _b, double _os, double _f)
+        : backwards(_b), _flipFactor(_f), myrule(_m), mypos(backwards ? myrule.cmds.cend() : myrule.cmds.cbegin()), scaleBy(_os) {}
 
     bool done() {
-        return mypos == (backwards ? myrule->cmds.begin() : myrule->cmds.end());
+        return mypos == (backwards ? myrule.cmds.begin() : myrule.cmds.end());
     }
 
     void doit(Rulerunner *towho);
@@ -42,7 +42,7 @@ class Rulestate {
    private:
     bool backwards;
     double _flipFactor;
-    const Rule *myrule;
+    const Rule &myrule;
     Cmdcont::const_iterator mypos;
     double scaleBy;
 };
