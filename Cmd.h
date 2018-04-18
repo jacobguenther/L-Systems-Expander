@@ -12,9 +12,14 @@
 class Command {
 public:
     virtual void executeOn(Rulerunner *target) = 0;
-    virtual ~Command()=default;
     virtual void evaluateExpressions(const Context & /*unused*/) {}
-    
+    virtual ~Command() = default;
+    Command() = default;
+    Command(const Command&) = delete;
+    Command& operator=(const Command&) = delete;
+    Command(Command&&) = delete;
+    Command& operator=(Command&&) = delete;
+
 private:
 };
 

@@ -22,8 +22,11 @@ class Graphic  //how do I make SURE this is an abstract base class?!!!
         glVertex2d(m.topt.x, m.topt.y);
         glEnd();
     }
-    virtual ~Graphic() =default;
-
+    virtual ~Graphic() = default;
+    Graphic(const Graphic&) = delete;
+    Graphic& operator=(const Graphic&) = delete;
+    Graphic(Graphic&&) = delete;
+    Graphic& operator=(Graphic&&) = delete;
    protected:
     Motion m;  //not base class because Invisgraphic doesn't need it?!!!
 };
@@ -38,8 +41,6 @@ class Dropgraphic : public Graphic {
         double dy = m.topt.y - m.frompt.y;
         storedpt.x = m.frompt.x + dd * (cos(da) * dx - sin(da) * dy);
         storedpt.y = m.frompt.y + dd * (sin(da) * dx + cos(da) * dy);
-        //      storedpt.x = (m.frompt.x+m.topt.x)/2;
-        //      storedpt.y = (m.frompt.y+m.topt.y)/2;
         todraw.topt = storedpt;
         haveapt = true;
         m = todraw;
@@ -65,13 +66,6 @@ class Invisgraphic : public Graphic {
    public:
     void draw() override {}
 };
-
-/*//!!! efficiency?
-class Midptgraphic : public Dropgraphic
-{
-public:
-};
-*/
 
 class Rectgraphic : public Graphic {
 };

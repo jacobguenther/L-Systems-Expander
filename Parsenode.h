@@ -17,7 +17,12 @@ using ParsenodePtr = std::unique_ptr<Parsenode>;
 class Parsenode {
    public:
     virtual double eval(const Context & =Context{}) = 0;
-    virtual ~Parsenode()=default;
+    virtual ~Parsenode() = default;
+    Parsenode() = default;
+    Parsenode(const Parsenode&) = delete;
+    Parsenode& operator=(const Parsenode&) = delete;
+    Parsenode(Parsenode&&) = delete;
+    Parsenode& operator=(Parsenode&&) = delete;
 
    private:
     static bool lastconstruct;
