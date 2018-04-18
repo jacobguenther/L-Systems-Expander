@@ -33,11 +33,11 @@ void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, doubl
     }
 }
 
-void Rulestate::runCurrentCommandOn(Rulerunner *toWho) {//!!! Need to wrap rule so this can use reverse iterators
+void Rulestate::runCurrentCommandOn(Rulerunner *target) {//!!! Need to wrap rule so this can use reverse iterators
     if (_isReversed)
-        (*--_nextCommand)->execute(toWho);
+        (*--_nextCommand)->executeOn(target);
     else
-        (*_nextCommand++)->execute(toWho);
+        (*_nextCommand++)->executeOn(target);
 }
 
 void Rulerunner::draw() {

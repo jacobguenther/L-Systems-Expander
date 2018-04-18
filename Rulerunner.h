@@ -40,7 +40,7 @@ class Rulestate {
         return _nextCommand == (_isReversed ? _myRule.cmds.begin() : _myRule.cmds.end());
     }
 
-    void runCurrentCommandOn(Rulerunner *towho);
+    void runCurrentCommandOn(Rulerunner *target);
 
    private:
     bool _isReversed;
@@ -73,7 +73,7 @@ private:
     void push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy);
     void pop();
     void graphic(const Motion &);
-    void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
+    void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double atScale);
 
     Ruletable _therules;
     std::string _startrule;
