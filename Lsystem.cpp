@@ -22,25 +22,25 @@ void assertdatatoken(const Token &t) {
     if (t.iseol()) throw runtime_error("Unexpected end of line");
 }
 
-Cmdcont readrule(Lexer &lex) {
-    Cmdcont retval;
+Commands readrule(Lexer &lex) {
+    Commands retval;
     Token t = lex.nexttoken();
     while (!t.iseol()) {
         assertdatatoken(t);
         if (t.getdata() == "left") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            retval.push_back(make_shared<Rotatecmd>(Parser(t.getdata()).parse()));
+            retval.push_back(make_shared<RotateCommand>(Parser(t.getdata()).parse()));
         } else if (t.getdata() == "right") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            retval.push_back(make_shared<Rotatecmd>(Parser("-(" + t.getdata() + ")").parse()));
+            retval.push_back(make_shared<RotateCommand>(Parser("-(" + t.getdata() + ")").parse()));
         } else if (t.getdata() == "|" || t.getdata() == "flip")
-            retval.push_back(make_shared<Flipcmd>());
+            retval.push_back(make_shared<FlipCommand>());
         else if (t.getdata() == "[" || t.getdata() == "push")
-            retval.push_back(make_shared<Pushcmd>());
+            retval.push_back(make_shared<PushCommand>());
         else if (t.getdata() == "]" || t.getdata() == "pop")
-            retval.push_back(make_shared<Popcmd>());
+            retval.push_back(make_shared<PopCommand>());
         else {  //A rule
             bool rev = false;
             bool flip = false;
@@ -54,9 +54,9 @@ Cmdcont readrule(Lexer &lex) {
                 thisrule = thisrule.substr(0, thisrule.length() - 1);
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                retval.push_back(make_shared<Rulecmd>(thisrule, rev, flip, Parser(t.getdata()).parse()));
+                retval.push_back(make_shared<RuleCommand>(string(thisrule), rev, flip, Parser(t.getdata()).parse()));
             } else
-                retval.push_back(make_shared<Rulecmd>(thisrule, rev, flip));
+                retval.push_back(make_shared<RuleCommand>(string(thisrule), rev, flip));
         }
         t = lex.nexttoken();
     }

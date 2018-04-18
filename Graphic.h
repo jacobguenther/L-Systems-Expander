@@ -45,7 +45,7 @@ class Dropgraphic : public Graphic {
         m = todraw;
     }
     friend class Rulerunner;
-    friend class Popcmd;
+    friend class PopCommand;
     void draw() override {
         if (draws) Graphic::draw();
     }

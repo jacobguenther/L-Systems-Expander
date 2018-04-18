@@ -9,59 +9,77 @@
 #include "Parser.h"
 #include "Rulerunner.h"
 
-class Cmd {
-   public:
-    virtual void execute(Rulerunner *master) = 0;
-    virtual ~Cmd()=default;
-    virtual void cachevalue(const Context & /*unused*/) {}
-
-   private:
+class Command {
+public:
+    virtual void execute(Rulerunner *ruleRunner) = 0;
+    virtual ~Command()=default;
+    virtual void evaluateExpressions(const Context & /*unused*/) {}
+    
+private:
 };
 
-using Cmdcont = std::list<std::shared_ptr<Cmd> >;
-
-class Rotatecmd : public Cmd {
-   public:
-    explicit Rotatecmd(std::shared_ptr<Parsenode> _a) : angle(std::move(_a)) {}
-    void execute(Rulerunner *master) override { master->_turtle.rotate(cachedangle); }
-    void cachevalue(const Context &cc) override { cachedangle = angle->eval(cc); }
-
-   private:
+class RotateCommand : public Command {
+public:
+    explicit RotateCommand(std::shared_ptr<Parsenode> _a)
+    : angle(std::move(_a))
+    {}
+    
+    void execute(Rulerunner *ruleRunner) override {
+        ruleRunner->_turtle.rotate(cachedangle);
+    }
+    
+    void evaluateExpressions(const Context &cc) override {
+        cachedangle = angle->eval(cc);
+    }
+    
+private:
     std::shared_ptr<Parsenode> angle;
     double cachedangle;
 };
 
-class Flipcmd : public Cmd {
-   public:
-    void execute(Rulerunner *master) override { master->_turtle.flip(); }
+class FlipCommand : public Command {
+public:
+    void execute(Rulerunner *ruleRunner) override {
+        ruleRunner->_turtle.flip();
+    }
 };
 
-class Pushcmd : public Cmd {
-   public:
-    void execute(Rulerunner *master) override { master->_turtle.push(); }
+class PushCommand : public Command {
+public:
+    void execute(Rulerunner *ruleRunner) override { ruleRunner->_turtle.push(); }
 };
 
-class Popcmd : public Cmd {
-   public:
-    void execute(Rulerunner *master) override {
-        master->_turtle.pop();
+class PopCommand : public Command {
+public:
+    void execute(Rulerunner *ruleRunner) override {
+        ruleRunner->_turtle.pop();
         Dropgraphic::haveapt = false;
     }
 };
 
-class Rulecmd : public Cmd {
-   public:
-    explicit Rulecmd(std::string _m, bool _r = false, bool _f = false,
-            std::shared_ptr<Parsenode> _s = Parser("1").parse())
-        : myrule(std::move(_m)), rev(_r), flip(_f), scale(std::move(_s)) {}
-    void execute(Rulerunner *master) override { master->handlerule(myrule, rev, flip, cachedscale); }
-    void cachevalue(const Context &cc) override { cachedscale = scale->eval(cc); }
-
-   private:
-    const std::string myrule;
-    bool rev;
-    bool flip;
-    std::shared_ptr<Parsenode> scale;
-    double cachedscale;
+class RuleCommand : public Command {
+public:
+    explicit RuleCommand(std::string_view ruleName, bool isReversed , bool isFlipped ,
+                     std::shared_ptr<Parsenode> scaleExpression = Parser("1").parse())
+    : _ruleName(ruleName)
+    , _isReversed(isReversed)
+    , _isFlipped(isFlipped)
+    , _scaleExpression(scaleExpression)
+    {}
+    
+    void execute(Rulerunner *ruleRunner) override {
+        ruleRunner->handlerule(_ruleName, _isReversed, _isFlipped, _scale);
+    }
+    
+    void evaluateExpressions(const Context &cc) override {
+        _scale = _scaleExpression->eval(cc);
+    }
+    
+private:
+    const std::string _ruleName;
+    bool _isReversed;
+    bool _isFlipped;
+    const std::shared_ptr<Parsenode> _scaleExpression;
+    double _scale;
 };
 #endif

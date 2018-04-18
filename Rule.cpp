@@ -75,7 +75,7 @@ void Rule::readruleoptions(Lexer &lex) {
 
 void Rule::calculateParameters(const Context& cc) {
     for (auto & cmd : cmds)
-        cmd->cachevalue(cc);
+        cmd->evaluateExpressions(cc);
     switch (drawmethod) {
         case DROP:
             cacheddropangle = dropangle->eval(cc) * M_PI / 180.0;  //!!! cache sin and cos instead?

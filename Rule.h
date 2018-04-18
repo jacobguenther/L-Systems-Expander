@@ -6,9 +6,8 @@
 #include <list>
 
 #include "Lexer.h"
-class Cmd;
-using Cmdcont = std::list<std::shared_ptr<Cmd>>; //!!!rationalize includes, shouldn't need to forward declare here
-//and Cmdcont is defined again in Cmd.h, bad form!!!
+class Command; //!!!rationalize includes, shouldn't need to forward declare here
+using Commands = std::vector<std::shared_ptr<Command>>;
 
 #include "Parser.h"
 
@@ -16,22 +15,23 @@ class Rule {
     friend class Turtle;
     friend class Rulestate;
     friend class Rulerunner;  //!!!be careful with friends?
-    enum Method { NORM,
-                   DROP,
-                   RECT,
-                   INVIS,
-                   MIDPT,
-                  WRITE
+    enum Method {
+        NORM,
+        DROP,
+        RECT,
+        INVIS,
+        MIDPT,
+        WRITE
     } ;
    public:
     void readruleoptions(Lexer &lex);
-    void setcmds(Cmdcont &&newcmds) { cmds = std::move(newcmds); }
+    void setcmds(Commands &&newcmds) { cmds = std::move(newcmds); }
     //!!! initialize scalefac, or fix it later when syntax checking?
     void setdrawmethod(Method m);
     void calculateParameters(const Context &cc);
 
    private:
-    Cmdcont cmds;
+    Commands cmds;
     Method drawmethod=NORM;
     std::shared_ptr<Parsenode> dropangle;
     std::shared_ptr<Parsenode> dropdistance;
@@ -45,6 +45,6 @@ class Rule {
     //Color
 };
 
-using Ruletable = std::map<std::string, Rule >; //!!!Should be reference, not copy
+using Ruletable = std::map<std::string, Rule >; //!!!Should be reference, not copy?
 
 #endif

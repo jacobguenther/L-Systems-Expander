@@ -46,16 +46,16 @@ class Rulestate {
     bool _isReversed;
     double _flipFactor;
     const Rule &_myRule;
-    Cmdcont::const_iterator _nextCommand;
+    Commands::const_iterator _nextCommand;
     double _scaleFactor;
 };
 
 class Rulerunner {
-friend class Rotatecmd;  //!!!need friends, or make a public turtle accessor?
-friend class Flipcmd;
-friend class Popcmd;
-friend class Pushcmd;
-friend class Rulecmd;
+friend class RotateCommand;  //!!!need friends, or make a public turtle accessor?
+friend class FlipCommand;
+friend class PopCommand;
+friend class PushCommand;
+friend class RuleCommand;
 public:
     Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
     : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
