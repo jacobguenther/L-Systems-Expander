@@ -30,8 +30,8 @@ class Rulestate {
     friend class Rulerunner;
 
    public:
-    Rulestate(const Rule *_m, bool _b, double _os, bool _f)
-        : backwards(_b), flipped(_f), myrule(_m), mypos(backwards ? myrule->cmds.cend() : myrule->cmds.cbegin()), oldscale(_os) {}
+    Rulestate(const Rule *_m, bool _b, double _os, double _f)
+        : backwards(_b), _flipFactor(_f), myrule(_m), mypos(backwards ? myrule->cmds.cend() : myrule->cmds.cbegin()), scaleBy(_os) {}
 
     bool done() {
         return mypos == (backwards ? myrule->cmds.begin() : myrule->cmds.end());
@@ -41,10 +41,10 @@ class Rulestate {
 
    private:
     bool backwards;
-    bool flipped;
+    double _flipFactor;
     const Rule *myrule;
     Cmdcont::const_iterator mypos;
-    double oldscale;
+    double scaleBy;
 };
 
 class Rulerunner {
@@ -52,17 +52,14 @@ class Rulerunner {
     friend class Flipcmd;
     friend class Popcmd;
     friend class Pushcmd;
-    // friend class Rulecmd; // !!! similar question here, is handlerule() public?
    public:
     Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
     : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
-//    ,_rulestates{{Rulestate{&_therules[_startrule],false,1.0,false}}}
     ,_maxdepth(maxdepth), _minscale(minscale)
     {
         Dropgraphic::haveapt = false;
         for (auto & therule : _therules)
             therule.second.cachevalues(_context);
-//        _turtle.scaleby(_therules[_startrule].cachedscalefac);
         handlerule(_startrule, false, false, 1.0);
         makeapoint();
     }
@@ -72,6 +69,8 @@ class Rulerunner {
     void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double localscale);
     bool isDeepEnough();
    private:
+    void push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy);
+    void pop();
     void graphic(const Motion &);
     void makeapoint();
     

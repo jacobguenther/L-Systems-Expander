@@ -5,28 +5,33 @@ using std::string;
 #include <memory>
 #include <stdexcept>
 using std::logic_error;
-
-
-#ifdef _DEBUG
-#include <iostream>
-using namespace std;
-#endif
+#include <cassert>
 
 bool Rulerunner::isDeepEnough() {
     return _rulestates.size() > _maxdepth || _turtle.getscale() < _minscale;
 }
 
+void Rulerunner::push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy) {
+    _backwards ^= ruleRev;
+    _rulestates.push(Rulestate(&rule, _backwards, scaleBy, flipFactor));
+    _turtle.scaleby(scaleBy);
+    _turtle.flipBy(flipFactor);
+}
+
+void Rulerunner::pop() {
+    _turtle.flipBy(_rulestates.top()._flipFactor);
+    _turtle.scaleby(1.0/_rulestates.top().scaleBy);
+    _rulestates.pop();
+    _backwards = !_rulestates.empty() && _rulestates.top().backwards;
+}
+
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double atScale) {
     const auto & rule = _therules[rr];
-    bool willflip = rulerev ^ ruleflip;
+    auto flipFactor = rulerev ^ ruleflip ? -1.0 : 1.0;
     if (isDeepEnough()) {
-        _agraphic = _turtle.draw(rule,willflip?-1.0:1.0,atScale);
+        _agraphic = _turtle.draw(rule,flipFactor,atScale);
     } else {
-        _backwards ^= rulerev;
-        _rulestates.push(Rulestate(&rule, _backwards, _turtle.getscale(), willflip));
-        if (willflip)
-            _turtle.flip();
-        _turtle.scaleby(atScale * rule._localScale);
+        push(rule,rulerev,flipFactor,atScale*rule._localScale);
     }
 }
 
@@ -46,27 +51,21 @@ std::shared_ptr<Graphic> Rulerunner::nextpoint() {
 }
 
 void Rulerunner::makeapoint() {
-    while (_agraphic == nullptr) {
-        if (_rulestates.top().done()) {
-            _turtle.setscale(_rulestates.top().oldscale);
-            if (_rulestates.top().flipped)
-                _turtle.flip();
-            _rulestates.pop();
-            if (_rulestates.empty()) {
-                _finished = true;
-                return;
-            }
-            _backwards = !_rulestates.empty() && _rulestates.top().backwards;
-        } else
+    while (!_rulestates.empty() && _agraphic == nullptr) {
+        if (_rulestates.top().done())
+            pop();
+        else
             _rulestates.top().doit(this);
+    }
+    if (_rulestates.empty()) {
+        _finished = true;
+        return;
     }
 }
 
 void Rulerunner::drawnextpoint() {
-#ifdef _DEBUG
-    if (_agraphic == nullptr)
-        throw logic_error("Called drawnextpoint() on a Rulerunner with no graphic ready\n");
-#endif
+    assert(_agraphic != nullptr);
+//        throw logic_error("Called drawnextpoint() on a Rulerunner with no graphic ready\n");
     _agraphic->draw();
     _agraphic.reset();
     makeapoint();

@@ -13,12 +13,14 @@ const double DEG2RAD = M_PI / 180;
 
 class Turtle {
    public:
+    void flipBy(double multiplier) {
+        _states.top().flipfac *= multiplier;
+    }
     void flip() {
-        _states.top().flipfac *= -1;
+        flipBy(-1.0);
     }
     void rotate(double turnangle) {
         _states.top().angle += _states.top().flipfac * turnangle;
-        // angle %= 360;
     }
     void forward(double dist = 1.0) {
         _states.top().position.x += getscale() * dist * cos(DEG2RAD * _states.top().angle);
