@@ -17,6 +17,9 @@ using std::ifstream;
 #include <memory>
 using std::make_shared;
 
+#include <string>
+using std::string_view;
+
 void assertdatatoken(const Token &t) {
     if (t.iseof()) throw runtime_error("Unexpected end of file");
     if (t.iseol()) throw runtime_error("Unexpected end of line");
@@ -44,7 +47,7 @@ Commands readrule(Lexer &lex) {
         else {  //A rule
             bool rev = false;
             bool flip = false;
-            auto thisrule = t.getdata();
+            string_view thisrule = t.getdata();
             while (thisrule[0] == '~' || thisrule[0] == '|') {
                 if (thisrule[0] == '~') rev = true;
                 if (thisrule[0] == '|') flip = true;
