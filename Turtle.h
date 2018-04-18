@@ -30,7 +30,7 @@ class Turtle {
         _states.top().scalefac *= s;
     }
     double getscale() const {
-        return _states.top().scalefac; //!!!unused?
+        return _states.top().scalefac;
     }
     int getflip() const {
         return _states.top().flipfac;
@@ -57,7 +57,7 @@ class Turtle {
         double scalefac{1};
     };
     
-    std::stack<TurtleState> _states{{TurtleState{}}};
+    std::stack<TurtleState> _states{{ TurtleState{} }};
 };
 
 #endif

@@ -6,6 +6,7 @@
 
 using std::isspace;
 using std::string;
+using std::move;
 
 //!!! Should Lexer us char or int? ifstream.get() returns int (for EOF)
 // but ifstream.get(c) takes char &. (What happens if that gets the ASCII 255 char?)
@@ -63,15 +64,20 @@ void Lexer::escapedalpha(int next) {
 
 Lexer::State Lexer::iws() {
     auto next = infile.get();
-    while (isspace(next) && next != '\n') next = infile.get();
-    if (next == '\\') return State::BSN;
+    while (isspace(next) && next != '\n')
+        next = infile.get();
+    if (next == '\\')
+        return State::BSN;
     if (next == '#') {
         infile.ignore(9999, '\n');
         return EOLTOKEN;
     }
-    if (next == '"') return NORMQ;
-    if (next == '\n') return EOLTOKEN;
-    if (next == std::char_traits<char>::eof()) return EOFTOKEN;
+    if (next == '"')
+        return NORMQ;
+    if (next == '\n')
+        return EOLTOKEN;
+    if (next == std::char_traits<char>::eof())
+        return EOFTOKEN;
     //otherwise
     infile.putback(char(next));
     return NORMN;
@@ -79,10 +85,14 @@ Lexer::State Lexer::iws() {
 
 Lexer::State Lexer::bsspq() {
     auto next = infile.get();
-    while (isspace(next)) next = infile.get();
-    if (next == '\\') return BSQ;
-    if (next == '"') return NORMN;
-    if (next == std::char_traits<char>::eof()) return DATATOKEN;
+    while (isspace(next))
+        next = infile.get();
+    if (next == '\\')
+        return BSQ;
+    if (next == '"')
+        return NORMN;
+    if (next == std::char_traits<char>::eof())
+        return DATATOKEN;
     //otherwise (including #)
     thetoken.push_back(char(next));
     return NORMQ;
@@ -90,8 +100,10 @@ Lexer::State Lexer::bsspq() {
 
 Lexer::State Lexer::bsspn() {
     auto next = infile.get();
-    while (isspace(next)) next = infile.get();
-    if (next == '\\') return BSN;
+    while (isspace(next))
+        next = infile.get();
+    if (next == '\\')
+        return BSN;
     if (next == '#') {
         infile.ignore(9999, '\n');
         ;
@@ -108,9 +120,12 @@ Lexer::State Lexer::bsspn() {
 Lexer::State Lexer::normq() {
     while (true) {
         auto next = infile.get();
-        if (next == std::char_traits<char>::eof()) return DATATOKEN;
-        if (next == '\\') return BSQ;
-        if (next == '"') return NORMN;
+        if (next == std::char_traits<char>::eof())
+            return DATATOKEN;
+        if (next == '\\')
+            return BSQ;
+        if (next == '"')
+            return NORMN;
         if (next == '\n') {
             infile.putback('\n');
             return DATATOKEN;
@@ -123,19 +138,23 @@ Lexer::State Lexer::normq() {
 Lexer::State Lexer::normn() {
     while (true) {
         auto next = infile.get();
-        if (next == std::char_traits<char>::eof()) return DATATOKEN;
-        if (next == '\\') return BSN;
+        if (next == std::char_traits<char>::eof())
+            return DATATOKEN;
+        if (next == '\\')
+            return BSN;
         if (next == '#') {
             infile.ignore(9999, '\n');
             infile.putback('\n');
             return DATATOKEN;
         }
-        if (next == '"') return NORMQ;
+        if (next == '"')
+            return NORMQ;
         if (next == '\n') {
             infile.putback('\n');
             return DATATOKEN;
         }  //throw "newline in string"?!!!
-        if (isspace(next)) return DATATOKEN;
+        if (isspace(next))
+            return DATATOKEN;
         //otherwise
         thetoken.push_back(char(next));
     }
@@ -143,8 +162,10 @@ Lexer::State Lexer::normn() {
 
 Lexer::State Lexer::bsq() {
     auto next = infile.get();
-    if (next == std::char_traits<char>::eof()) return DATATOKEN;
-    if (isspace(next)) return BSSPQ;
+    if (next == std::char_traits<char>::eof())
+        return DATATOKEN;
+    if (isspace(next))
+        return BSSPQ;
     if (isalpha(next)) {
         escapedalpha(next);
         return NORMQ;
@@ -157,7 +178,8 @@ Lexer::State Lexer::bsq() {
 Lexer::State Lexer::bsn() {
     auto next = infile.get();
     if (next == std::char_traits<char>::eof()) return DATATOKEN;
-    if (isspace(next)) return BSSPN;
+    if (isspace(next))
+        return BSSPN;
     if (isalpha(next)) {
         escapedalpha(next);
         return NORMN;
@@ -195,7 +217,7 @@ Token Lexer::nexttoken() {
             case EOFTOKEN:
                 return Token(string(), Token::EOFT);
             case DATATOKEN:
-                return Token(thetoken, Token::DATAT);
+                return Token(move(thetoken), Token::DATAT);
         }
     }
 }
