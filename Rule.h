@@ -33,16 +33,15 @@ class Rule {
    private:
     Commands cmds;
     Method drawmethod=NORM;
-    std::shared_ptr<Parsenode> dropangle;
-    std::shared_ptr<Parsenode> dropdistance;
-    std::shared_ptr<Parsenode> rectwidth;
-    std::shared_ptr<Parsenode> scalefac;
-    double cacheddropangle;
-    double cacheddropdistance;
-    double cachedrectwidth;
+    std::shared_ptr<Parsenode> _dropAngleExpression;
+    std::shared_ptr<Parsenode> _dropDistanceExpression;
+    std::shared_ptr<Parsenode> _rectWidthExpression;
+    std::shared_ptr<Parsenode> _localScaleExpression;
+    double _dropAngle;
+    double _dropDistance;
+    double _rectWidth;
     double _localScale;
-    std::string info;
-    //Color
+    std::string _info;
 };
 
 using Ruletable = std::map<std::string, Rule >; //!!!Should be reference, not copy?

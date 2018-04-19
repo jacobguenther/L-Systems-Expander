@@ -39,7 +39,7 @@ public:
     
 private:
     std::shared_ptr<Parsenode> _angleExpression;
-    double _angle;
+    double _angle=0.0;
 };
 
 class FlipCommand : public Command {
@@ -85,6 +85,6 @@ private:
     bool _isReversed;
     bool _isFlipped;
     const ParsenodePtr _scaleExpression;
-    double _scale;
+    double _scale=1.0;
 };
 #endif

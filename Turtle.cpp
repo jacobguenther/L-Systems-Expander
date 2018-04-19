@@ -23,10 +23,10 @@ std::unique_ptr<Graphic> Turtle::draw(const Rule &rule, double flipFactor, doubl
             return make_unique<Linegraphic>(temp);
         case Rule::DROP:
             return make_unique<Dropgraphic>(temp,
-                                            flipFactor* getflip() * rule.cacheddropangle,
-                                            rule.cacheddropdistance);
+                                            flipFactor* getflip() * rule._dropAngle,
+                                            rule._dropDistance);
         case Rule::WRITE:
-            cout << "[" << getflip() << "," << getscale() << "] " << rule.info << " distance: " << distance << " flipFactor: " << flipFactor << endl;
+            cout << "[" << getflip() << "," << getscale() << "] " << rule._info << " distance: " << distance << " flipFactor: " << flipFactor << endl;
             return make_unique<Linegraphic>(temp);
     }
 }

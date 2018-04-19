@@ -9,14 +9,14 @@ void Rule::setdrawmethod(Method m) {
         case NORM:
             break;
         case DROP:
-            if (!dropangle)
-                dropangle = Parser("0").parse();
-            if (!dropdistance)
-                dropdistance = Parser("1").parse();
+            if (!_dropAngleExpression)
+                _dropAngleExpression = Parser("0").parse();
+            if (!_dropDistanceExpression)
+                _dropDistanceExpression = Parser("1").parse();
             break;
         case RECT:
-            if (!rectwidth)
-                rectwidth = Parser("0.1").parse();
+            if (!_rectWidthExpression)
+                _rectWidthExpression = Parser("0.1").parse();
             break;
         case INVIS:
         case MIDPT:
@@ -50,25 +50,25 @@ void Rule::readruleoptions(Lexer &lex) {
         } else if (t.getdata() == "dropangle") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            dropangle = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+            _dropAngleExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
         } else if (t.getdata() == "dropdistance") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            dropdistance = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+            _dropDistanceExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
         } else if (t.getdata() == "rectwidth") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            rectwidth = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+            _rectWidthExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
         }                                               //!!!fix similarity of last three elseifs
         else if (t.getdata() == "info") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            info = t.getdata();
+            _info = t.getdata();
         }  //!!!even this is pretty similar,
         else if (t.getdata() == "localscale") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            scalefac = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+            _localScaleExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
         } else
             throw std::runtime_error("Unexpected option " + t.getdata());
         t = lex.nexttoken();
@@ -80,11 +80,11 @@ void Rule::calculateParameters(const Context& cc) {
         cmd->evaluateExpressions(cc);
     switch (drawmethod) {
         case DROP:
-            cacheddropangle = dropangle->eval(cc) * M_PI / 180.0;  //!!! cache sin and cos instead?
-            cacheddropdistance = dropdistance->eval(cc);
+            _dropAngle = _dropAngleExpression->eval(cc) * M_PI / 180.0;  //!!! cache sin and cos instead?
+            _dropDistance = _dropDistanceExpression->eval(cc);
             break;
         case RECT:
-            cachedrectwidth = rectwidth->eval(cc);
+            _rectWidth = _rectWidthExpression->eval(cc);
             break;
         case NORM:
         case INVIS:
@@ -92,5 +92,5 @@ void Rule::calculateParameters(const Context& cc) {
         case WRITE:
             break;
     }
-    _localScale = scalefac ? scalefac->eval(cc) : 1;
+    _localScale = _localScaleExpression ? _localScaleExpression->eval(cc) : 1;
 }
