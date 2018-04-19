@@ -33,8 +33,8 @@ public:
         target->_turtle.rotate(_angle);
     }
     
-    void evaluateExpressions(const Context &cc) override {
-        _angle = _angleExpression->eval(cc);
+    void evaluateExpressions(const Context &context) override {
+        _angle = _angleExpression->eval(context);
     }
     
 private:
@@ -76,8 +76,8 @@ public:
         target->handlerule(_ruleName, _isReversed, _isFlipped, _scale);
     }
     
-    void evaluateExpressions(const Context &cc) override {
-        _scale = _scaleExpression->eval(cc);
+    void evaluateExpressions(const Context &context) override {
+        _scale = _scaleExpression->eval(context);
     }
     
 private:
