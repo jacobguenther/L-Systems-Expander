@@ -17,7 +17,7 @@ class Token {
 
    private:
     std::string data;
-    Type mytype;
+    Type mytype=EOFT;
 };
 
 #endif

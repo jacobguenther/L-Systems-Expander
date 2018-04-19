@@ -37,10 +37,10 @@ class Rule {
     std::shared_ptr<Parsenode> _dropDistanceExpression;
     std::shared_ptr<Parsenode> _rectWidthExpression;
     std::shared_ptr<Parsenode> _localScaleExpression;
-    double _dropAngle;
-    double _dropDistance;
-    double _rectWidth;
-    double _localScale;
+    double _dropAngle=0.0;
+    double _dropDistance=0.5;
+    double _rectWidth=0.05;
+    double _localScale=1.0;
     std::string _info;
 };
 
