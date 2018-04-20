@@ -87,7 +87,7 @@ void Rule::calculateParameters(const Context& cc) {
         cmd->evaluateExpressions(cc);
     switch (drawmethod) {
         case DROP:
-            _dropAngle = _dropAngleExpression->eval(cc) * M_PI / 180.0;  //!!! cache sin and cos instead?
+            _dropAngle = _dropAngleExpression->eval(cc) * M_PI / 180.0;
             _dropDistance = _dropDistanceExpression->eval(cc);
             break;
         case RECT:
@@ -100,5 +100,5 @@ void Rule::calculateParameters(const Context& cc) {
         case WRITE:
             break;
     }
-    _localScale = _localScaleExpression ? _localScaleExpression->eval(cc) : 1;
+    _localScale = _localScaleExpression ? _localScaleExpression->eval(cc) : 1.0;
 }

@@ -9,5 +9,4 @@ TEST_CASE( "Parsing expressions", "[Parser]" ) {
     REQUIRE(!bool(Parser("2>4").parse()->eval({})));
     REQUIRE(Parser("1?1:2").parse()->eval({})==Approx(1));
     REQUIRE(Parser("0?1:2").parse()->eval({})==Approx(2));
-
 }

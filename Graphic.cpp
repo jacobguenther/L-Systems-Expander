@@ -10,7 +10,7 @@
 bool Dropgraphic::haveapt = false;
 Point Dropgraphic::storedpt;  //!!! Surely there's a better way then static point CMH 4/8/18
 
-Graphic //how do I make SURE this is an abstract base class?!!!
+Graphic
 ::Graphic(const Motion& _m) :
 		m(_m) {
 }

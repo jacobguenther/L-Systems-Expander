@@ -39,10 +39,9 @@ void Rulerunner::pop() {
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double atScale) {
     const auto & rule = _therules.at(rr);
     auto flipFactor = rulerev ^ ruleflip ? -1.0 : 1.0;
-    if (isDeepEnough()) {
+    if (isDeepEnough())
         _turtle.draw(rule,flipFactor,atScale)->draw(); //!!!Turtle should just draw
-    } else {
+    else
         push(rule,rulerev,flipFactor,atScale*rule._localScale);
-    }
 }
 
