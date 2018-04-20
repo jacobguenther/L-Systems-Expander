@@ -1,12 +1,11 @@
     Checks:          'bugprone*,clang-analyzer*,cert*,misc*,modernize*,performance*,portability*
-                     google*,-google-readability-braces-around-statements,-google-runtime-references,
-                     cppcore*,-cppcoreguidelines-pro-type-member-init,
-                     hicpp*,-hicpp-signed-bitwise,-hicpp-member-init,-hicpp-braces-around-statements,
-                     llvm*,-llvm-include-order,-llvm-header-guard,
+                     google*,-google-readability-braces-around-statements,
+                     cppcore*,
+                     hicpp*,-hicpp-signed-bitwise,-hicpp-braces-around-statements,
+                     llvm*,-llvm-header-guard,
                      readability*,-readability-braces-around-statements'
 
-    HeaderFilterRegex: '*'
-    FormatStyle:     Google
+    FormatStyle:     file
     CheckOptions:
       - key:     readability-implicit-bool-conversion.AllowIntegerConditions
         value:   '1'
