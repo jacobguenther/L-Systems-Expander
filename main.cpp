@@ -1,6 +1,10 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
+#include "Cmd.h"
+#include "Context.h"
+#include "Lsystem.h"
+#include "Rulerunner.h"
 #include <algorithm>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -10,10 +14,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include "Cmd.h"
-#include "Context.h"
-#include "Lsystem.h"
-#include "Rulerunner.h"
+
 
 using std::cout;
 using std::endl;
