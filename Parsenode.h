@@ -94,8 +94,10 @@ class Unopnode : public Parsenode {
     double eval(const Context &cc) override {
         if (op == '!')
           return static_cast<double>(!static_cast<bool>(child->eval(cc)));
-        if (op == '-') return -child->eval(cc);
-        if (op == '+') return child->eval(cc);
+        if (op == '-')
+            return -child->eval(cc);
+        if (op == '+')
+            return child->eval(cc);
         throw std::runtime_error(std::string("unrecognized unary operator ") + op);
     }
 
