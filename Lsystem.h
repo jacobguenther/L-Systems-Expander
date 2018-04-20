@@ -8,17 +8,34 @@
 #include <utility>
 #include <vector>
 
+class Lexer;
+
 class Lsystem {
     friend class Rulerunner;
+    enum Method {
+        NONE,
+        NORM,
+        DROP,
+        RECT,
+        INVIS,
+        MIDPT,
+        WRITE
+    } ;
 
    public:
-	Lsystem(std::string _n, bool _a, Ruletable _t, std::string _s, Exprtype _e);
+    Lsystem(std::string_view name, Lexer &lex);
 	const std::string& getname();
 	bool isactive() const;
 
    private:
-    std::string name;
-    bool active;
+    void readSystemOptions(Lexer &lex);
+    
+    std::string _name;
+    std::string _info;
+    Method _drawMethod = NORM;
+    ParsenodePtr _dropAngleExpression;
+    ParsenodePtr _dropDistanceExpression;
+    bool active=true;
     Ruletable table;
     std::string startrule;
     Exprtype expressions;

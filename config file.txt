@@ -9,23 +9,6 @@ dragon
 A : left 45 A right 90 ~A left 45
 A ? localscale 1/sqrt(2)
 
-AltTerdragon2-p
-    $a = 180*p1
-    $len1 = 2/3*sind($a/2)
-    $ang1 = 90-$a/2
-    $len2 = sqrt(5+4*cosd($a))/3
-    $ang2 = 90+acosd(3*sqrt((1+cosd($a))/(10+8*cosd($a))))
-    A : left $ang1 A@ $len1 A@ $len1 right $ang2 ~A@ $len2 left $ang2 right $ang1
-    #A : left $ang1 A@ $len1 right $ang2 A@ $len2 left $ang2 A@ $len1 right $ang1
-
-AltTerdragon-p 
-    $a = 180*p1
-    $len1 = 2/3*sind($a/2)
-    $ang1 = 90-$a/2
-    $len2 = sqrt(5+4*cosd($a))/3
-    $ang2 = 90+acosd(3*sqrt((1+cosd($a))/(10+8*cosd($a))))
-    A : left $ang1 A@ $len1 right $ang2 A@ $len2 left $ang2 A@ $len1 right $ang1
-
 AltDragon-p
     $a = 90*p1
     $len1 = sind($a)
@@ -36,46 +19,15 @@ AltDragon-p
 	#A ? localscale 1/sqrt(5) 
 
 bisquare
+    system ? drawmethod drop dropdistance sqrt(2)/2 dropangle 45
 	a : left 90 |b@ 2 right 90 a a a right 90 |a |a left 90
-	a ? localscale 1/3 drawmethod drop dropdistance sqrt(2)/2 dropangle 45
+	a ? localscale 1/3
 	b : left 90 |b@ 2 right 90 a a a right 90 |a ~a left 90
-	b ? localscale 1/3 drawmethod drop dropdistance sqrt(2)/4 dropangle 45
+	b ? localscale 1/3
 
 Terdragon
 	A : left 30 A right 120 A left 120 A right 30
 	A ? localscale 1/sqrt(3)
-	
-Terdragon*3
-	B : A right 120 A right 120 A
-	A : left 30 A right 120 A left 120 A right 30 
-	A ? localscale 1/sqrt(3)
-
-"Terdragon with midpoints" inactive
-	A : left 30 A right 120 A left 120 A right 30 
-	A ? localscale 1/sqrt(3)
-	A ? drawmethod midpoint
-
-"Terdragon with midpoints *3"
-	B : A right 120 A right 120 A
-	A : left 30 A right 120 A left 120 A right 30 
-	A ? localscale 1/sqrt(3)
-	A ? drawmethod midpoint
-
-island/3
-	a : left 30 a a right 120 ~a left 90
-	a ? localscale 1/sqrt(3) drawmethod midpoint
-
-Neat inactive
-	A : left 30 |A right 120 A left 120 |A right 30
-	A ? localscale 1/sqrt(3)
-
-"asymetric sevener"
-	$sm = asind(sqrt(3)/(2*sqrt(7)))
-    start : a
-    a : | right $sm a a left 120 a a right 120 a right 120 a left 120 a left $sm |
-    a ? localscale 1/sqrt(7)
-    c : a right 120 a right 120 a right 120
-	b : a left 120 a left 120 a left 120
 
 sevener.1
 	$sm2 = asind(sqrt(3)/(2*sqrt(7)))
@@ -101,330 +53,11 @@ sevener.1
 	b : [ a ] left 120 [ a ] left 120 [ a ] left 120
 	invis ? drawmethod invisible
 	invis : invis 
-	
-sevener.2
-	$sm  = asind(1/(2*sqrt(7)))
-	$sm2 = asind(sqrt(3)/(2*sqrt(7)))
-	a : | left 90+$sm a \
-		right 90+$sm-$sm2 |a \
-		right 90+$sm2-$sm a \
-	    left 2*$sm2 |a \
-	    right 2*$sm2 a \
-	    left 90+$sm2-$sm |a \
-	    left 90+$sm-$sm2 a \
-	    right 90+$sm |
-	a ? localscale 1/sqrt(7)
-	    
-13.1
-	$sm = atand(sqrt(3)/7)
-	start : a
-	b : a left 120 a left 120 a left 120
-	a : | right $sm \
-		left 180 a \
-		right 120 a \
-		a \
-		right 120 a \
-		left 120 a \
-		right 120 a \
-		a \
-		a \
-		left 120 a \
-		right 120 a \
-		left 120 a \
-		a \
-		left 120 a \
-		right 180 left $sm |
-	a ? localscale 1/sqrt(13) # drawmethod midpoint
-	
-13.2
-	$sm = atand(sqrt(3)/7)
-	start : a
-	b : a left 120 a left 120 a left 120
-	a : | right $sm \
-		right 60 a \
-		left 120 a \
-		a \
-		a \
-		right 120 a \
-		right 120 a \
-		left 120 a \
-		right 120 a \
-		left 120 a \
-		left 120 a \
-		a \
-		a \
-		right 120 a \
-		left 60 left $sm |
-	a ? localscale 1/sqrt(13) # drawmethod midpoint
-	 
-dragon
-	D : A right 90 ~A right 90 A right 90 ~A right 90 
-	C : [ A ] right 90  [ A ] right 90  [ A ] right 90  [ A ] right 90 
-	B : A right 180 A
-	A : left 45 A right 90 ~A left 45
-	A ? localscale 1/sqrt(2) 
-
-13test inactive
-	$sm = atand(sqrt(3)/7)
-	start : b
-	b : [ a ] left 120 [ a ] left 120 [ a ] left 120
-	a : left $sm \
-		right 60 a \
-		right 60 a \
-		left 60 a \
-		left 60 a \
-		left 60  a \
-		left 60 a \
-		right 60 a \
-		left 60 a \
-		right 60 a \
-		right 60 a \
-		right 60 a \
-		right 60 a \
-		left 60 a \
-		left 60 right $sm
-	a ? localscale 1/sqrt(13) #drawmethod midpoint
-
-"Sierpinkski curve"
-    a : left 45 |a right 90 |a left 45
-	a ? localscale 1/sqrt(2)
-    #a ? drawmethod drop dropdistance sqrt(5)/4 dropangle asind(1/sqrt(5))
-	
-"Another niner!"
-    a : left 60 a right 120 a left 120 a right 120 a right 120 a \
-        left 120 a left 120 a right 120 a left 120 a right 60
-    a ? localscale 1/3
-	
-niner
-	a : a left 120 |a right 120 a left 120 |a right 120 a right 60 \
-		|a right 120 a left 120 |a left 60 a
-	a ? localscale 1/3 drawmethod midpoint
-
-sevener.3
-	$sm2 = asind(sqrt(3)/(2*sqrt(7)))
-	$tilang = 120-$sm2
-	start : e
-	e : a left 120 a left 120 a left 120
-	d : [ a ] left 60 \
-		[ a ] left 60 \
-		[ a ] left 60 \
-		[ a ] left 60 \
-		[ a ] left 60 \
-		[ a ] left 60 
-	c : [ a ] left $tilang invis@ 1/sqrt(7) right $tilang-60*p1 a
-	a : left 120-$sm2 a \
-		right 120 a \
-		a \
-		right 120 a \
-		left 120 a \
-		a \
-		left 120 a \
-		right 120-$sm2
-	a ? localscale 1/sqrt(7) drawmethod midpoint
-	b : [ a ] left 120 [ a ] left 120 [ a ] left 120
-	invis ? drawmethod invisible
-	invis : invis 
-	
-sevener.4 inactive
-	$sm  = asind(1/(2*sqrt(7)))
-	$sm2 = asind(sqrt(3)/(2*sqrt(7)))
-	a : | left 90+$sm a \
-		right 90+$sm-$sm2 |a \
-		right 90+$sm2-$sm a \
-	    left 2*$sm2 |a \
-	    right 2*$sm2 a \
-	    left 90+$sm2-$sm |a \
-	    left 90+$sm-$sm2 a \
-	    right 90+$sm |
-	a ? localscale 1/sqrt(7)
-	    
-sevener.5 inactive
-	$sm  = asind(1/(2*sqrt(7)))
-	a : left 90-$sm |a right 60 |a right 120 ~a left 60 |a \
-		right 60 ~a left 120 |a left 60 |a right 90-$sm
-	a ? localscale 1/sqrt(7)
-	    
-Goodmidpt inactive
-	a : left 60 a right 120 a a left 120 a right 60
-	a ? localscale 1/2 drawmethod midpoint 
-	#s : a left 120 a left 120 a left 120
-
-Good
-	a : left 60 a right 120 a a left 120 a right 60
-	a ? localscale 1/2
-	#s : a left 120 a left 120 a left 120
-
-noname
-	a : left 60 a right 120 ~|a left 120 ~|a right 120 a left 60
-	a ? localscale 1/2 # drawmethod midpoint 
-
-Chris
-	a : left 135 a right 90 a ~a right 90 a left 90 a right 90 ~a a right 90 a left 135
-	a ? localscale 1/sqrt(8) # drawmethod midpoint
-
-Glenn
-	a : left 45 a right 90 ~a right 90 a \
-		left 90 ~a left 90 a left 90 ~a \
-		right 90 a right 90 ~a left 45
-	a ? localscale 1/sqrt(8) # drawmethod midpoint
-	s :  [ ~a ] right 90   [ ~a ] right 90   [ ~a ] right 90   [ ~a ] right 90  
-	
-Glenn2
-	a : left 45 a ~a left 90 a right 90 a right 90 a right 90 a left 90 ~a a left 45
-	a ? localscale 1/sqrt(8) #drawmethod midpoint
-	
-AltDragon-p inactive
-    $a = 90*p1
-    $len1 = sind($a)
-    $len2 = cosd($a)
-    S : left 90-$a ~S@ $len1 right 90 S@ $len2 left $a
-    #S ? drawmethod midpoint
-	#A : left acosd(1/sqrt(5)) |A right 90 ~|A@ 2 left asind(1/sqrt(5)) 
-	#A ? localscale 1/sqrt(5) 
-
-Twoer-p inactive
-    $a = 90*p1
-    $len1 = sind($a)
-    $len2 = cosd($a)
-    S : left 90-$a |S@ $len1 right 90 ~|S@ $len2 left $a
-    S ? drawmethod drop dropangle (90-$a)/2 dropdistance p1/2 drawmethod normal
-	#A : left acosd(1/sqrt(5)) |A right 90 ~|A@ 2 left asind(1/sqrt(5)) 
-	#A ? localscale 1/sqrt(5) 
-
-Fiver3
-	b : a right 90 a right 90 a right 90 a right 90
-	a : left acosd(1/sqrt(5)) |a right 90 |a right 90 |a left 90 |a left 90 |a right acosd(1/sqrt(5))
-a ? localscale 1/sqrt(5) drawmethod midpoint
-
-Fiver2
-	a : left acosd(1/sqrt(5)) a right 90 a left 90 a right 180 \
-	    a left 90 |~a left 90-acosd(1/sqrt(5))
-	a ? localscale 1/sqrt(5) drawmethod midpoint
-
-Fiver1
-	b : a right 90 a right 90 a right 90 a right 90
-	a : left acosd(1/sqrt(5)) a right 90 a right 90 a left 90 a left 90 a right acosd(1/sqrt(5))
-	a ? localscale 1/sqrt(5) drawmethod midpoint
-
-Fourer
-	a ? localscale 1/2 # drawmethod midpoint
-	a : a right 90 |a left 90 a left 90 |a right 90
-	
-Fourer2
-	a ? localscale 1/2  drawmethod midpoint
-	a : a right 90 |a left 90 a left 90 |a right 90
-	
-huh
-	a : left 30 |a |~a right 120 |a left 90
-	s : [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ]
-	a ? localscale 1/sqrt(3)
-    a ? drawmethod midpoint
-	
-"huh flipped"
-	start : s
-	t : [ ~a ] \
-	    left 180 [ ~a ]
-	s : [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ] \
-	    left 60 [ a ]
-	a ? localscale 1/sqrt(3)
-	a : | left 30 |a |~a right 120 |a left 90 |
-	a ? drawmethod midpoint
-	
-huh2
-	a : left 30 |a ~|a right 120 ~|a left 90
-	a ? localscale 1/sqrt(3)
-#a ? drawmethod midpoint
-
-"Sierpinkski curve"
-	a : a left 90 a right 180 a left 90 a
-	a ? localscale 1/2
-	#a ? drawmethod midpoint
-	
-Tromino #63.43... is acos(1/sqrt(5))
-	s : lc
-	start : right 90 invis left 90 \
-			line left 90 line left 90 line@ 1/2 left 90 line@ 1/2 right 90 line@ 1/2 \
-			left 90 line@ 1/2 left 90 startlc
-    startlt : left 63.43494882 lt@ sqrt(5)/2
-    startlm : left 45 lm@ 1/sqrt(2)
-    startlc : lc
-    startll : left 45 ll@ sqrt(2)
-    startct : invis left 180-63.43494882 ct@ sqrt(5)/2
-	ll : right 45 ~|lc@ 1/(2*sqrt(2)) \
-	     left 45 lm@ 1/4 \
-	     left 135-63.43494882 ct@ sqrt(5/32) \
-	     right 90 ~ct@ sqrt(5/32) left 63.43494882-45
-	tt : right 90 ll left 90 lm@ 1/2 left 45 ~|lc@ 1/sqrt(2) left 45 ~|lm@  1/2 right 90
-	ct : left 63.43494882 ~lc@ 1/sqrt(5) \
-		 right 63.43494882 |lt@ 1/2 \
-		 right 90 ~|lt@ 1/2 \
-		 left 63.43494882+45 ~|lm@ 1/sqrt(10) right 63.43494882-45
-	lm : right 45 ~|lc@ sqrt(2)/2 left 45 ll left 90 lm@ 1/2 left 90 |lm@ 1/2 right 180
-	lc : left 63.43494882 |ct@ sqrt(5)/4 \
-	     right 63.43494882-45 tt@ sqrt(2)/4 \
-	     right 135-63.43494882 ~lt@ sqrt(5)/4 \
-	     right 63.43494882 |lc@ 1/2 left 90	     
-	lt : right 63.43494882 ~|lc@ 1/sqrt(5) \
-		 left 45 lm@ 1/sqrt(10) \ 
-		 left 45 ~|lc@ 1/sqrt(5) \
-		 left 45 ~|lm@ 1/sqrt(10) right 135-63.43494882
-	line : line
-	invis : invis
-	invis ? drawmethod invisible
-	#ll ? drawmethod midpoint
-	#tt ? drawmethod midpoint
-	#ct ? drawmethod midpoint
-	#lm ? drawmethod midpoint
-	#lc ? drawmethod midpoint
-	#lt ? drawmethod midpoint
 
 "Tree test"
 	start : left 90 A
 	A : [ left 49 B ] [ right 68 B ] B A@ 1/2
 	B : B
-
-"Less elegant Menger sponge"
-	A : A A  A left 90 invis left 90 \
-	  |A invis |A right 90 invis right 90 \
-	  A A A right 90 invis@ 2 left 90
-	invis : invis
-	invis ? drawmethod invisible
-	A ? localscale 1/3
-	#A ? drawmethod midpoint
-	
-"Menger sponge"
-	A : invis left 90 A A A right 90 |A right 90 \
-	    A A A right 90 |A left 180 invis invis
-	invis : invis
-    A ? localscale 1/3
-    invis ? drawmethod invisible
-
-"Menger sponge 2"
-	A : invis left 90 A A A right 180 invis left 90 A left 90 |A \
-		right 180 invis A A right 180 invis left 90 A right 180 \
-		invis@ 2 right 90 invis left 90
-	invis : invis
-	invis ? drawmethod invisible
-    A ? localscale 1/3
-   
-"twisty with reverse"
-	A : left 30 ~A A right 120 A left 90
-	A ? localscale 1/sqrt(3) # drawmethod midpoint
-	
-"Hartman Isle"
-	B : A right 120 A right 120 A right 120
-	A : left  30 ~A A right 120 A left 90
-	A ? localscale 1/sqrt(3)
-	#A ? drawmethod midpoint
 
 "Sierpinski gasket"
     s : A left 60 A left 60 A left 60 A left 60 A left 60 A
@@ -433,86 +66,15 @@ Tromino #63.43... is acos(1/sqrt(5))
 	$cosang = cosd($ang)
 	#A ? drawmethod midpoint 
 
-"\"Flipped\" Sierpinski gasket"
-	A : | left $ang ~A@ $cosang right $ang A@ 1-2*$cosang*$cosang right $ang ~A@ $cosang left $ang |
-	$ang = (p1*45+45)
-	$cosang = cosd($ang)
-	#A ? drawmethod midpoint 
-	
 Terdragon
 	A : left 30 A right 120 A left 120 A right 30
 	A ? localscale 1/sqrt(3)
-	
-Terdragon*3
-	B : A right 120 A right 120 A
-	A : left 30 A right 120 A left 120 A right 30 
-	A ? localscale 1/sqrt(3)
-
-"Terdragon with midpoints"
-	A : left 30 A right 120 A left 120 A right 30 
-	A ? localscale 1/sqrt(3)
-	A ? drawmethod midpoint
-
-"Terdragon with midpoints *3"
-	B : A right 120 A right 120 A
-	A : left 30 A right 120 A left 120 A right 30 
-	A ? localscale 1/sqrt(3)
-	A ? drawmethod midpoint
-
-Neat
-	A : left 30 | ~A | right 120 A left 120 | ~A | right 30
-	A ? localscale 1/sqrt(3)
-
-"Neat with midpoints"
-	A : left 30 | ~A | right 120 A left 120 | ~A | right 30
-	A ? localscale 1/sqrt(3)
-	A ? drawmethod midpoint
-
-"Koch curve"
-    seg : seg left 60 seg right 120 seg left 60 seg
-    seg ? localscale 1/3
-
-"Koch curve temp"
-    seg : seg ~seg left 60 seg right 120 seg left 60
-    seg ? localscale 1/3
-
-"Koch 8 segment curve"
-	A :          A \
-		left  90 A \
-		right 90 A \
- 		right 90 A A \
-		left  90 A \
-		left  90 A \
-		right 90 A
-	A ? localscale 1/4
-
-"dragon with midpoints"
-	C : [ B ] left 90 [ B ] left 90 [ B ] left 90 [ B ] left 90
-	B : A left 180 A left 180
-	A : left 45 A right 90 ~A left 45
-A ? localscale 1/sqrt(2) # drawmethod midpoint
 
 "Hilbert curve"
+    system ? drawmethod drop 45  1/sqrt(2)
     seg : left 90 |seg right 90 seg seg right 90 |seg left 90
-    seg ? drawmethod drop dropangle 45 dropdistance 1/sqrt(2) localscale 1/2
+    seg ? localscale 1/2
 	s : seg left 180 seg left 180
-
-"tree"
-	start : left 90 seg
-    seg : trunk [ left 30 seg ] seg
-    seg ? drawmethod normal localscale 1/2 # color green
-    trunk : trunk
-    trunk ? drawmethod rectangle # color brown
-    seg ? info "This is a tree designed by Chris Hartman on 4/16/03"
-    
-Peano
-	b : a right 90 a right 90 a right 90 a right 90
-	a : a left 90 a right 90 a right 90 a right 90 a left 90 a left 90 a left 90 a right 90 a
-	a ? localscale 1/3 drawmethod midpoint
-
-"is it nice?"
-	star : forward left 144 forward left 144 forward left 144 forward left 144 forward left 144
-	forward : forward
 
 "Wikipedia Sierpinski Triangle"
     start  : F left 120 G left 120 G
