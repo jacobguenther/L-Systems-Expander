@@ -6,6 +6,7 @@
 #include "Lsystem.h"
 #include "Parser.h"
 #include "Rule.h"
+#include "RuleState.h"
 #include "Turtle.h"
 #include <list>
 #include <map>
@@ -19,30 +20,11 @@ class Rulerunner;
 
 //class Rulestate
 //Member variables are
-//   bool isReversed = is the currently running rule reversed
-//   double flipFactor = do we flip the turtle when we start running this rule
-//   const Rule & myRule  = the currently running rule
+//   bool _isReversed = is the currently running rule reversed
+//   double _flipFactor = do we flip the turtle when we start running this rule
+//   const Rule & _myRule  = the currently running rule
 //   Cmdcont::const_iterator _nextCommand = the next command to run
-//   double scaleFactor = what was our scale before we started this rule
-
-class Rulestate {
-    friend class Rulerunner;
-
-   public:
-	Rulestate(const Rule& myRule, bool isReversed, double scaleFactor,
-			double flipFactor);
-
-	bool hasNoMoreCommands();
-
-    void runCurrentCommandOn(Rulerunner &target);
-
-   private:
-    bool _isReversed;
-    double _flipFactor;
-    const Rule &_myRule;
-    Commands::const_iterator _nextCommand;
-    double _scaleFactor;
-};
+//   double _scaleFactor = what did we scale by when starting this rule?
 
 class Rulerunner {
 friend class RotateCommand;  //!!!need friends, or make a public turtle accessor?

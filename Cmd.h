@@ -1,9 +1,9 @@
 #ifndef CMD_H
 #define CMD_H
 
-#include "Context.h"
+class Context;
 #include "Parser.h"
-#include "Rulerunner.h"
+class Rulerunner;
 #include <list>
 #include <string>
 #include <utility>
@@ -19,6 +19,8 @@ public:
     virtual void executeOn(Rulerunner &target) = 0;
     virtual void evaluateExpressions(const Context & /*unused*/) {}
 };
+
+using Commands = std::vector<std::shared_ptr<Command>>;
 
 class RotateCommand : public Command {
 public:
