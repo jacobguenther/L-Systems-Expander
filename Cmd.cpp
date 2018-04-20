@@ -1,4 +1,5 @@
 #include "Cmd.h"
+#include "Rulerunner.h"
 
 RotateCommand::RotateCommand(std::shared_ptr<Parsenode> _a) :
 		_angleExpression(std::move(_a)) {
