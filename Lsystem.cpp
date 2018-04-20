@@ -18,7 +18,7 @@ using std::runtime_error;
 using std::ifstream;
 
 #include <memory>
-using std::make_shared;
+using std::make_unique;
 
 #include <string>
 using std::string_view;
@@ -36,17 +36,17 @@ Commands readrule(Lexer &lex) {
         if (t.getdata() == "left") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            retval.push_back(make_shared<RotateCommand>(Parser(t.getdata()).parse()));
+            retval.push_back(make_unique<RotateCommand>(Parser(t.getdata()).parse()));
         } else if (t.getdata() == "right") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            retval.push_back(make_shared<RotateCommand>(Parser("-(" + t.getdata() + ")").parse()));
+            retval.push_back(make_unique<RotateCommand>(Parser("-(" + t.getdata() + ")").parse()));
         } else if (t.getdata() == "|" || t.getdata() == "flip")
-            retval.push_back(make_shared<FlipCommand>());
+            retval.push_back(make_unique<FlipCommand>());
         else if (t.getdata() == "[" || t.getdata() == "push")
-            retval.push_back(make_shared<PushCommand>());
+            retval.push_back(make_unique<PushCommand>());
         else if (t.getdata() == "]" || t.getdata() == "pop")
-            retval.push_back(make_shared<PopCommand>());
+            retval.push_back(make_unique<PopCommand>());
         else {  //A rule
             bool rev = false;
             bool flip = false;
@@ -60,9 +60,9 @@ Commands readrule(Lexer &lex) {
                 thisrule.remove_suffix(1);
                 auto localScale = lex.nexttoken();
                 assertdatatoken(localScale);
-                retval.push_back(make_shared<RuleCommand>(string(thisrule), rev, flip, Parser(localScale.getdata()).parse()));
+                retval.push_back(make_unique<RuleCommand>(string(thisrule), rev, flip, Parser(localScale.getdata()).parse()));
             } else
-                retval.push_back(make_shared<RuleCommand>(string(thisrule), rev, flip));
+                retval.push_back(make_unique<RuleCommand>(string(thisrule), rev, flip));
         }
         t = lex.nexttoken();
     }
@@ -141,7 +141,7 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
             }
             t = lex.nexttoken();
         }
-        thelsystems.emplace_back(systemname, activerule, table, startrule, expressions);
+        thelsystems.emplace_back(systemname, activerule, std::move(table), startrule, expressions);
         if (t.iseof())
             return thelsystems;
     }

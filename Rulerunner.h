@@ -33,7 +33,7 @@ friend class PopCommand;
 friend class PushCommand;
 friend class RuleCommand;
 public:
-    Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c);
+    Rulerunner(Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c);
     std::shared_ptr<Graphic> nextpoint();
     void draw();
     bool isDeepEnough();
@@ -43,7 +43,7 @@ private:
     void graphic(const Motion &);
     void handlerule(const std::string &rr, bool rulerev, bool ruleflip, double atScale);
 
-    Ruletable _therules;
+    Ruletable &_therules; //Would like to be const, but calculating/caching parameters changes
     std::string _startrule;
     const Context _context;
     std::stack<Rulestate> _rulestates;

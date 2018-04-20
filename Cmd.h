@@ -20,16 +20,16 @@ public:
     virtual void evaluateExpressions(const Context & /*unused*/) {}
 };
 
-using Commands = std::vector<std::shared_ptr<Command>>;
+using Commands = std::vector<std::unique_ptr<Command>>;
 
 class RotateCommand : public Command {
 public:
-	explicit RotateCommand(std::shared_ptr<Parsenode> _a);
+	explicit RotateCommand(std::unique_ptr<Parsenode> _a);
     void executeOn(Rulerunner& target) override;
     void evaluateExpressions(const Context& context) override;
     
 private:
-    std::shared_ptr<Parsenode> _angleExpression;
+    std::unique_ptr<Parsenode> _angleExpression;
     double _angle=0.0;
 };
 

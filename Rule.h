@@ -30,10 +30,10 @@ class Rule {
    private:
     Commands cmds;
     Method drawmethod=NORM;
-    std::shared_ptr<Parsenode> _dropAngleExpression;
-    std::shared_ptr<Parsenode> _dropDistanceExpression;
-    std::shared_ptr<Parsenode> _rectWidthExpression;
-    std::shared_ptr<Parsenode> _localScaleExpression;
+    std::unique_ptr<Parsenode> _dropAngleExpression;
+    std::unique_ptr<Parsenode> _dropDistanceExpression;
+    std::unique_ptr<Parsenode> _rectWidthExpression;
+    std::unique_ptr<Parsenode> _localScaleExpression;
     double _dropAngle=0.0;
     double _dropDistance=0.5;
     double _rectWidth=0.05;

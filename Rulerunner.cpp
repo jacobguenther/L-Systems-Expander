@@ -8,7 +8,7 @@
 
 using std::string;
 
-Rulerunner::Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
+Rulerunner::Rulerunner(Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
 : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
 ,_maxdepth(maxdepth), _minscale(minscale)
 {
@@ -37,7 +37,7 @@ void Rulerunner::pop() {
 }
 
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double atScale) {
-    const auto & rule = _therules[rr];
+    const auto & rule = _therules.at(rr);
     auto flipFactor = rulerev ^ ruleflip ? -1.0 : 1.0;
     if (isDeepEnough()) {
         _turtle.draw(rule,flipFactor,atScale)->draw(); //!!!Turtle should just draw
