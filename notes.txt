@@ -124,7 +124,7 @@ Answer: Not sure why I was confused. A rule that's not defined expands to nothin
 
 "reverse" is really "reflect", yes? At least for users.
 
-Discuss with Glenn: what should commands take as a context? Most affect the turtle, but RuleCmd (of course) affects the RuleRunner. (And fix the names of the classes! Especially RuleRunner.)
-And simplification to parser?
+Put related classes in same files?
+
 
 
