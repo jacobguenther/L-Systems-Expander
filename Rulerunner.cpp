@@ -35,7 +35,7 @@ void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, doubl
     }
 }
 
-void Rulestate::runCurrentCommandOn(Rulerunner *target) {//!!! Need to wrap rule so this can use reverse iterators
+void Rulestate::runCurrentCommandOn(Rulerunner &target) {
     if (_isReversed)
         (*--_nextCommand)->executeOn(target);
     else
@@ -47,6 +47,6 @@ void Rulerunner::draw() {
         if (_rulestates.top().hasNoMoreCommands())
             pop();
         else
-            _rulestates.top().runCurrentCommandOn(this);
+            _rulestates.top().runCurrentCommandOn(*this);
     }
 }

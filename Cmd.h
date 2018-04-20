@@ -11,7 +11,7 @@
 
 class Command {
 public:
-    virtual void executeOn(Rulerunner *target) = 0;
+    virtual void executeOn(Rulerunner &target) = 0;
     virtual void evaluateExpressions(const Context & /*unused*/) {}
     virtual ~Command() = default;
     Command() = default;
@@ -29,8 +29,8 @@ public:
     : _angleExpression(std::move(_a))
     {}
     
-    void executeOn(Rulerunner *target) override {
-        target->_turtle.rotate(_angle);
+    void executeOn(Rulerunner &target) override {
+        target._turtle.rotate(_angle);
     }
     
     void evaluateExpressions(const Context &context) override {
@@ -44,20 +44,22 @@ private:
 
 class FlipCommand : public Command {
 public:
-    void executeOn(Rulerunner *target) override {
-        target->_turtle.flip();
+    void executeOn(Rulerunner &target) override {
+        target._turtle.flip();
     }
 };
 
 class PushCommand : public Command {
 public:
-    void executeOn(Rulerunner *target) override { target->_turtle.push(); }
+    void executeOn(Rulerunner &target) override {
+        target._turtle.push();
+    }
 };
 
 class PopCommand : public Command {
 public:
-    void executeOn(Rulerunner *target) override {
-        target->_turtle.pop();
+    void executeOn(Rulerunner &target) override {
+        target._turtle.pop();
         Dropgraphic::haveapt = false;
     }
 };
@@ -72,8 +74,8 @@ public:
     , _scaleExpression(std::move(scaleExpression))
     {}
     
-    void executeOn(Rulerunner *target) override {
-        target->handlerule(_ruleName, _isReversed, _isFlipped, _scale);
+    void executeOn(Rulerunner &target) override {
+        target.handlerule(_ruleName, _isReversed, _isFlipped, _scale);
     }
     
     void evaluateExpressions(const Context &context) override {

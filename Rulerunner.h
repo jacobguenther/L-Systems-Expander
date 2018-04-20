@@ -40,7 +40,7 @@ class Rulestate {
         return _nextCommand == (_isReversed ? _myRule.cmds.begin() : _myRule.cmds.end());
     }
 
-    void runCurrentCommandOn(Rulerunner *target);
+    void runCurrentCommandOn(Rulerunner &target);
 
    private:
     bool _isReversed;
