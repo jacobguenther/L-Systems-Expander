@@ -20,9 +20,6 @@ it can be created at syntax check time.
 Would it help to make the "top" turtle a member directly? (ie, is stack.top()
 inefficient?)
 
-How bad is the autoptr to Graphic stuff? We could go back to a regular pointer
-(although I don't know where the memory leak was) or we could replace a lot of
-the .get() calls if we keep a boolean to say whether we have a graphic yet.
 --------------------------------------------
 Graphics
 --------------------------------------------
@@ -34,9 +31,6 @@ similarly, will the points list ever have more than one point in it?
 rulerunner needs to return draw primitives (ie, segment, etc.) but then
 we need some way to combine them for efficiency. Or do we?
 
-the whole makeapoint, nextpoint thing could be redone in a different way. Should it?
-It's really a point (ah, well, ..., Motion) stream. 
-
 Midpoint graphic class isn't stable w/ respect to haveapt being reset. Actually, I don't
 think this class works generally at all.
 
@@ -46,11 +40,6 @@ Header file correctness
 check const correctness everywhere
 
 typdef all containers
-
-include guards
-
-rationalize headers into smaller parts, who needs what?
-and make ALL functions go into .cpp files
 
 .h files should include only needed header files, forward declaring when necessary
 
@@ -65,23 +54,9 @@ with variables.
 
 rectgraphic
 
-lexer needs a getdatatoken() routine
-
-lexer needs a little help with comment lines. Seems that 
-	1) a commented out \ is still not an end of line
-	2) lines with nothing but whitespace and then a comment shouldn't get eol after comment
-This should be solved by Haskell style layout rules.
-
-Need starting position for turtle. Starting scale, too?
-
-info and startrule are wierd. Info needs to be a system option, and startrule looks like a
-rule option but is really a system option. Should also have a way to display the info.
 
 Add ways to interactivly
-	make systems inactive or active
-	Set drawmethod to or from midpoint
-
-midpoint drawmethod a property of the whole system? Yes, I believe so.
+	Set drawmethod to or from midpoint/drop
 
 rule option list should just put stuff in a map, and cache for efficiency some values.
 Could a Context go back to being just var->double map? I think so. So do syntax 
@@ -91,7 +66,7 @@ Things that don't pass syntax check or otherwise throw while reading should just
 be put in the list...
 See Efficiency above.
 
-invis standard rule?
+invis and forward standard rule? Not sure how to handle scaling
 
 How should a context be passed to a rulerunner. By value seems to be inefficient
 (copying the whole thing) but by const reference is dangerous unless the user is
@@ -105,7 +80,6 @@ it after constructor time!
 Notes from main.cpp
   //!!!!"class"ify this (wrt a tx, ty translation pair and a sc scale
     //!!!glBegin->glEnd a C++ class constructor destructor resource acquisition?
-int curfractal = -1;  //!!! change to optional or add a bool haveCurrentFractal
     } catch (std::exception &error) {
         //!!! Some errors (like can't read config file) are terminal, others we can proceed
         std::cerr << error.what() << std::endl;
@@ -119,12 +93,8 @@ Consider parser type any<T> instead of double?
 
 We cache things because they can't be evaluated until parameter value is known, but this seems prone to error. Maybe no cache at all? But then we're parsing every time. Hmmmmm.
 
-What's the deal with rules in a system in the config file that aren't defined, or refer to themselves only, or are defined as empty? 
-Answer: Not sure why I was confused. A rule that's not defined expands to nothing is the same as one defined as empty (so it will go away after one expansion.) If it's defined as itself only, it obviously doesn't go away.
-
 "reverse" is really "reflect", yes? At least for users.
 
-Put related classes in same files?
 
 
 
