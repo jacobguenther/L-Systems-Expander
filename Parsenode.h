@@ -16,13 +16,14 @@ using ParsenodePtr = std::unique_ptr<Parsenode>;
 
 class Parsenode {
    public:
-    virtual double eval(const Context & =Context{}) = 0;
-    virtual ~Parsenode() = default;
     Parsenode() = default;
+    virtual ~Parsenode() = default;
     Parsenode(const Parsenode&) = delete;
     Parsenode& operator=(const Parsenode&) = delete;
     Parsenode(Parsenode&&) = delete;
     Parsenode& operator=(Parsenode&&) = delete;
+
+    virtual double eval(const Context & cc) = 0;
 
    private:
     static bool lastconstruct;
@@ -63,7 +64,7 @@ class Unopnode : public Parsenode {
 class Numnode : public Parsenode {
    public:
 	explicit Numnode(double _v);
-	double eval(const Context&) override;
+	double eval(const Context& cc) override;
 
    private:
     double val;
