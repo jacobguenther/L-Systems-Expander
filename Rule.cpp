@@ -11,8 +11,6 @@ void Rule::setcmds(Commands&& newcmds) {
 
 void Rule::setdrawmethod(Method m) {
     switch (m) {
-        case NORM:
-            break;
         case DROP:
             if (!_dropAngleExpression)
                 _dropAngleExpression = Parser("0").parse();
@@ -23,6 +21,8 @@ void Rule::setdrawmethod(Method m) {
             if (!_rectWidthExpression)
                 _rectWidthExpression = Parser("0.1").parse();
             break;
+        case NONE:
+        case NORM:
         case INVIS:
         case MIDPT:
         case WRITE:
@@ -38,7 +38,9 @@ void Rule::readruleoptions(Lexer &lex) {
         if (t.getdata() == "drawmethod") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            if (t.getdata() == "drop")
+            if (t.getdata() == "none")
+                setdrawmethod(Rule::NONE);
+            else if (t.getdata() == "drop")
                 setdrawmethod(Rule::DROP);
             else if (t.getdata() == "normal")
                 setdrawmethod(Rule::NORM);
@@ -91,6 +93,7 @@ void Rule::calculateParameters(const Context& cc) {
         case RECT:
             _rectWidth = _rectWidthExpression->eval(cc);
             break;
+        case NONE:
         case NORM:
         case INVIS:
         case MIDPT:

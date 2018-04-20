@@ -13,6 +13,7 @@ class Rule {
     friend class Rulestate;
     friend class Rulerunner;  //!!!be careful with friends?
     enum Method {
+        NONE,
         NORM,
         DROP,
         RECT,

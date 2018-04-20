@@ -1,3 +1,10 @@
+Hilbert2
+S : A right 90 forward right 90 A right 90 forward right 90
+A : left 90 ~A forward right 90 A forward A right 90 forward ~A left 90
+A ? localscale 1/2 drawmethod none
+forward : forward
+forward ? localscale 1/2
+
 dragon
 A : left 45 A right 90 ~A left 45
 A ? localscale 1/sqrt(2)
@@ -506,13 +513,6 @@ Peano
 "is it nice?"
 	star : forward left 144 forward left 144 forward left 144 forward left 144 forward left 144
 	forward : forward
-
-Hilbert2
-	A : left 90 B forward right 90 A forward A right 90 forward B left 90
-    B : right 90 A forward left 90 B forward B left 90 forward A right 90
-    forward :
-    A ? localscale 1/2 drawmethod invisible
-    B ? localscale 1/2 drawmethod invisible
 
 "Wikipedia Sierpinski Triangle"
     start  : F left 120 G left 120 G

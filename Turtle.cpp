@@ -4,7 +4,6 @@
 #include "Turtle.h"
 
 using std::make_unique;
-#include <iostream>
 using std::cout;
 using std::endl;
 
@@ -56,6 +55,8 @@ void Turtle::pop() {
 }
 
 std::unique_ptr<Graphic> Turtle::draw(const Rule &rule, double flipFactor, double distance) {
+    if (rule.drawmethod==Rule::NONE)
+        return make_unique<Invisgraphic>();
     Motion temp;
     temp.frompt = getposition();
     forward(distance);
@@ -76,5 +77,7 @@ std::unique_ptr<Graphic> Turtle::draw(const Rule &rule, double flipFactor, doubl
         case Rule::WRITE:
             cout << "[" << getflip() << "," << getscale() << "] " << rule._info << " distance: " << distance << " flipFactor: " << flipFactor << endl;
             return make_unique<Linegraphic>(temp);
+        case Rule::NONE:
+            throw(std::logic_error("Turtle::draw - Can't happen, returned already."));
     }
 }
