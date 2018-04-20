@@ -10,15 +10,14 @@ class Token {
                    EOLT,
                    EOFT };
     Token()=default;
-    Token(std::string  _d, Type _t) : data(std::move(_d)), mytype(_t) {}
-    const std::string& getdata() const { return data; }
-    bool isdata() const { return mytype == DATAT; }
-    bool iseol() const { return mytype == EOLT; }
-    bool iseof() const { return mytype == EOFT; }
+	Token(std::string _d, Type _t);
+	const std::string& getdata() const;
+	bool isdata() const;
+	bool iseol() const;
+	bool iseof() const;
 
    private:
     std::string data;
     Type mytype=EOFT;
 };
-
 #endif

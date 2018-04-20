@@ -6,13 +6,16 @@ set(CMAKE_CXX_EXTENSIONS OFF) #Don't use non-standard compiler extensions
 project (LSystems)
 set(SOURCES
 Cmd.h
+Cmd.cpp
 Context.h
-Graphic.cpp
+Context.cpp
 Graphic.h
+Graphic.cpp
 Lexer.cpp
 Lexer.h
 Lsystem.cpp
 Lsystem.h
+Parsenode.cpp
 Parsenode.h
 Parser.cpp
 Parser.h
@@ -21,6 +24,7 @@ Rule.cpp
 Rule.h
 Rulerunner.cpp
 Rulerunner.h
+Token.cpp
 Token.h
 Turtle.h
 Turtle.cpp

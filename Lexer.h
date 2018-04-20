@@ -6,7 +6,7 @@
 
 class Lexer {
 public:
-    explicit Lexer(std::istream &_in) : infile(_in) {}
+	explicit Lexer(std::istream& _in);
     Token nexttoken();
 
    private:
@@ -34,4 +34,5 @@ public:
 };
 
 void assertdatatoken(const Token &t);
+
 #endif

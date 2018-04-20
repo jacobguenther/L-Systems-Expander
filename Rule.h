@@ -25,7 +25,7 @@ class Rule {
     } ;
    public:
     void readruleoptions(Lexer &lex);
-    void setcmds(Commands &&newcmds) { cmds = std::move(newcmds); }
+	void setcmds(Commands&& newcmds);
     //!!! initialize scalefac, or fix it later when syntax checking?
     void setdrawmethod(Method m);
     void calculateParameters(const Context &cc);
@@ -44,6 +44,5 @@ class Rule {
     std::string _info;
 };
 
-using Ruletable = std::map<std::string, Rule >; //!!!Should be reference, not copy?
-
+using Ruletable = std::map<std::string, Rule >;
 #endif

@@ -7,14 +7,14 @@
 
 class Parser {
    public:
-    explicit Parser(const std::string& _w) : input(_w) {}
+	explicit Parser(const std::string& _w);
     ParsenodePtr parse();
 
    private:
     std::istringstream input;
 
     void match(char x);
-    char nextchar() { return char(input.peek()); }  //!!!check for eof?
+	char nextchar();
     double number();
     [[noreturn]] void error(const std::string& /*text*/);
     ParsenodePtr value();
@@ -33,5 +33,4 @@ class Parser {
     ParsenodePtr idexpr();
     std::string getidname();
 };
-
 #endif

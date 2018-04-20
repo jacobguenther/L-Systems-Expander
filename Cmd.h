@@ -10,31 +10,21 @@
 
 class Command {
 public:
-    virtual void executeOn(Rulerunner &target) = 0;
-    virtual void evaluateExpressions(const Context & /*unused*/) {}
     virtual ~Command() = default;
     Command() = default;
     Command(const Command&) = delete;
     Command& operator=(const Command&) = delete;
     Command(Command&&) = delete;
     Command& operator=(Command&&) = delete;
-
-private:
+    virtual void executeOn(Rulerunner &target) = 0;
+    virtual void evaluateExpressions(const Context & /*unused*/) {}
 };
 
 class RotateCommand : public Command {
 public:
-    explicit RotateCommand(std::shared_ptr<Parsenode> _a)
-    : _angleExpression(std::move(_a))
-    {}
-    
-    void executeOn(Rulerunner &target) override {
-        target._turtle.rotate(_angle);
-    }
-    
-    void evaluateExpressions(const Context &context) override {
-        _angle = _angleExpression->eval(context);
-    }
+	explicit RotateCommand(std::shared_ptr<Parsenode> _a);
+    void executeOn(Rulerunner& target) override;
+    void evaluateExpressions(const Context& context) override;
     
 private:
     std::shared_ptr<Parsenode> _angleExpression;
@@ -43,43 +33,27 @@ private:
 
 class FlipCommand : public Command {
 public:
-    void executeOn(Rulerunner &target) override {
-        target._turtle.flip();
-    }
+	void executeOn(Rulerunner& target) override;
 };
 
 class PushCommand : public Command {
 public:
-    void executeOn(Rulerunner &target) override {
-        target._turtle.push();
-    }
+	void executeOn(Rulerunner& target) override;
 };
 
 class PopCommand : public Command {
 public:
-    void executeOn(Rulerunner &target) override {
-        target._turtle.pop();
-        Dropgraphic::haveapt = false;
-    }
+	void executeOn(Rulerunner& target) override;
 };
 
 class RuleCommand : public Command {
 public:
-    explicit RuleCommand(std::string_view ruleName, bool isReversed , bool isFlipped ,
-                     ParsenodePtr scaleExpression = Parser("1").parse())
-    : _ruleName(ruleName)
-    , _isReversed(isReversed)
-    , _isFlipped(isFlipped)
-    , _scaleExpression(std::move(scaleExpression))
-    {}
+	explicit RuleCommand(std::string_view ruleName, bool isReversed,
+			bool isFlipped, ParsenodePtr scaleExpression = Parser("1").parse());
     
-    void executeOn(Rulerunner &target) override {
-        target.handlerule(_ruleName, _isReversed, _isFlipped, _scale);
-    }
+    void executeOn(Rulerunner& target) override;
     
-    void evaluateExpressions(const Context &context) override {
-        _scale = _scaleExpression->eval(context);
-    }
+    void evaluateExpressions(const Context& context) override;
     
 private:
     const std::string _ruleName;

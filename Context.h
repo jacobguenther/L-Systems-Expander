@@ -14,9 +14,8 @@ using Exprtype = std::map<std::string, std::shared_ptr<Parsenode>>;
 class Context {
    public:
     Context() = default;
-    Context(Consttype _c, Exprtype _e) : constants(std::move(_c)), expressions(std::move(_e)) {}
+	Context(Consttype _c, Exprtype _e);
     const Consttype constants;
     const Exprtype expressions;
 };
-
 #endif

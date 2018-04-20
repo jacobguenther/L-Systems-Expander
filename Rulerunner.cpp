@@ -8,6 +8,16 @@
 
 using std::string;
 
+Rulerunner::Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
+: _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
+,_maxdepth(maxdepth), _minscale(minscale)
+{
+    Dropgraphic::haveapt = false;
+    for (auto & [name,rule] : _therules)
+        rule.calculateParameters(_context);
+    handlerule(_startrule, false, false, 1.0);
+}
+
 bool Rulerunner::isDeepEnough() {
     return _rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale;
 }
@@ -34,6 +44,18 @@ void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, doubl
     } else {
         push(rule,rulerev,flipFactor,atScale*rule._localScale);
     }
+}
+
+Rulestate::Rulestate(const Rule& myRule, bool isReversed, double scaleFactor,
+		double flipFactor) :
+		_isReversed(isReversed), _flipFactor(flipFactor), _myRule(myRule), _nextCommand(
+				_isReversed ? _myRule.cmds.cend() : _myRule.cmds.cbegin()), _scaleFactor(
+				scaleFactor) {
+}
+
+bool Rulestate::hasNoMoreCommands() {
+	return _nextCommand
+			== (_isReversed ? _myRule.cmds.begin() : _myRule.cmds.end());
 }
 
 void Rulestate::runCurrentCommandOn(Rulerunner &target) {

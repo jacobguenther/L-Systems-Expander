@@ -12,9 +12,9 @@ class Lsystem {
     friend class Rulerunner;
 
    public:
-    Lsystem(std::string _n, bool _a, Ruletable _t, std::string _s, Exprtype _e) : name(std::move(_n)), active(_a), table(std::move(_t)), startrule(std::move(_s)), expressions(std::move(_e)) {}
-    const std::string &getname() { return name; }
-    bool isactive() const { return active; }
+	Lsystem(std::string _n, bool _a, Ruletable _t, std::string _s, Exprtype _e);
+	const std::string& getname();
+	bool isactive() const;
 
    private:
     std::string name;
@@ -24,6 +24,7 @@ class Lsystem {
     Exprtype expressions;
 };
 
-std::vector<Lsystem> readlsystemfile(const std::string &configfilename = "config file.txt");
+std::vector<Lsystem> readlsystemfile(const std::string &configfilename =
+		"config file.txt");
 
 #endif

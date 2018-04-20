@@ -5,6 +5,10 @@
 #include "Cmd.h"
 #include <exception>
 
+void Rule::setcmds(Commands&& newcmds) {
+	cmds = std::move(newcmds);
+}
+
 void Rule::setdrawmethod(Method m) {
     switch (m) {
         case NORM:

@@ -12,6 +12,10 @@ using std::string;
 using std::move;
 using std::make_unique;
 
+Parser::Parser(const std::string& _w) :
+		input(_w) {
+}
+
 ParsenodePtr Parser::parse() {
     auto val = value();
     if (input.get() == std::char_traits<char>::eof())
@@ -180,6 +184,10 @@ std::string Parser::getidname() {
     }
     return name;
 }
+
+char Parser::nextchar() {
+	return char(input.peek());
+} //!!!check for eof?
 
 double Parser::number() {
     double val;

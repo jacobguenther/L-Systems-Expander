@@ -5,6 +5,7 @@
 #include "Graphic.h"
 #include "Lsystem.h"
 #include "Parser.h"
+#include "Rule.h"
 #include "Turtle.h"
 #include <list>
 #include <map>
@@ -12,7 +13,6 @@
 #include <stdexcept>
 #include <string>
 
-#include "Rule.h"
 
 class Lexer;
 class Rulerunner;
@@ -29,15 +29,10 @@ class Rulestate {
     friend class Rulerunner;
 
    public:
-    Rulestate(const Rule &myRule, bool isReversed, double scaleFactor, double flipFactor)
-        : _isReversed(isReversed), _flipFactor(flipFactor), _myRule(myRule)
-        ,_nextCommand(_isReversed ? _myRule.cmds.cend() : _myRule.cmds.cbegin())
-        , _scaleFactor(scaleFactor) {
-    }
+	Rulestate(const Rule& myRule, bool isReversed, double scaleFactor,
+			double flipFactor);
 
-    bool hasNoMoreCommands() {
-        return _nextCommand == (_isReversed ? _myRule.cmds.begin() : _myRule.cmds.end());
-    }
+	bool hasNoMoreCommands();
 
     void runCurrentCommandOn(Rulerunner &target);
 
@@ -56,15 +51,7 @@ friend class PopCommand;
 friend class PushCommand;
 friend class RuleCommand;
 public:
-    Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
-    : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
-    ,_maxdepth(maxdepth), _minscale(minscale)
-    {
-        Dropgraphic::haveapt = false;
-        for (auto & [name,rule] : _therules)
-            rule.calculateParameters(_context);
-        handlerule(_startrule, false, false, 1.0);
-    }
+    Rulerunner(const Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c);
     std::shared_ptr<Graphic> nextpoint();
     void draw();
     bool isDeepEnough();
@@ -84,5 +71,4 @@ private:
     bool _backwards=false;
     double _minscale;
 };
-
 #endif

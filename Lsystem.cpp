@@ -146,3 +146,17 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
             return thelsystems;
     }
 }
+
+Lsystem::Lsystem(std::string _n, bool _a, Ruletable _t, std::string _s,
+		Exprtype _e) :
+		name(std::move(_n)), active(_a), table(std::move(_t)), startrule(
+				std::move(_s)), expressions(std::move(_e)) {
+}
+
+const std::__1::string& Lsystem::getname() {
+	return name;
+}
+
+bool Lsystem::isactive() const {
+	return active;
+}

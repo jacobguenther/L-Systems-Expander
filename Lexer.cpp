@@ -192,6 +192,10 @@ Lexer::State Lexer::bsn() {
     return NORMN;
 }
 
+Lexer::Lexer(std::istream& _in) :
+		infile(_in) {
+}
+
 Token Lexer::nexttoken() {
     thetoken.clear();
     State thestate = iws();
