@@ -1,14 +1,14 @@
 #ifndef PARSENODE_H
 #define PARSENODE_H
 
+#include "Context.h"
 #include <cmath>
+#include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-#include <iostream>
-#include <memory>
-#include "Context.h"
 
 //!!! Maybe turn off warnings in this file wrt using double as bool and comparing double ==
 

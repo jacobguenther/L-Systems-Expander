@@ -1,25 +1,25 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include <iostream>
-using std::cout;
-using std::endl;
-#include <vector>
-using std::vector;
-#include <algorithm>
-using std::find_if;
 
+#include <algorithm>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
-
+#include <iostream>
 #include <sstream>
+#include <vector>
 #include "Cmd.h"
 #include "Context.h"
 #include "Lsystem.h"
 #include "Rulerunner.h"
+
+using std::cout;
+using std::endl;
+using std::find_if;
 using std::runtime_error;
+using std::vector;
 
 namespace {
 

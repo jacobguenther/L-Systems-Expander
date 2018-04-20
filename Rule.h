@@ -1,15 +1,15 @@
 #ifndef RULE_H
 #define RULE_H
 
+#include "Lexer.h"
+#include "Parser.h"
+#include <list>
 #include <memory>
 #include <stdexcept>
-#include <list>
 
-#include "Lexer.h"
 class Command; //!!!rationalize includes, shouldn't need to forward declare here
 using Commands = std::vector<std::shared_ptr<Command>>;
 
-#include "Parser.h"
 
 class Rule {
     friend class Turtle;

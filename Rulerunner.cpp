@@ -1,11 +1,12 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include "Rulerunner.h"
-using std::string;
-#include "Cmd.h"
 
-#include <memory>
+#include "Rulerunner.h"
+#include "Cmd.h"
 #include <cassert>
+#include <memory>
+
+using std::string;
 
 bool Rulerunner::isDeepEnough() {
     return _rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale;

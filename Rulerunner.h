@@ -6,12 +6,11 @@
 #include "Lsystem.h"
 #include "Parser.h"
 #include "Turtle.h"
-
-#include <stack>
 #include <list>
 #include <map>
-#include <string>
+#include <stack>
 #include <stdexcept>
+#include <string>
 
 #include "Rule.h"
 

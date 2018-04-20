@@ -1,15 +1,8 @@
 #ifndef GRAPHIC_H
 #define GRAPHIC_H
 
-#include <cmath>
-
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
-
 #include "PointMotion.h"  // just needs struct Motion!!!
+#include <cmath>
 
 class Graphic  //how do I make SURE this is an abstract base class?!!!
 {

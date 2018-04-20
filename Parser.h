@@ -1,9 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <string>
 #include "Parsenode.h"
 #include <sstream>
+#include <string>
 
 class Parser {
    public:

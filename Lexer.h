@@ -1,10 +1,10 @@
 #ifndef LEXER_H
 #define LEXER_H
-#include <iosfwd>
+
 #include "Token.h"
+#include <iosfwd>
 
 class Lexer {
-
 public:
     explicit Lexer(std::istream &_in) : infile(_in) {}
     Token nexttoken();

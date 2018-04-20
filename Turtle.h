@@ -1,15 +1,13 @@
 #ifndef TURTLE_H
 #define TURTLE_H
 
-#include <stack>
-//#define _USE_MATH_DEFINES
-#include <cmath>
-#define M_PI 3.14159265358979323846264338327950288
-const double DEG2RAD = M_PI / 180;
-
+#include "Graphic.h"
 #include "PointMotion.h"
 #include "Rule.h"
-#include "Graphic.h"
+#include <cmath>
+#include <stack>
+#define M_PI 3.14159265358979323846264338327950288
+const double DEG2RAD = M_PI / 180;
 
 class Turtle {
    public:

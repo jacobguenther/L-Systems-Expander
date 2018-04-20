@@ -1,13 +1,12 @@
 #ifndef CMD_H
 #define CMD_H
 
-#include <string>
-#include <list>
-#include <utility>
-
 #include "Context.h"
 #include "Parser.h"
 #include "Rulerunner.h"
+#include <list>
+#include <string>
+#include <utility>
 
 class Command {
 public:

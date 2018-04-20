@@ -1,10 +1,11 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "Lsystem.h"
 #include "Cmd.h"
 #include "Lexer.h"
 #include "Parser.h"
-#include "Rule.h"  //#include "Rule.h" will be enough, when I write it!!!
+#include "Rule.h"
 #include "Token.h"
 
 using std::vector;

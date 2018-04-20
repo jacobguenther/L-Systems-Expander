@@ -1,14 +1,12 @@
 #ifndef LSYSTEM_H
 #define LSYSTEM_H
 
-#include <string>
+#include "Context.h"
+#include "Rule.h"
 #include <map>
+#include <string>
 #include <utility>
 #include <vector>
-
-#include "Rule.h"
-
-#include "Context.h"
 
 class Lsystem {
     friend class Rulerunner;
