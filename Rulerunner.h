@@ -16,7 +16,6 @@
 
 
 class Lexer;
-class Rulerunner;
 
 //class Rulestate
 //Member variables are

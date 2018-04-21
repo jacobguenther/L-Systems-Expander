@@ -66,7 +66,6 @@ Commands readrule(Lexer &lex) {
 }
 
 Lsystem::Lsystem(string_view name, Lexer &lex) {
-
     _name = name;
     auto t = lex.nexttoken();
     while (t.isdata()) {
@@ -102,7 +101,8 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
                     throw runtime_error("Expected '?' after keyword 'system'");
                 readSystemOptions(lex);
             } else {
-                if (startrule.empty()) startrule = rulename;
+                if (startrule.empty())
+                    startrule = rulename;
                 t = lex.nexttoken();
                 assertdatatoken(t);
                 if (t.getdata() == ":")
@@ -151,7 +151,6 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
 }
 
 void Lsystem::readSystemOptions(Lexer &lex) {
-    
     for (auto t = lex.nexttoken(); t.isdata(); t = lex.nexttoken()) {
         if (t.getdata() == "drawmethod") { //!!! Verify these all are appropriate and work
             t = lex.nexttoken();
