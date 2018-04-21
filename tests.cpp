@@ -1,7 +1,7 @@
 #include "catch.hpp"
-#include "glutFunctions.hpp"
-#include "Parser.h"
+#include "GlutFunctions.hpp"
 #include "Lsystem.h"
+#include "Parser.h"
 
 TEST_CASE( "Parsing expressions", "[Parser]" ) {
     auto p = Parser("0").parse();
