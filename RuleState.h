@@ -16,7 +16,7 @@ class Rulestate {
     friend class Rulerunner;
     
 public:
-    Rulestate(const Rule& myRule, bool isReversed, double scaleFactor,
+    Rulestate(const Rule& myRule, bool isReversed, double oldScale,
               double flipFactor);
     
     bool hasNoMoreCommands();
@@ -28,7 +28,7 @@ private:
     double _flipFactor;
     const Rule &_myRule;
     Commands::const_iterator _nextCommand;
-    double _scaleFactor;
+    double _oldScale;
 };
 
 #endif /* RuleState_hpp */

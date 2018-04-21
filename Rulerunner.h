@@ -24,7 +24,7 @@ class Rulerunner;
 //   double _flipFactor = do we flip the turtle when we start running this rule
 //   const Rule & _myRule  = the currently running rule
 //   Cmdcont::const_iterator _nextCommand = the next command to run
-//   double _scaleFactor = what did we scale by when starting this rule?
+//   double _oldScale = what did we scale by when starting this rule?
 
 class Rulerunner {
 friend class RotateCommand;  //!!!need friends, or make a public turtle accessor?

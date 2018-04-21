@@ -9,10 +9,10 @@
 #include "Rule.h"
 #include "Rulerunner.h"
 
-Rulestate::Rulestate(const Rule& myRule, bool isReversed, double scaleFactor,
+Rulestate::Rulestate(const Rule& myRule, bool isReversed, double oldScale,
                      double flipFactor) :
-_isReversed(isReversed), _flipFactor(flipFactor), _myRule(myRule),_nextCommand(_isReversed ? _myRule.cmds.cend() : _myRule.cmds.cbegin()), _scaleFactor(
-scaleFactor) {
+_isReversed(isReversed), _flipFactor(flipFactor), _myRule(myRule),_nextCommand(_isReversed ? _myRule.cmds.cend() : _myRule.cmds.cbegin()), _oldScale(
+oldScale) {
 }
 
 bool Rulestate::hasNoMoreCommands() {
@@ -27,11 +27,3 @@ void Rulestate::runCurrentCommandOn(Rulerunner &target) {
         (*_nextCommand++)->executeOn(target);
 }
 
-void Rulerunner::draw() {
-    while (!_rulestates.empty()) {
-        if (_rulestates.top().hasNoMoreCommands())
-            pop();
-        else
-            _rulestates.top().runCurrentCommandOn(*this);
-    }
-}

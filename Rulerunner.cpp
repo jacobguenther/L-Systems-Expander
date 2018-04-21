@@ -24,14 +24,14 @@ bool Rulerunner::isDeepEnough() {
 
 void Rulerunner::push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy) {
     _backwards ^= ruleRev; //NOLINT
-    _rulestates.push(Rulestate(rule, _backwards, scaleBy, flipFactor));
+    _rulestates.push(Rulestate(rule, _backwards, _turtle.getscale(), flipFactor));
     _turtle.scaleby(scaleBy);
     _turtle.flipBy(flipFactor);
 }
 
 void Rulerunner::pop() {
     _turtle.flipBy(_rulestates.top()._flipFactor);
-    _turtle.scaleby(1.0/_rulestates.top()._scaleFactor);
+    _turtle.setscale(_rulestates.top()._oldScale);
     _rulestates.pop();
     _backwards = !_rulestates.empty() && _rulestates.top()._isReversed;
 }
@@ -43,5 +43,14 @@ void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, doubl
         _turtle.draw(rule,flipFactor,atScale)->draw(); //!!!Turtle should just draw
     else
         push(rule,rulerev,flipFactor,atScale*rule._localScale);
+}
+
+void Rulerunner::draw() {
+    while (!_rulestates.empty()) {
+        if (_rulestates.top().hasNoMoreCommands())
+            pop();
+        else
+            _rulestates.top().runCurrentCommandOn(*this);
+    }
 }
 
