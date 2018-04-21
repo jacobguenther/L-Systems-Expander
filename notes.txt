@@ -54,6 +54,7 @@ with variables.
 
 rectgraphic
 
+lexer needs a getdatatoken() routine
 
 Add ways to interactivly
 	make systems inactive or active
