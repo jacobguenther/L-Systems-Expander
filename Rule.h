@@ -12,6 +12,10 @@ class Rule {
     friend class Turtle;
     friend class Rulestate;
     friend class Rulerunner;  //!!!be careful with friends?
+    friend class LinesDrawStrategy;
+    friend class DropDrawStrategy; //!!! Fix these
+    //use accessors, or friend the base class and give it protected methods
+    //or use a strategy here
     enum Method {
         NONE,
         NORM,

@@ -32,8 +32,8 @@ void PopCommand::executeOn(Rulerunner& target)
 
 RuleCommand::RuleCommand(std::string_view ruleName,
 		bool isReversed, bool isFlipped, ParsenodePtr scaleExpression) :
-		_ruleName(ruleName), _isReversed(isReversed), _isFlipped(isFlipped), _scaleExpression(
-				std::move(scaleExpression)) {
+		_ruleName(ruleName), _isReversed(isReversed), _isFlipped(isFlipped),
+        _scaleExpression(std::move(scaleExpression)) {
 }
 
 void RuleCommand::executeOn(Rulerunner& target)

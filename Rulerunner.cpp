@@ -10,7 +10,7 @@ using std::string;
 
 Rulerunner::Rulerunner(Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c)
 : _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
-,_maxdepth(maxdepth), _minscale(minscale)
+,_maxdepth(maxdepth), _minscale(minscale), _lSystem(l)
 {
     Dropgraphic::haveapt = false;
     for (auto & [name,rule] : _therules)
@@ -40,7 +40,7 @@ void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, doubl
     const auto & rule = _therules.at(rr);
     auto flipFactor = rulerev ^ ruleflip ? -1.0 : 1.0;
     if (isDeepEnough())
-        _turtle.draw(rule,flipFactor,atScale)->draw(); //!!!Turtle should just draw
+        _lSystem._drawStrategy->draw(_turtle,rule,flipFactor,atScale);
     else
         push(rule,rulerev,flipFactor,atScale*rule._localScale);
 }
