@@ -47,7 +47,7 @@ void Rulerunner::draw() {
     while (!_rulestates.empty()) {
         if (isDeepEnough()) {
             _turtle.setscale(_rulestates.top()._oldScale);
-            _lSystem._drawStrategy->draw(_turtle,_rulestates.top()._myRule,1.0,1.0);
+            _lSystem._drawStrategy->draw(*this);
             pop();
         } else if (_rulestates.top().hasNoMoreCommands())
             pop();

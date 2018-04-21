@@ -16,6 +16,7 @@
 
 
 class Lexer;
+class Lsystem;
 
 //class Rulestate
 //Member variables are
@@ -31,6 +32,8 @@ friend class FlipCommand;
 friend class PopCommand;
 friend class PushCommand;
 friend class RuleCommand;
+friend class LinesDrawStrategy;
+friend class DropDrawStrategy;
 public:
     Rulerunner(Lsystem &l, unsigned int maxdepth, double minscale, const Consttype &c);
     std::shared_ptr<Graphic> nextpoint();

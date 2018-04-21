@@ -11,13 +11,14 @@
 #else
 #include <GL/glut.h>
 #endif
+#include "Rulerunner.h"
 
-void LinesDrawStrategy::draw(Turtle &turtle, const Rule &rule, double /*unused*/, double atScale) {
-    if (rule.drawmethod==Rule::NONE)
+void LinesDrawStrategy::draw(Rulerunner& ruleRunner) {
+    if (ruleRunner._rulestates.top()._myRule.drawmethod==Rule::NONE)
         return;
-    auto from = turtle.getposition();
-    turtle.forward(atScale);
-    auto to = turtle.getposition();
+    auto from = ruleRunner._turtle.getposition();
+    ruleRunner._turtle.forward(1.0);
+    auto to = ruleRunner._turtle.getposition();
     // !!! up to here is maybe a base class thing?
     glBegin(GL_LINES);
     glVertex2d(from.x, from.y);
@@ -29,6 +30,14 @@ DropDrawStrategy::DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePt
 :_dropAngleExpression(move(dropAngleExpression)),_dropDistanceExpression(move(dropDistanceExpression))
 {}
 
-void DropDrawStrategy::draw(Turtle &turtle, const Rule &rule, double flipFactor, double atScale) {
-    
+void DropDrawStrategy::draw(Rulerunner& ruleRunner) {
+    Motion todraw;
+//    todraw.frompt = storedpt;
+//    double dx = m.topt.x - m.frompt.x;
+//    double dy = m.topt.y - m.frompt.y;
+//    storedpt.x = m.frompt.x + dd * (cos(da) * dx - sin(da) * dy);
+//    storedpt.y = m.frompt.y + dd * (sin(da) * dx + cos(da) * dy);
+//    todraw.topt = storedpt;
+//    haveapt = true;
+//    m = todraw;
 }

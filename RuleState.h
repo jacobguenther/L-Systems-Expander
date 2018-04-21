@@ -23,7 +23,6 @@ public:
     
     void runCurrentCommandOn(Rulerunner &target);
     
-private:
     bool _isReversed;
     double _flipFactor;
     const Rule &_myRule;
