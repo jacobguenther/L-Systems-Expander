@@ -56,7 +56,8 @@ rectgraphic
 
 
 Add ways to interactivly
-	Set drawmethod to or from midpoint/drop
+	make systems inactive or active
+	Set drawmethod to or from midpoint
 
 rule option list should just put stuff in a map, and cache for efficiency some values.
 Could a Context go back to being just var->double map? I think so. So do syntax 
