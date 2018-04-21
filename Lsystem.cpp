@@ -117,6 +117,8 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
         }
         t = lex.nexttoken();
     }
+    if(!_drawStrategy)
+        _drawStrategy = make_unique<LinesDrawStrategy>();
 }
 
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
@@ -154,29 +156,21 @@ void Lsystem::readSystemOptions(Lexer &lex) {
         if (t.getdata() == "drawmethod") { //!!! Verify these all are appropriate and work
             t = lex.nexttoken();
             assertdatatoken(t);
-            if (t.getdata() == "none")
-                _drawMethod = NONE;
-            else if (t.getdata() == "drop") {
-                _drawMethod = DROP;
+            if (t.getdata() == "drop") {
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                _dropAngleExpression = Parser(t.getdata()).parse();
+                auto dropAngleExpression = Parser(t.getdata()).parse();
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                _dropDistanceExpression = Parser(t.getdata()).parse();
+                auto dropDistanceExpression = Parser(t.getdata()).parse();
+                _drawStrategy = make_unique<DropDrawStrategy>(move(dropAngleExpression),move(dropDistanceExpression));
             }
             else if (t.getdata() == "normal")
-                _drawMethod = NORM;
-            else if (t.getdata() == "rectangle")
-                _drawMethod = RECT;
-            else if (t.getdata() == "invisible")
-                _drawMethod = INVIS;
-            else if (t.getdata() == "midpoint") {
-                _drawMethod = MIDPT;
-                _dropAngleExpression = Parser("0").parse();
-                _dropDistanceExpression = Parser("1.0/2.0").parse();
-            } else if (t.getdata() == "write")
-                _drawMethod = WRITE;
+                _drawStrategy = make_unique<LinesDrawStrategy>();
+//            else if (t.getdata() == "rectangle")
+//                _drawMethod = RECT;
+            else if (t.getdata() == "midpoint")
+                _drawStrategy = make_unique<DropDrawStrategy>(Parser("0").parse(),Parser("1.0/2.0").parse());
             else
                 throw std::runtime_error("Unexpected draw method " + t.getdata());
         } else if (t.getdata() == "info") {

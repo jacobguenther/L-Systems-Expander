@@ -52,5 +52,6 @@ private:
     std::shared_ptr<Graphic> _agraphic;
     bool _backwards=false;
     double _minscale;
+    Lsystem &_lSystem; //Think about this. Do we really want parent pointers?!!!
 };
 #endif

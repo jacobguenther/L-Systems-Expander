@@ -2,6 +2,7 @@
 #define LSYSTEM_H
 
 #include "Context.h"
+#include "DrawStrategy.hpp"
 #include "Rule.h"
 #include <map>
 #include <string>
@@ -32,9 +33,7 @@ class Lsystem {
     
     std::string _name;
     std::string _info;
-    Method _drawMethod = NORM;
-    ParsenodePtr _dropAngleExpression;
-    ParsenodePtr _dropDistanceExpression;
+    DrawStrategyPtr _drawStrategy;
     bool active=true;
     Ruletable table;
     std::string startrule;

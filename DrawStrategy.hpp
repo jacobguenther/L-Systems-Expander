@@ -8,8 +8,10 @@
 #ifndef DrawStrategy_hpp
 #define DrawStrategy_hpp
 
+#include "Parsenode.h"
 #include "Rule.h"
 #include "Turtle.h"
+#include <memory>
 
 class DrawStrategy {
 public:
@@ -23,6 +25,8 @@ public:
     virtual void draw(Turtle &turtle, const Rule &rule, double flipFactor, double atScale) =0;
 };
 
+using DrawStrategyPtr = std::unique_ptr<DrawStrategy>;
+
 class LinesDrawStrategy : public DrawStrategy {
 public:
     void draw(Turtle &turtle, const Rule &rule, double flipFactor, double atScale) override;
@@ -32,7 +36,11 @@ public:
 
 class DropDrawStrategy : public DrawStrategy {
 public:
+    DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePtr dropDistanceExpression);
     void draw(Turtle &turtle, const Rule &rule, double flipFactor, double atScale) override;
+private:
+    ParsenodePtr _dropAngleExpression;
+    ParsenodePtr _dropDistanceExpression;
 };
 
 
