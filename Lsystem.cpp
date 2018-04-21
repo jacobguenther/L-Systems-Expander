@@ -7,21 +7,17 @@
 #include "Parser.h"
 #include "Rule.h"
 #include "Token.h"
+#include <stdexcept>
+#include <string>
+#include <fstream>
+#include <memory>
 
+using std::ifstream;
+using std::make_unique;
+using std::runtime_error;
+using std::string_view;
 using std::vector;
 using std::string;
-
-#include <stdexcept>
-using std::runtime_error;
-
-#include <fstream>
-using std::ifstream;
-
-#include <memory>
-using std::make_unique;
-
-#include <string>
-using std::string_view;
 
 void assertdatatoken(const Token &t) {
     if (t.iseof()) throw runtime_error("Unexpected end of file");
@@ -69,6 +65,62 @@ Commands readrule(Lexer &lex) {
     return retval;
 }
 
+Lsystem::Lsystem(string_view name, Lexer &lex) {
+    _name = name;
+    auto t = lex.nexttoken();
+    while (t.isdata()) {
+        if (t.getdata() == "inactive") {
+            active = false;
+            t = lex.nexttoken();
+        } else
+            throw runtime_error("Unrecognized option after system name: " + _name);
+    }
+    if (t.iseof())
+        throw runtime_error("Unexpected end of file during " + _name);
+    // t is EOL
+    t = lex.nexttoken();
+    while (t.isdata())  //read (rule, rule option, or expression) line
+    {
+        std::string rulename = t.getdata();
+        try {
+            if (rulename[0] == '$') {
+                t = lex.nexttoken();
+                assertdatatoken(t);
+                if (t.getdata() != "=")
+                    throw runtime_error("Expected '='");
+                t = lex.nexttoken();
+                assertdatatoken(t);
+                expressions[rulename] = Parser(t.getdata()).parse();
+                t = lex.nexttoken();
+                if (t.isdata())
+                    throw runtime_error("Unexpected additional characters " + t.getdata());
+            } else if (rulename == "system") {
+                t = lex.nexttoken();
+                assertdatatoken(t);
+                if (t.getdata() != "?")
+                    throw runtime_error("Expected '?' after keyword 'system'");
+                readSystemOptions(lex);
+            } else {
+                if (startrule.empty())
+                    startrule = rulename;
+                t = lex.nexttoken();
+                assertdatatoken(t);
+                if (t.getdata() == ":")
+                    table[rulename].setcmds(readrule(lex));
+                else if (t.getdata() == "?")
+                    table[rulename].readruleoptions(lex);
+                else
+                    throw runtime_error("Expected option line or rule definition");
+            }
+        } catch (runtime_error &error) {
+            throw runtime_error(std::string(error.what()).append(" in ").append(_name).append(" rule ").append(rulename));
+        }
+        t = lex.nexttoken();
+    }
+    if(!_drawStrategy)
+        _drawStrategy = make_unique<LinesDrawStrategy>();
+}
+
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
     ifstream in(configfilename);
     if (!in) {
@@ -81,12 +133,9 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
 
     vector<Lsystem> thelsystems;
     while (true) {
-        string systemname;
-        bool activerule = true;
-        Ruletable table;
-        string startrule;
-        Exprtype expressions;
-
+        //!!! Should be able to clean up this loop
+        //I don't like reading the name, then calling the constructor
+        //Some sort of builder pattern? I don't know
         Token t;
         do
             t = lex.nexttoken();
@@ -97,64 +146,42 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
             
             return thelsystems;
         }
-        systemname = t.getdata();
-        t = lex.nexttoken();
-        while (t.isdata()) {
-            if (t.getdata() == "inactive") {
-                activerule = false;
-                t = lex.nexttoken();
-            } else
-                throw runtime_error("Unrecognized option after system name: " + systemname);
-        }
-        if (t.iseof())
-            throw runtime_error("Unexpected end of file during " + systemname);
-        // t is EOL
-        t = lex.nexttoken();
-        while (t.isdata())  //read (rule, rule option, or expression) line
-        {
-            std::string rulename = t.getdata();
-            try {
-                if (rulename[0] == '$') {
-                    t = lex.nexttoken();
-                    assertdatatoken(t);
-                    if (t.getdata() != "=")
-                        throw runtime_error("Expected '='");
-                    t = lex.nexttoken();
-                    assertdatatoken(t);
-                    expressions[rulename] = Parser(t.getdata()).parse();
-                    t = lex.nexttoken();
-                    if (t.isdata())
-                        throw runtime_error("Unexpected additional characters " + t.getdata());
-                } else {
-                    if (startrule.empty()) startrule = rulename;
-                    t = lex.nexttoken();
-                    assertdatatoken(t);
-                    if (t.getdata() == ":")
-                        table[rulename].setcmds(readrule(lex));
-                    else if (t.getdata() == "?")
-                        table[rulename].readruleoptions(lex);
-                    else
-                        throw runtime_error("Expected option line or rule definition");
-                }
-            } catch (runtime_error &error) {
-                throw runtime_error(std::string(error.what()).append(" in ").append(systemname).append(" rule ").append(rulename));
-            }
-            t = lex.nexttoken();
-        }
-        thelsystems.emplace_back(systemname, activerule, std::move(table), startrule, expressions);
-        if (t.iseof())
-            return thelsystems;
+        thelsystems.emplace_back(t.getdata(),lex);
     }
 }
 
-Lsystem::Lsystem(std::string _n, bool _a, Ruletable _t, std::string _s,
-		Exprtype _e) :
-		name(std::move(_n)), active(_a), table(std::move(_t)), startrule(
-				std::move(_s)), expressions(std::move(_e)) {
+void Lsystem::readSystemOptions(Lexer &lex) {
+    for (auto t = lex.nexttoken(); t.isdata(); t = lex.nexttoken()) {
+        if (t.getdata() == "drawmethod") { //!!! Verify these all are appropriate and work
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            if (t.getdata() == "drop") {
+                t = lex.nexttoken();
+                assertdatatoken(t);
+                auto dropAngleExpression = Parser(t.getdata()).parse();
+                t = lex.nexttoken();
+                assertdatatoken(t);
+                auto dropDistanceExpression = Parser(t.getdata()).parse();
+                _drawStrategy = make_unique<DropDrawStrategy>(move(dropAngleExpression),move(dropDistanceExpression));
+            }
+            else if (t.getdata() == "normal")
+                _drawStrategy = make_unique<LinesDrawStrategy>();
+//            else if (t.getdata() == "rectangle")
+//                _drawMethod = RECT;
+            else if (t.getdata() == "midpoint")
+                _drawStrategy = make_unique<DropDrawStrategy>(Parser("0").parse(),Parser("1.0/2.0").parse());
+            else
+                throw std::runtime_error("Unexpected draw method " + t.getdata());
+        } else if (t.getdata() == "info") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            _info = t.getdata();
+        }
+    }
 }
 
-const std::__1::string& Lsystem::getname() {
-	return name;
+const std::string& Lsystem::getname() {
+	return _name;
 }
 
 bool Lsystem::isactive() const {

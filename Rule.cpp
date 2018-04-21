@@ -40,38 +40,21 @@ void Rule::readruleoptions(Lexer &lex) {
             assertdatatoken(t);
             if (t.getdata() == "none")
                 setdrawmethod(Rule::NONE);
-            else if (t.getdata() == "drop")
-                setdrawmethod(Rule::DROP);
             else if (t.getdata() == "normal")
                 setdrawmethod(Rule::NORM);
             else if (t.getdata() == "rectangle")
                 setdrawmethod(Rule::RECT);
             else if (t.getdata() == "invisible")
                 setdrawmethod(Rule::INVIS);
-            else if (t.getdata() == "midpoint")
-                setdrawmethod(Rule::MIDPT);
             else if (t.getdata() == "write")
                 setdrawmethod(Rule::WRITE);
             else
                 throw std::runtime_error("Unexpected draw method " + t.getdata());
-        } else if (t.getdata() == "dropangle") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            _dropAngleExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
-        } else if (t.getdata() == "dropdistance") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            _dropDistanceExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
         } else if (t.getdata() == "rectwidth") {
             t = lex.nexttoken();
             assertdatatoken(t);
             _rectWidthExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
         }                                               //!!!fix similarity of last three elseifs
-        else if (t.getdata() == "info") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            _info = t.getdata();
-        }  //!!!even this is pretty similar,
         else if (t.getdata() == "localscale") {
             t = lex.nexttoken();
             assertdatatoken(t);
