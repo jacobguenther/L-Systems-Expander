@@ -7,10 +7,10 @@
 #include "Parser.h"
 #include "Rule.h"
 #include "Token.h"
-#include <stdexcept>
-#include <string>
 #include <fstream>
 #include <memory>
+#include <stdexcept>
+#include <string>
 
 using std::ifstream;
 using std::make_unique;

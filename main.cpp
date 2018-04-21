@@ -3,7 +3,7 @@
 
 #include "Cmd.h"
 #include "Context.h"
-#include "glutFunctions.hpp"
+#include "GlutFunctions.hpp"
 #include "Lsystem.h"
 #include "Rulerunner.h"
 #include <algorithm>
@@ -13,9 +13,6 @@
 
 using std::cout;
 using std::endl;
-using std::find_if;
-using std::runtime_error;
-using std::vector;
 
 int main(int argc, char **argv) {
     try {
