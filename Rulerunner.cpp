@@ -19,12 +19,12 @@ Rulerunner::Rulerunner(Lsystem &l, unsigned int maxdepth, double minscale, const
 }
 
 bool Rulerunner::isDeepEnough() {
-    return _rulestates.size() >= _maxdepth || _turtle.getscale() < _minscale;
+    return _rulestates.size() > _maxdepth || _turtle.getscale() < _minscale;
 }
 
 void Rulerunner::push(const Rule &rule, bool ruleRev, double flipFactor, double scaleBy) {
     _backwards ^= ruleRev; //NOLINT
-    _rulestates.push(Rulestate(rule, _backwards, _turtle.getscale(), flipFactor));
+    _rulestates.push({rule, _backwards, _turtle.getscale(), flipFactor});
     _turtle.scaleby(scaleBy);
     _turtle.flipBy(flipFactor);
 }
@@ -37,17 +37,19 @@ void Rulerunner::pop() {
 }
 
 void Rulerunner::handlerule(const string &rr, bool rulerev, bool ruleflip, double atScale) {
+    //!!! refactor to remove entirely
     const auto & rule = _therules.at(rr);
     auto flipFactor = rulerev ^ ruleflip ? -1.0 : 1.0;
-    if (isDeepEnough())
-        _lSystem._drawStrategy->draw(_turtle,rule,flipFactor,atScale);
-    else
-        push(rule,rulerev,flipFactor,atScale*rule._localScale);
+    push(rule,rulerev,flipFactor,atScale*rule._localScale);
 }
 
 void Rulerunner::draw() {
     while (!_rulestates.empty()) {
-        if (_rulestates.top().hasNoMoreCommands())
+        if (isDeepEnough()) {
+            _turtle.setscale(_rulestates.top()._oldScale);
+            _lSystem._drawStrategy->draw(_turtle,_rulestates.top()._myRule,1.0,1.0);
+            pop();
+        } else if (_rulestates.top().hasNoMoreCommands())
             pop();
         else
             _rulestates.top().runCurrentCommandOn(*this);
