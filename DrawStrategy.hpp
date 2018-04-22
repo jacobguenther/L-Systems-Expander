@@ -42,6 +42,7 @@ public:
 private:
     ParsenodePtr _dropAngleExpression;
     ParsenodePtr _dropDistanceExpression;
+    Point _lastDropped;
 };
 
 
