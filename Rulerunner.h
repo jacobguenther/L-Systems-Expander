@@ -21,7 +21,8 @@ friend class Command;
 friend class PopCommand; //Turtle pops need to know about drawstrategies
 friend class RuleCommand; //Rules need to call handlerule
 friend class LinesDrawStrategy;
-friend class DropDrawStrategy;public:
+friend class DropDrawStrategy;
+public:
     Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c);
     void draw();
 private:
@@ -43,7 +44,7 @@ private:
     const Context _context;
     int _maxdepth;
     Turtle _turtle;
-    bool _backwards=false;  //!!!Still used?
+    bool _backwards=false;
     double _minscale;
     Lsystem &_lSystem; //Think about this. Do we really want parent pointers?!!!
 };
