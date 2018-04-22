@@ -1,7 +1,3 @@
-Tester
-    A : A@ 2 A
-    A ? localscale 1/3
-
 Hilbert2
     S : A right 90 forward right 90 A right 90 forward right 90
     A : left 90 ~A forward right 90 A forward A right 90 forward ~A left 90
