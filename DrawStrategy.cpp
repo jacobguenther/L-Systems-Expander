@@ -13,7 +13,7 @@
 #endif
 #include "Rulerunner.h"
 
-void LinesDrawStrategy::draw(Rulerunner& ruleRunner, Rule &rule, bool /*ruleFlip*/, double atScale) {
+void LinesDrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool /*ruleFlip*/, double atScale) {
     if (rule._doesNotDraw)
         return;
     auto from = ruleRunner._turtle.getposition();
@@ -38,7 +38,7 @@ DropDrawStrategy::DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePt
 :_dropAngleExpression(move(dropAngleExpression)),_dropDistanceExpression(move(dropDistanceExpression))
 {}
 
-void DropDrawStrategy::draw(Rulerunner& ruleRunner, Rule &rule, bool ruleFlip, double atScale) {
+void DropDrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) {
     if (rule._doesNotDraw)
         return;
     auto from = ruleRunner._turtle.getposition();
