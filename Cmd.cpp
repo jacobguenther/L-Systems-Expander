@@ -1,12 +1,18 @@
 #include "Cmd.h"
 #include "Rulerunner.h"
+#include "Turtle.h"
+
+Turtle & Command::turtle(Rulerunner& rulerunner)
+{
+    return rulerunner._turtle;
+}
 
 RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 		_angleExpression(std::move(_a)) {
 }
 
 void RotateCommand::executeOn(Rulerunner& target, int /* unused */) {
-	target._turtle.rotate(_angle);
+	turtle(target).rotate(_angle);
 }
 
 void RotateCommand::evaluateExpressions(const Context& context)
@@ -16,17 +22,17 @@ void RotateCommand::evaluateExpressions(const Context& context)
 
 void FlipCommand::executeOn(Rulerunner& target, int /* unused */)
 {
-	target._turtle.flip();
+	turtle(target).flip();
 }
 
 void PushCommand::executeOn(Rulerunner& target, int /* unused */)
 {
-	target._turtle.push();
+	turtle(target).push();
 }
 
 void PopCommand::executeOn(Rulerunner& target, int /* unused */)
 {
-	target._turtle.pop();
+	turtle(target).pop();
     target._lSystem._drawStrategy->finish();
     target._lSystem._drawStrategy->start();
 }

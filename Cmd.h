@@ -1,14 +1,18 @@
 #ifndef CMD_H
 #define CMD_H
 
-class Context;
 #include "Parser.h"
-class Rulerunner;
 #include <list>
 #include <string>
 #include <utility>
 
+class Context;
+class Rulerunner;
+class Turtle;
+
 class Command {
+protected:
+    Turtle & turtle(Rulerunner& rulerunner);
 public:
     virtual ~Command() = default;
     Command() = default;
