@@ -29,7 +29,8 @@ public:
     void draw();
 private:
     bool isDeepEnough(int depth);
-    void handlerule(Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth);
+    void handlerule(const Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth);
+    void doCommand(Command &c,  bool reverse, bool flip, double scale, int depth);
 
     Ruletable &_therules; //Would like to be const, but calculating/caching parameters changes
     std::string _startrule;

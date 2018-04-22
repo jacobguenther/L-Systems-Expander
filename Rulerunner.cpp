@@ -21,32 +21,31 @@ bool Rulerunner::isDeepEnough(int depth) {
     return depth >= _maxdepth || _turtle.getscale() < _minscale;
 }
 
-void Rulerunner::handlerule(Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth) {
-    //const Rule & and look everything else up?
+void Rulerunner::doCommand(Command &c,  bool reverse, bool flip, double scale, int depth) {
+    if (reverse ^ flip)
+        _turtle.flip();
+    auto oldScale = _turtle.getscale();
+    _turtle.scaleby(scale);
+    _backwards ^= reverse; //NOLINT
+    c.executeOn(*this,depth+1);
+    _backwards ^= reverse; //NOLINT
+    _turtle.setscale(oldScale);
+    if (reverse ^ flip)
+        _turtle.flip();
+}
+
+void Rulerunner::handlerule(const Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth) {
     if (isDeepEnough(depth)) {
         _lSystem._drawStrategy->draw(*this,rule,ruleflip,atScale);
         return;
     }
     
-    auto doCommand = [&](auto &command) {
-        if (rulerev ^ ruleflip)
-            _turtle.flip();
-        auto oldScale = _turtle.getscale();
-        _turtle.scaleby(atScale*rule._localScale);
-        _backwards ^= rulerev; //NOLINT
-        command->executeOn(*this,depth+1);
-        _backwards ^= rulerev; //NOLINT
-        _turtle.setscale(oldScale);
-        if (rulerev ^ ruleflip)
-            _turtle.flip();
-    };
-    
     if(rulerev ^ _backwards)
         for(auto i = rule._commands.rbegin(); i != rule._commands.rend(); ++i)
-            doCommand(*i);
+            doCommand(**i,rulerev,ruleflip,atScale*rule._localScale,depth);
     else
         for(auto i = rule._commands.begin(); i != rule._commands.end(); ++i)
-            doCommand(*i);
+            doCommand(**i,rulerev,ruleflip,atScale*rule._localScale,depth);
 }
 
 void Rulerunner::draw() {
