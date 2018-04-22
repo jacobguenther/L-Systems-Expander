@@ -28,9 +28,17 @@ public:
     Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c);
     void draw();
 private:
+    struct RuleInvocation {
+        const Rule &rule;
+        bool rulerev;
+        bool ruleflip;
+        double atScale;
+        int depth;
+    };
+    
     bool isDeepEnough(int depth);
-    void handlerule(const Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth);
-    void doCommand(Command &c,  bool reverse, bool flip, double scale, int depth);
+    void handlerule(const RuleInvocation &ri);
+    void doCommand(Command &c, const RuleInvocation &ri);
 
     Ruletable &_therules; //Would like to be const, but calculating/caching parameters changes
     std::string _startrule;

@@ -39,7 +39,7 @@ RuleCommand::RuleCommand(std::string_view ruleName,
 
 void RuleCommand::executeOn(Rulerunner& target, int depth)
 {
-	target.handlerule(target._therules[_ruleName], _isReversed, _isFlipped, _scale, depth);
+    target.handlerule(Rulerunner::RuleInvocation{target._therules[_ruleName], _isReversed, _isFlipped, _scale, depth});
 }
 
 void RuleCommand::evaluateExpressions(const Context& context) {

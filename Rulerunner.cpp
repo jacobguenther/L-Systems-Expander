@@ -21,36 +21,36 @@ bool Rulerunner::isDeepEnough(int depth) {
     return depth >= _maxdepth || _turtle.getscale() < _minscale;
 }
 
-void Rulerunner::doCommand(Command &c,  bool reverse, bool flip, double scale, int depth) {
-    if (reverse ^ flip)
+void Rulerunner::doCommand(Command &c, const RuleInvocation &ri) {
+    if (ri.rulerev ^ ri.ruleflip)
         _turtle.flip();
     auto oldScale = _turtle.getscale();
-    _turtle.scaleby(scale);
-    _backwards ^= reverse; //NOLINT
-    c.executeOn(*this,depth+1);
-    _backwards ^= reverse; //NOLINT
+    _turtle.scaleby(ri.atScale*ri.rule._localScale);
+    _backwards ^= ri.rulerev; //NOLINT
+    c.executeOn(*this,ri.depth+1);
+    _backwards ^= ri.rulerev; //NOLINT
     _turtle.setscale(oldScale);
-    if (reverse ^ flip)
+    if (ri.rulerev ^ ri.ruleflip)
         _turtle.flip();
 }
 
-void Rulerunner::handlerule(const Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth) {
-    if (isDeepEnough(depth)) {
-        _lSystem._drawStrategy->draw(*this,rule,ruleflip,atScale);
+void Rulerunner::handlerule(const RuleInvocation &ri) {
+    if (isDeepEnough(ri.depth)) {
+        _lSystem._drawStrategy->draw(*this,ri.rule,ri.ruleflip,ri.atScale);
         return;
     }
     
-    if(rulerev ^ _backwards)
-        for(auto i = rule._commands.rbegin(); i != rule._commands.rend(); ++i)
-            doCommand(**i,rulerev,ruleflip,atScale*rule._localScale,depth);
+    if(ri.rulerev ^ _backwards)
+        for(auto i = ri.rule._commands.rbegin(); i != ri.rule._commands.rend(); ++i)
+            doCommand(**i,ri);
     else
-        for(auto i = rule._commands.begin(); i != rule._commands.end(); ++i)
-            doCommand(**i,rulerev,ruleflip,atScale*rule._localScale,depth);
+        for(auto i = ri.rule._commands.begin(); i != ri.rule._commands.end(); ++i)
+            doCommand(**i,ri);
 }
 
 void Rulerunner::draw() {
     _lSystem._drawStrategy->start();
-    handlerule(_therules[_startrule], false, false, 1.0,0);
+    handlerule(RuleInvocation{_therules[_startrule], false, false, 1.0,0});
     _lSystem._drawStrategy->finish();
 }
 
