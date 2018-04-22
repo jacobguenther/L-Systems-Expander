@@ -1,7 +1,6 @@
 #ifndef TURTLE_H
 #define TURTLE_H
 
-#include "Graphic.h"
 #include "PointMotion.h"
 #include "Rule.h"
 #include <cmath>
@@ -22,7 +21,6 @@ class Turtle {
 	Point getposition();
 	void push();
 	void pop();
-    std::unique_ptr<Graphic> draw(const Rule &rule, double flipFactor, double distance);
    private:
 
     struct TurtleState {

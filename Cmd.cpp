@@ -5,7 +5,7 @@ RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 		_angleExpression(std::move(_a)) {
 }
 
-void RotateCommand::executeOn(Rulerunner& target) {
+void RotateCommand::executeOn(Rulerunner& target, int /* unused */) {
 	target._turtle.rotate(_angle);
 }
 
@@ -14,20 +14,21 @@ void RotateCommand::evaluateExpressions(const Context& context)
 	_angle = _angleExpression->eval(context);
 }
 
-void FlipCommand::executeOn(Rulerunner& target)
+void FlipCommand::executeOn(Rulerunner& target, int /* unused */)
 {
 	target._turtle.flip();
 }
 
-void PushCommand::executeOn(Rulerunner& target)
+void PushCommand::executeOn(Rulerunner& target, int /* unused */)
 {
 	target._turtle.push();
 }
 
-void PopCommand::executeOn(Rulerunner& target)
+void PopCommand::executeOn(Rulerunner& target, int /* unused */)
 {
 	target._turtle.pop();
-	Dropgraphic::haveapt = false;
+    target._lSystem._drawStrategy->finish();
+    target._lSystem._drawStrategy->start();
 }
 
 RuleCommand::RuleCommand(std::string_view ruleName,
@@ -36,9 +37,9 @@ RuleCommand::RuleCommand(std::string_view ruleName,
         _scaleExpression(std::move(scaleExpression)) {
 }
 
-void RuleCommand::executeOn(Rulerunner& target)
+void RuleCommand::executeOn(Rulerunner& target, int depth)
 {
-	target.handlerule(_ruleName, _isReversed, _isFlipped, _scale);
+	target.handlerule(target._therules[_ruleName], _isReversed, _isFlipped, _scale, depth);
 }
 
 void RuleCommand::evaluateExpressions(const Context& context) {

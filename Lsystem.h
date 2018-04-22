@@ -13,11 +13,12 @@ class Lexer;
 
 class Lsystem {
     friend class Rulerunner;
+    friend class PopCommand;
+    
     enum Method {
         NONE,
         NORM,
         DROP,
-        RECT,
         INVIS,
         MIDPT,
         WRITE

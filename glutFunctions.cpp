@@ -29,7 +29,7 @@ namespace {
 
 int main_menu_id;
 GLdouble tx = -0.5, ty = 0, sc = 1;
-unsigned int level = 1;
+int level = 1;
 vector<Lsystem> systems;
 auto curfractal=systems.end();
 double p1 = 0;
@@ -69,7 +69,7 @@ void change_window_title() {
     glutSetWindowTitle(os1.str().c_str());
 }
     
-void adjust_level(unsigned int newlevel) {
+void adjust_level(int newlevel) {
     level = newlevel;
     change_window_title();
     glutPostRedisplay();
@@ -184,7 +184,7 @@ void reshape(int w, int h) {
     glutPostRedisplay();
 }
 
-}
+}  // namespace
 
 void readtheconfigfile() {
     systems = readlsystemfile();

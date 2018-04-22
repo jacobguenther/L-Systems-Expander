@@ -3,9 +3,6 @@
 
 #include "Turtle.h"
 
-using std::make_unique;
-using std::cout;
-using std::endl;
 
 void Turtle::flipBy(double multiplier) {
 	_states.top().flipfac *= multiplier;
@@ -52,32 +49,4 @@ void Turtle::push() {
 
 void Turtle::pop() {
 	_states.pop();
-}
-
-std::unique_ptr<Graphic> Turtle::draw(const Rule &rule, double flipFactor, double distance) {
-    if (rule.drawmethod==Rule::NONE)
-        return make_unique<Invisgraphic>();
-    Motion temp;
-    temp.frompt = getposition();
-    forward(distance);
-    temp.topt = getposition();
-    switch (rule.drawmethod) {
-        case Rule::NORM:
-            return make_unique<Linegraphic>(temp);
-        case Rule::MIDPT:
-            return make_unique<Dropgraphic>(temp, 0, .5);
-        case Rule::INVIS:
-            return make_unique<Invisgraphic>();
-        case Rule::RECT:
-            return make_unique<Linegraphic>(temp);
-        case Rule::DROP:
-            return make_unique<Dropgraphic>(temp,
-                                            flipFactor* getflip() * rule._dropAngle,
-                                            rule._dropDistance);
-        case Rule::WRITE:
-            cout << "[" << getflip() << "," << getscale() << "] " << rule._info << " distance: " << distance << " flipFactor: " << flipFactor << endl;
-            return make_unique<Linegraphic>(temp);
-        case Rule::NONE:
-            throw(std::logic_error("Turtle::draw - Can't happen, returned already."));
-    }
 }

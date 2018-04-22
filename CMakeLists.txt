@@ -13,8 +13,6 @@ DrawStrategy.hpp
 DrawStrategy.cpp
 GlutFunctions.hpp
 GlutFunctions.cpp
-Graphic.h
-Graphic.cpp
 Lexer.cpp
 Lexer.h
 Lsystem.cpp
@@ -30,8 +28,6 @@ Rule.cpp
 Rule.h
 Rulerunner.cpp
 Rulerunner.h
-RuleState.cpp
-RuleState.h
 Token.cpp
 Token.h
 Turtle.h

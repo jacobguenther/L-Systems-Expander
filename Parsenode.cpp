@@ -69,7 +69,7 @@ Numnode::Numnode(double _v) :
 		val(_v) {
 }
 
-double Numnode::eval(const Context&) {
+double Numnode::eval(const Context& /*cc*/) {
 	return val;
 }
 

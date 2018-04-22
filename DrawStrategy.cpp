@@ -13,18 +13,24 @@
 #endif
 #include "Rulerunner.h"
 
-void LinesDrawStrategy::draw(Rulerunner& ruleRunner) {
-    if (ruleRunner._rulestates.top()._myRule.drawmethod == Rule::NONE)
+void LinesDrawStrategy::draw(Rulerunner& ruleRunner, Rule &rule, bool /*ruleFlip*/, double atScale) {
+    if (rule._doesNotDraw)
         return;
     auto from = ruleRunner._turtle.getposition();
-    ruleRunner._turtle.forward(1.0);
-    if (ruleRunner._rulestates.top()._myRule.drawmethod==Rule::INVIS)
+    ruleRunner._turtle.forward(atScale);
+    if (rule._drawsInvisibly)
         return;
     auto to = ruleRunner._turtle.getposition();
-    // !!! up to here is maybe a base class thing?
-    glBegin(GL_LINES);
+    // !!! up to here is maybe a base class thing? Use Sutter's Non-Virtual Interface Idiom!
     glVertex2d(from.x, from.y);
     glVertex2d(to.x, to.y);
+}
+
+void LinesDrawStrategy::start() {
+    glBegin(GL_LINES);
+}
+
+void LinesDrawStrategy::finish() {
     glEnd();
 }
 
@@ -32,25 +38,41 @@ DropDrawStrategy::DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePt
 :_dropAngleExpression(move(dropAngleExpression)),_dropDistanceExpression(move(dropDistanceExpression))
 {}
 
-void DropDrawStrategy::draw(Rulerunner& ruleRunner) {
-    if (ruleRunner._rulestates.top()._myRule.drawmethod == Rule::NONE){
+void DropDrawStrategy::draw(Rulerunner& ruleRunner, Rule &rule, bool ruleFlip, double atScale) {
+    if (rule._doesNotDraw)
         return;
-    }
     auto from = ruleRunner._turtle.getposition();
-    ruleRunner._turtle.forward(1.0);
+    ruleRunner._turtle.forward(atScale);
+    if (rule._drawsInvisibly)
+        return;
     auto to = ruleRunner._turtle.getposition();
-    glBegin(GL_LINES);
-    glVertex2d(_lastDropped.x, _lastDropped.y);
+    
     double dx = to.x - from.x;
     double dy = to.y - from.y;
-    std::cout << from.x << "," << from.y << " to " << to.x << "," << to.y << "\n";
-    std::cout << dx << " <-dx,dy-> " << dy << "\n";
     auto dd = _dropDistanceExpression->eval(ruleRunner._context);
     auto da = _dropAngleExpression->eval(ruleRunner._context)*ruleRunner._turtle.getflip()*DEG2RAD;//!!! cache these?
-    std::cout << dd << " <-dd,da-> " << da << "\n";
-    _lastDropped.x = from.x + dd * (cos(da) * dx - sin(da) * dy);
-    _lastDropped.y = from.y + dd * (sin(da) * dx + cos(da) * dy);
-    std::cout << _lastDropped.x << "," << _lastDropped.y << "\n";
+    if (ruleFlip)
+        da *=-1;
+    auto nextX = from.x + dd * (cos(da) * dx - sin(da) * dy);
+    auto nextY = from.y + dd * (sin(da) * dx + cos(da) * dy);
+    
+    if(!_hasDroppedPoint) {
+        _lastDropped = {nextX,nextY};
+        _hasDroppedPoint = true;
+        return;
+    }
+
     glVertex2d(_lastDropped.x, _lastDropped.y);
+    glVertex2d(nextX, nextY);
+
+    _lastDropped = {nextX,nextY};
+}
+
+void DropDrawStrategy::start() {
+    glBegin(GL_LINES);
+}
+
+void DropDrawStrategy::finish() {
     glEnd();
+    _hasDroppedPoint = false;
 }
