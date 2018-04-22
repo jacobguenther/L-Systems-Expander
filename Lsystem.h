@@ -15,15 +15,6 @@ class Lsystem {
     friend class Rulerunner;
     friend class PopCommand;
     
-    enum Method {
-        NONE,
-        NORM,
-        DROP,
-        INVIS,
-        MIDPT,
-        WRITE
-    } ;
-
    public:
     Lsystem(std::string_view name, Lexer &lex);
 	const std::string& getname();
