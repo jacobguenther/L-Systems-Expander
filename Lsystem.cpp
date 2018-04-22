@@ -177,6 +177,8 @@ void Lsystem::readSystemOptions(Lexer &lex) {
             assertdatatoken(t);
             _info = t.getdata();
         }
+        else throw runtime_error("Unexpected system option: " + t.getdata());
+
     }
 }
 
