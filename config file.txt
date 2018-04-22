@@ -1,3 +1,7 @@
+Tester
+A : A@ 2 A
+A ? localscale 1/3
+
 Hilbert2
 S : A right 90 forward right 90 A right 90 forward right 90
 A : left 90 ~A forward right 90 A forward A right 90 forward ~A left 90
@@ -19,7 +23,7 @@ AltDragon-p
 	#A ? localscale 1/sqrt(5) 
 
 bisquare
-    system ? drawmethod drop dropdistance sqrt(2)/2 dropangle 45
+    system ? drawmethod drop sqrt(2)/2 45
 	a : left 90 |b@ 2 right 90 a a a right 90 |a |a left 90
 	a ? localscale 1/3
 	b : left 90 |b@ 2 right 90 a a a right 90 |a ~a left 90
