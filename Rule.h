@@ -12,6 +12,7 @@ class Rule {
     friend class Turtle;
     friend class Rulestate;
     friend class Rulerunner;  //!!!be careful with friends?
+    friend class RuleCommand;
     friend class LinesDrawStrategy;
     friend class DropDrawStrategy; //!!! Fix these
     friend class DrawStrategy;

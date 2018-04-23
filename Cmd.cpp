@@ -45,9 +45,32 @@ RuleCommand::RuleCommand(std::string_view ruleName,
 
 void RuleCommand::executeOn(Rulerunner& target, int depth)
 {
-    target.handlerule(Rulerunner::RuleInvocation{target._therules[_ruleName], _isReversed, _isFlipped, _scale, depth});
+    auto & rule = target._therules[_ruleName];
+    
+    if (target.isDeepEnough(depth)) {
+        target._lSystem._drawStrategy->draw(target,rule,_isReversed^_isFlipped,_atScale);
+        return;
+    }
+    
+    if (_isReversed ^ _isFlipped)
+        turtle(target).flip();
+    auto oldScale = turtle(target).getscale();
+    turtle(target).scaleby(_atScale*rule._localScale);
+    target._backwards ^= _isReversed; //NOLINT
+
+    if(target._backwards)
+        for(auto i = rule._commands.rbegin(); i != rule._commands.rend(); ++i)
+            (*i)->executeOn(target,depth+1);
+    else
+        for(auto &i : rule._commands)
+            i->executeOn(target,depth+1);
+
+    target._backwards ^= _isReversed; //NOLINT
+    turtle(target).setscale(oldScale);
+    if (_isReversed ^ _isFlipped)
+        turtle(target).flip();
 }
 
 void RuleCommand::evaluateExpressions(const Context& context) {
-	_scale = _scaleExpression->eval(context);
+	_atScale = _scaleExpression->eval(context);
 }

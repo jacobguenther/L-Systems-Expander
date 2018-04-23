@@ -66,6 +66,6 @@ private:
     bool _isReversed;
     bool _isFlipped;
     const ParsenodePtr _scaleExpression;
-    double _scale=1.0;
+    double _atScale=1.0;
 };
 #endif

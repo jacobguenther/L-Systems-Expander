@@ -53,7 +53,6 @@ DropDrawStrategy::DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePt
 {}
 
 void DropDrawStrategy::drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) {
-    
     double dx = m.topt.x - m.frompt.x;
     double dy = m.topt.y - m.frompt.y;
     auto dd = _dropDistanceExpression->eval(ruleRunner.getContext());

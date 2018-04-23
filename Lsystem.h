@@ -14,7 +14,7 @@ class Lexer;
 class Lsystem {
     friend class Rulerunner;
     friend class PopCommand;
-    
+    friend class RuleCommand;
    public:
     Lsystem(std::string_view name, Lexer &lex);
 	const std::string& getname();

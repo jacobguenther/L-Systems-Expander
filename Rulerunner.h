@@ -28,17 +28,7 @@ public:
     const Context & getContext() const;
     void draw();
 private:
-    struct RuleInvocation {
-        const Rule &rule;
-        bool rulerev;
-        bool ruleflip;
-        double atScale;
-        int depth;
-    };
-    
     bool isDeepEnough(int depth);
-    void handlerule(const RuleInvocation &ri);
-    void doCommand(Command &c, const RuleInvocation &ri);
 
     Ruletable &_therules; //Would like to be const, but calculating/caching parameters changes
     //!!! can access throu _lSystem?
@@ -46,7 +36,7 @@ private:
     const Context _context;
     int _maxdepth;
     Turtle _turtle;
-    bool _backwards=false;
+    bool _backwards=false; //!!!move into RuleCommand?
     double _minscale;
     Lsystem &_lSystem; //Think about this. Do we really want parent pointers?!!!
 };
