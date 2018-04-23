@@ -60,8 +60,8 @@ void DropDrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleF
     
     double dx = to.x - from.x;
     double dy = to.y - from.y;
-    auto dd = _dropDistanceExpression->eval(ruleRunner._context);
-    auto da = _dropAngleExpression->eval(ruleRunner._context)*ruleRunner._turtle.getflip()*DEG2RAD;//!!! cache these?
+    auto dd = _dropDistanceExpression->eval(ruleRunner.getContext());
+    auto da = _dropAngleExpression->eval(ruleRunner.getContext())*ruleRunner._turtle.getflip()*DEG2RAD;//!!! cache these?
     if (ruleFlip)
         da *=-1;
     auto nextX = from.x + dd * (cos(da) * dx - sin(da) * dy);

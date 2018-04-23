@@ -24,6 +24,7 @@ friend class LinesDrawStrategy;
 friend class DropDrawStrategy;
 public:
     Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c);
+    const Context & getContext();
     void draw();
 private:
     struct RuleInvocation {

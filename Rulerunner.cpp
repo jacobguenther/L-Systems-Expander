@@ -17,6 +17,16 @@ Rulerunner::Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttyp
 //    handlerule(_therules[_startrule], false, false, 1.0); //!!!
 }
 
+const Context & Rulerunner::getContext() {
+    return _context;
+}
+
+void Rulerunner::draw() {
+    _lSystem._drawStrategy->start();
+    handlerule(RuleInvocation{_therules[_startrule], false, false, 1.0,0});
+    _lSystem._drawStrategy->finish();
+}
+
 bool Rulerunner::isDeepEnough(int depth) {
     return depth >= _maxdepth || _turtle.getscale() < _minscale;
 }
@@ -46,11 +56,5 @@ void Rulerunner::handlerule(const RuleInvocation &ri) {
     else
         for(auto i = ri.rule._commands.begin(); i != ri.rule._commands.end(); ++i)
             doCommand(**i,ri);
-}
-
-void Rulerunner::draw() {
-    _lSystem._drawStrategy->start();
-    handlerule(RuleInvocation{_therules[_startrule], false, false, 1.0,0});
-    _lSystem._drawStrategy->finish();
 }
 
