@@ -24,8 +24,9 @@ public:
     DrawStrategy(DrawStrategy&&) = delete;
     DrawStrategy& operator=(DrawStrategy&&) = delete;
 
+    virtual void evaluateExpressions(const Context & /*context*/) const;
     void reset();
-    void draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale);
+    void draw(const Rule &rule, bool ruleFlip, double atScale);
     void rotate(double angle);
     void flip();
     void push();
@@ -38,7 +39,7 @@ public:
 protected:
     const Turtle & turtle();
 private:
-    virtual void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) =0;
+    virtual void drawImpl(const Motion &m, bool ruleFlip) =0;
     virtual void rotateImpl(double angle);
     virtual void flipImpl();
     virtual void pushImpl();
@@ -57,20 +58,21 @@ public:
     void start() override;
     void finish() override;
 private:
-    void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) override;
+    void drawImpl(const Motion &m, bool ruleFlip) override;
 };
-//!!! eventually might want rules to be able to start and stop drawing
-//so an invisible rule will call start and stop so we know when to do glBegin etc.
 
 class DropDrawStrategy : public DrawStrategy {
 public:
     DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePtr dropDistanceExpression);
+    void evaluateExpressions(const Context &context) const override;
     void start() override;
     void finish() override;
 private:
-    void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) override;
+    void drawImpl(const Motion &m, bool ruleFlip) override;
     ParsenodePtr _dropAngleExpression;
     ParsenodePtr _dropDistanceExpression;
+    mutable double _dropAngle=0.0;
+    mutable double _dropDistance=0.5;
     Point _lastDropped;
     bool _hasDroppedPoint=false;
 };

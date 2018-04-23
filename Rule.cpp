@@ -31,7 +31,7 @@ void Rule::readruleoptions(Lexer &lex) {
     }
 }
 
-void Rule::calculateParameters(const Context& cc) const {
+void Rule::evaluateExpressions(const Context& cc) const {
     for (auto & cmd : _commands)
         cmd->evaluateExpressions(cc);
     _localScale = _localScaleExpression ? _localScaleExpression->eval(cc) : 1.0;

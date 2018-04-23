@@ -24,11 +24,14 @@ DrawStrategyPtr drawStrategyFactory(std::string_view type, std::vector<Parsenode
     throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
 }
 
+void DrawStrategy::evaluateExpressions(const Context& /*context*/) const
+{}
+
 void DrawStrategy::reset() {
     _turtle = Turtle{};
 }
 
-void DrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) {
+void DrawStrategy::draw(const Rule &rule, bool ruleFlip, double atScale) {
     if (rule._doesNotDraw)
         return;
     auto from = _turtle.getposition();
@@ -36,7 +39,7 @@ void DrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip,
     if (rule._drawsInvisibly)
         return;
     auto to = _turtle.getposition();
-    drawImpl(ruleRunner, {from,to}, ruleFlip);
+    drawImpl({from,to}, ruleFlip);
 }
 
 void DrawStrategy::rotate(double angle){
@@ -101,7 +104,7 @@ const Turtle & DrawStrategy::turtle() {
     return _turtle;
 }
 
-void LinesDrawStrategy::drawImpl(const Rulerunner& /*ruleRunner*/, const Motion &m, bool /*ruleFlip*/) {
+void LinesDrawStrategy::drawImpl(const Motion &m, bool /*ruleFlip*/) {
     glVertex2d(m.frompt.x, m.frompt.y);
     glVertex2d(m.topt.x, m.topt.y);
 }
@@ -117,6 +120,11 @@ void LinesDrawStrategy::finish() {
 DropDrawStrategy::DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePtr dropDistanceExpression)
 :_dropAngleExpression(move(dropAngleExpression)),_dropDistanceExpression(move(dropDistanceExpression)) {}
 
+void DropDrawStrategy::evaluateExpressions(const Context& context) const {
+    _dropAngle = _dropAngleExpression->eval(context);
+    _dropDistance = _dropDistanceExpression->eval(context);
+}
+
 void DropDrawStrategy::start() {
     _hasDroppedPoint = false;
     glBegin(GL_LINES);
@@ -126,16 +134,15 @@ void DropDrawStrategy::finish() {
     glEnd();
 }
 
-void DropDrawStrategy::drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) {
+void DropDrawStrategy::drawImpl(const Motion &m, bool ruleFlip) {
     double dx = m.topt.x - m.frompt.x;
     double dy = m.topt.y - m.frompt.y;
-    auto dd = _dropDistanceExpression->eval(ruleRunner.getContext());
-    auto da = _dropAngleExpression->eval(ruleRunner.getContext())*turtle().getflip()*DEG2RAD;
     //!!! cache these, then won't need to pass in the rulerunner
+    auto da = _dropAngle*turtle().getflip()*DEG2RAD;
     if (ruleFlip)
         da *=-1;
-    auto nextX = m.frompt.x + dd * (cos(da) * dx - sin(da) * dy);
-    auto nextY = m.frompt.y + dd * (sin(da) * dx + cos(da) * dy);
+    auto nextX = m.frompt.x + _dropDistance * (cos(da) * dx - sin(da) * dy);
+    auto nextY = m.frompt.y + _dropDistance * (sin(da) * dx + cos(da) * dy);
     
     if(!_hasDroppedPoint) {
         _lastDropped = {nextX,nextY};

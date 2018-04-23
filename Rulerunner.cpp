@@ -13,7 +13,8 @@ Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, double minscale, const Co
 ,_maxdepth(maxdepth), _minscale(minscale), _lSystem(l)
 {
     for (auto & [name,rule] : _lSystem._rules)
-        rule.calculateParameters(_context);
+        rule.evaluateExpressions(_context);
+    getDrawStrategy().evaluateExpressions(_context);
 }
 
 const Context & Rulerunner::getContext() const {

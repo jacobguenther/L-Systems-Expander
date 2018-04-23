@@ -21,7 +21,7 @@ class Rule {
    public:
     void readruleoptions(Lexer &lex);
 	void setcmds(Commands&& newcmds);//!!! pass copy move
-    void calculateParameters(const Context &cc) const;
+    void evaluateExpressions(const Context &cc) const;
 
    private:
     Commands _commands;

@@ -48,7 +48,7 @@ void RuleCommand::executeOn(Rulerunner& target, int depth)
     const auto & rule = target.getRules().at(_ruleName);
     
     if (depth >= target.getMaxDepth()) {
-        target.getDrawStrategy().draw(target,rule,_isReversed^_isFlipped,_atScale);
+        target.getDrawStrategy().draw(rule,_isReversed^_isFlipped,_atScale);
         return;
     }
     
