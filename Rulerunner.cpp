@@ -27,8 +27,12 @@ void Rulerunner::draw() {
     getDrawStrategy().finish();
 }
 
-bool Rulerunner::isDeepEnough(int depth) {
-    return depth >= _maxdepth;
+int Rulerunner::getMaxDepth() const {
+    return _maxdepth;
+}
+
+const Ruletable & Rulerunner::getRules() const {
+    return _lSystem._rules;
 }
 
 DrawStrategy & Rulerunner::getDrawStrategy() {

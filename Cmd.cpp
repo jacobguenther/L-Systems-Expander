@@ -43,10 +43,10 @@ RuleCommand::RuleCommand(std::string_view ruleName,
 
 void RuleCommand::executeOn(Rulerunner& target, int depth)
 {
-    auto & rule = target._lSystem._rules[_ruleName];
+    const auto & rule = target.getRules().at(_ruleName);
     
-    if (target.isDeepEnough(depth)) {
-        target._lSystem._drawStrategy->draw(target,rule,_isReversed^_isFlipped,_atScale);
+    if (depth >= target.getMaxDepth()) {
+        target.getDrawStrategy().draw(target,rule,_isReversed^_isFlipped,_atScale);
         return;
     }
     
