@@ -13,7 +13,7 @@ class Turtle;
 
 class Command {
 protected:
-    DrawStrategy & artist(Rulerunner& rulerunner);
+    DrawStrategy & artist(const Rulerunner& rulerunner) const;
 public:
     virtual ~Command() = default;
     Command() = default;

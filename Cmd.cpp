@@ -2,7 +2,7 @@
 #include "Rulerunner.h"
 #include "Turtle.h"
 
-DrawStrategy & Command::artist(Rulerunner& rulerunner)
+DrawStrategy & Command::artist(const Rulerunner& rulerunner) const
 {
     return rulerunner.getDrawStrategy();
 }
