@@ -17,16 +17,12 @@ using std::move;
 using std::make_unique;
 
 DrawStrategyPtr drawStrategyFactory(std::string_view type, std::vector<ParsenodePtr> &&parameters) {
-    
-    if (type == "drop") {
+    if (type == "drop")
         return make_unique<DropDrawStrategy>(move(parameters[0]),move(parameters[1]));
-    }
-    else if (type == "normal")
+    if (type == "normal")
         return make_unique<LinesDrawStrategy>();
-    else
-        throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
+    throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
 }
-
 
 void LinesDrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool /*ruleFlip*/, double atScale) {
     if (rule._doesNotDraw)
