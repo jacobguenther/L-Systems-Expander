@@ -14,6 +14,7 @@ class Rule {
     friend class Rulerunner;  //!!!be careful with friends?
     friend class LinesDrawStrategy;
     friend class DropDrawStrategy; //!!! Fix these
+    friend class DrawStrategy;
     //use accessors, or friend the base class and give it protected methods
     //or use a strategy here
    public:

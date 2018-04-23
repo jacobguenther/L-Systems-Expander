@@ -17,7 +17,7 @@ Rulerunner::Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttyp
 //    handlerule(_therules[_startrule], false, false, 1.0); //!!!
 }
 
-const Context & Rulerunner::getContext() {
+const Context & Rulerunner::getContext() const {
     return _context;
 }
 
@@ -33,7 +33,7 @@ bool Rulerunner::isDeepEnough(int depth) {
 
 void Rulerunner::doCommand(Command &c, const RuleInvocation &ri) {
     if (ri.rulerev ^ ri.ruleflip)
-        _turtle.flip();
+        _turtle.flip(); //!!! handle flip as we handle _backwards?
     auto oldScale = _turtle.getscale();
     _turtle.scaleby(ri.atScale*ri.rule._localScale);
     _backwards ^= ri.rulerev; //NOLINT

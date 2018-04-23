@@ -24,7 +24,7 @@ DrawStrategyPtr drawStrategyFactory(std::string_view type, std::vector<Parsenode
     throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
 }
 
-void LinesDrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool /*ruleFlip*/, double atScale) {
+void DrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) {
     if (rule._doesNotDraw)
         return;
     auto from = ruleRunner._turtle.getposition();
@@ -32,9 +32,12 @@ void LinesDrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool /*ru
     if (rule._drawsInvisibly)
         return;
     auto to = ruleRunner._turtle.getposition();
-    // !!! up to here is maybe a base class thing? Use Sutter's Non-Virtual Interface Idiom!
-    glVertex2d(from.x, from.y);
-    glVertex2d(to.x, to.y);
+    drawImpl(ruleRunner, {from,to}, ruleFlip);
+}
+
+void LinesDrawStrategy::drawImpl(const Rulerunner& /*ruleRunner*/, const Motion &m, bool /*ruleFlip*/) {
+    glVertex2d(m.frompt.x, m.frompt.y);
+    glVertex2d(m.topt.x, m.topt.y);
 }
 
 void LinesDrawStrategy::start() {
@@ -49,23 +52,17 @@ DropDrawStrategy::DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePt
 :_dropAngleExpression(move(dropAngleExpression)),_dropDistanceExpression(move(dropDistanceExpression))
 {}
 
-void DropDrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) {
-    if (rule._doesNotDraw)
-        return;
-    auto from = ruleRunner._turtle.getposition();
-    ruleRunner._turtle.forward(atScale);
-    if (rule._drawsInvisibly)
-        return;
-    auto to = ruleRunner._turtle.getposition();
+void DropDrawStrategy::drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) {
     
-    double dx = to.x - from.x;
-    double dy = to.y - from.y;
+    double dx = m.topt.x - m.frompt.x;
+    double dy = m.topt.y - m.frompt.y;
     auto dd = _dropDistanceExpression->eval(ruleRunner.getContext());
-    auto da = _dropAngleExpression->eval(ruleRunner.getContext())*ruleRunner._turtle.getflip()*DEG2RAD;//!!! cache these?
+    auto da = _dropAngleExpression->eval(ruleRunner.getContext())*ruleRunner._turtle.getflip()*DEG2RAD;
+    //!!! cache these, then won't need to pass in the rulerunner
     if (ruleFlip)
         da *=-1;
-    auto nextX = from.x + dd * (cos(da) * dx - sin(da) * dy);
-    auto nextY = from.y + dd * (sin(da) * dx + cos(da) * dy);
+    auto nextX = m.frompt.x + dd * (cos(da) * dx - sin(da) * dy);
+    auto nextY = m.frompt.y + dd * (sin(da) * dx + cos(da) * dy);
     
     if(!_hasDroppedPoint) {
         _lastDropped = {nextX,nextY};

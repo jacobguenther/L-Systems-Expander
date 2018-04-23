@@ -23,9 +23,11 @@ public:
     DrawStrategy(DrawStrategy&&) = delete;
     DrawStrategy& operator=(DrawStrategy&&) = delete;
 
-    virtual void draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) =0;
+    void draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale);
     virtual void start()=0;
     virtual void finish()=0;
+private:
+    virtual void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) =0;
 };
 
 using DrawStrategyPtr = std::unique_ptr<DrawStrategy>;
@@ -34,9 +36,10 @@ DrawStrategyPtr drawStrategyFactory(std::string_view type, std::vector<Parsenode
 
 class LinesDrawStrategy : public DrawStrategy {
 public:
-    void draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) override;
     void start() override;
     void finish() override;
+private:
+    void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) override;
 };
 //!!! eventually might want rules to be able to start and stop drawing
 //so an invisible rule will call start and stop so we know when to do glBegin etc.
@@ -44,10 +47,11 @@ public:
 class DropDrawStrategy : public DrawStrategy {
 public:
     DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePtr dropDistanceExpression);
-    void draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) override;
     void start() override;
     void finish() override;
 private:
+    void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) override;
+
     ParsenodePtr _dropAngleExpression;
     ParsenodePtr _dropDistanceExpression;
     Point _lastDropped;

@@ -22,9 +22,10 @@ friend class PopCommand; //Turtle pops need to know about drawstrategies
 friend class RuleCommand; //Rules need to call handlerule
 friend class LinesDrawStrategy;
 friend class DropDrawStrategy;
+friend class DrawStrategy;
 public:
     Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c);
-    const Context & getContext();
+    const Context & getContext() const;
     void draw();
 private:
     struct RuleInvocation {
