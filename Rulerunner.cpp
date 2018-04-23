@@ -8,11 +8,11 @@
 
 using std::string;
 
-Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, double minscale, const Consttype &c)
-: _context(c, l.expressions)
-,_maxdepth(maxdepth), _minscale(minscale), _lSystem(l)
+Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, const Consttype &c)
+    : _context(c, l.getExpressions()),_maxdepth(maxdepth), _lSystem(l)
+    ,_drawStrategy(drawStrategyFactory(l.getDrawStrategy()))
 {
-    for (auto & [name,rule] : _lSystem._rules)
+    for (auto & [name,rule] : _lSystem.getRules())
         rule.evaluateExpressions(_context);
     getDrawStrategy().evaluateExpressions(_context);
 }
@@ -22,10 +22,10 @@ const Context & Rulerunner::getContext() const {
 }
 
 void Rulerunner::draw() {
-    getDrawStrategy().reset();
-    getDrawStrategy().start();
-    RuleCommand(_lSystem.startrule, false, false).executeOn(*this, 0);
-    getDrawStrategy().finish();
+    _drawStrategy->reset();
+    _drawStrategy->start();
+    RuleCommand(_lSystem.startRule(), false, false).executeOn(*this, 0);
+    _drawStrategy->finish();
 }
 
 int Rulerunner::getMaxDepth() const {
@@ -33,9 +33,9 @@ int Rulerunner::getMaxDepth() const {
 }
 
 const Ruletable & Rulerunner::getRules() const {
-    return _lSystem._rules;
+    return _lSystem.getRules();
 }
 
-DrawStrategy & Rulerunner::getDrawStrategy() const {
-    return *_lSystem._drawStrategy;
+const DrawStrategy & Rulerunner::getDrawStrategy() const {
+    return *_drawStrategy;
 }

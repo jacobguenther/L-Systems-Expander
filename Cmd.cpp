@@ -4,7 +4,7 @@
 
 DrawStrategy & Command::artist(const Rulerunner& rulerunner) const
 {
-    return rulerunner.getDrawStrategy();
+    return *rulerunner._drawStrategy;
 }
 
 void Command::evaluateExpressions(const Context& /*context*/) const
@@ -14,7 +14,7 @@ RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 		_angleExpression(std::move(_a)) {
 }
 
-void RotateCommand::executeOn(Rulerunner& target, int /* unused */) {
+void RotateCommand::executeOn(Rulerunner& target, int /* unused */) const {
 	artist(target).rotate(_angle);
 }
 
@@ -22,17 +22,17 @@ void RotateCommand::evaluateExpressions(const Context& context) const{
 	_angle = _angleExpression->eval(context);
 }
 
-void FlipCommand::executeOn(Rulerunner& target, int /* unused */)
+void FlipCommand::executeOn(Rulerunner& target, int /* unused */) const
 {
 	artist(target).flip();
 }
 
-void PushCommand::executeOn(Rulerunner& target, int /* unused */)
+void PushCommand::executeOn(Rulerunner& target, int /* unused */) const
 {
 	artist(target).push();
 }
 
-void PopCommand::executeOn(Rulerunner& target, int /* unused */)
+void PopCommand::executeOn(Rulerunner& target, int /* unused */) const
 {
 	artist(target).pop();
 }
@@ -43,26 +43,26 @@ RuleCommand::RuleCommand(std::string_view ruleName,
         _scaleExpression(std::move(scaleExpression)) {
 }
 
-void RuleCommand::executeOn(Rulerunner& target, int depth)
+void RuleCommand::executeOn(Rulerunner& target, int depth) const
 {
     const auto & rule = target.getRules().at(_ruleName);
     
     if (depth >= target.getMaxDepth()) {
-        target.getDrawStrategy().draw(rule,_isReversed^_isFlipped,_atScale);
+        target._drawStrategy->draw(rule,_isReversed^_isFlipped,_atScale);
         return;
     }
     
     if (_isReversed ^ _isFlipped)
         artist(target).flip();
     auto oldScale = artist(target).getscale();
-    artist(target).scaleby(_atScale*rule._localScale);
+    artist(target).scaleby(_atScale*rule.getLocalScale());
     target._backwards ^= _isReversed; //NOLINT
 
     if(target._backwards)
-        for(auto i = rule._commands.rbegin(); i != rule._commands.rend(); ++i)
+        for(auto i = rule.getCommands().rbegin(); i != rule.getCommands().rend(); ++i)
             (*i)->executeOn(target,depth+1);
     else
-        for(auto &i : rule._commands)
+        for(auto &i : rule.getCommands())
             i->executeOn(target,depth+1);
 
     target._backwards ^= _isReversed; //NOLINT

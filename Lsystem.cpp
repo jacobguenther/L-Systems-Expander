@@ -24,6 +24,7 @@ void assertdatatoken(const Token &t) {
     if (t.iseol()) throw runtime_error("Unexpected end of line");
 }
 
+namespace {
 Commands readrule(Lexer &lex) {
     Commands retval;
     Token t = lex.nexttoken();
@@ -64,6 +65,7 @@ Commands readrule(Lexer &lex) {
     }
     return retval;
 }
+}//end anonymous namespace
 
 Lsystem::Lsystem(string_view name, Lexer &lex) {
     _name = name;
@@ -117,8 +119,8 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
         }
         t = lex.nexttoken();
     }
-    if(!_drawStrategy)
-        _drawStrategy = drawStrategyFactory("normal",vector<ParsenodePtr>());
+    if(_drawStrategy.empty())
+        _drawStrategy = "normal"; //!!!Use empty for normal?
 }
 
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
@@ -156,24 +158,20 @@ void Lsystem::readSystemOptions(Lexer &lex) {
             t = lex.nexttoken();
             assertdatatoken(t);
             if (t.getdata() == "drop") {
+                _drawStrategy = t.getdata();
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                vector<ParsenodePtr> parameters;
-                parameters.emplace_back(Parser(t.getdata()).parse());
+                _drawStrategy += " " + t.getdata();
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                parameters.emplace_back(Parser(t.getdata()).parse());
-                _drawStrategy = drawStrategyFactory("drop",move(parameters));
+                _drawStrategy += " " + t.getdata();
             }
             else if (t.getdata() == "normal")
-                _drawStrategy = drawStrategyFactory("normal");
+                _drawStrategy = t.getdata();
 //            else if (t.getdata() == "rectangle")
 //                ...
             else if (t.getdata() == "midpoint") {
-                vector<ParsenodePtr> parameters;
-                parameters.emplace_back(Parser("0").parse());
-                parameters.emplace_back(Parser("1.0/2.0").parse());
-                _drawStrategy = drawStrategyFactory("drop",move(parameters));
+                _drawStrategy = "drop 0 1.0/2.0";
             } else
                 throw std::runtime_error("Unexpected draw method " + t.getdata());
         } else if (t.getdata() == "info") {
@@ -186,10 +184,26 @@ void Lsystem::readSystemOptions(Lexer &lex) {
     }
 }
 
-const std::string& Lsystem::getname() {
+const std::string& Lsystem::getname() const {
 	return _name;
 }
 
 bool Lsystem::isactive() const {
 	return active;
+}
+
+const Exprtype & Lsystem::getExpressions() const {
+    return expressions;
+}
+
+const Ruletable & Lsystem::getRules() const {
+    return _rules;
+}
+
+const string & Lsystem::startRule() const {
+    return startrule;
+}
+
+const string & Lsystem::getDrawStrategy() const {
+    return _drawStrategy;
 }

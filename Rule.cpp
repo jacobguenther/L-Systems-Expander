@@ -17,14 +17,14 @@ void Rule::readruleoptions(Lexer &lex) {
             _drawsInvisibly = true;
         } else if (t.getdata() == "nodraw") {
             _doesNotDraw=true;
-        } else if (t.getdata() == "rectwidth") {
-            t = lex.nexttoken();
-            assertdatatoken(t);
-            _rectWidthExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+//        } else if (t.getdata() == "rectwidth") {
+//            t = lex.nexttoken();
+//            assertdatatoken(t);
+//            _rectWidthExpression = Parser(t.getdata()).parse();
         } else if (t.getdata() == "localscale") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            _localScaleExpression = Parser(t.getdata()).parse();  //!!! Rule member function? (then can take away friendship)
+            _localScaleExpression = Parser(t.getdata()).parse();
         } else
             throw std::runtime_error("Unexpected option " + t.getdata());
         t = lex.nexttoken();
@@ -35,4 +35,20 @@ void Rule::evaluateExpressions(const Context& cc) const {
     for (auto & cmd : _commands)
         cmd->evaluateExpressions(cc);
     _localScale = _localScaleExpression ? _localScaleExpression->eval(cc) : 1.0;
+}
+
+double Rule::getLocalScale() const {
+    return _localScale;
+}
+
+const Commands & Rule::getCommands() const {
+    return _commands;
+}
+
+bool Rule::doesNotDraw() const {
+    return _doesNotDraw;
+}
+
+bool Rule::drawsInvisibly() const {
+    return _drawsInvisibly;
 }

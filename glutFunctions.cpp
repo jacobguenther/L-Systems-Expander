@@ -43,7 +43,7 @@ void display() {
     glDrawBuffer(GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT);
     vars["p1"] = p1;
-    Rulerunner runner(*curfractal, level, thresh, vars);
+    Rulerunner runner(*curfractal, level, vars);
     runner.draw();
     glutSwapBuffers();
     while (auto jj = glGetError())

@@ -16,10 +16,22 @@
 using std::move;
 using std::make_unique;
 
-DrawStrategyPtr drawStrategyFactory(std::string_view type, std::vector<ParsenodePtr> &&parameters) {
-    if (type == "drop")
-        return make_unique<DropDrawStrategy>(move(parameters[0]),move(parameters[1]));
-    if (type == "normal")
+DrawStrategyPtr drawStrategyFactory(const std::string &type) {
+    std::istringstream iss(type);
+    Lexer lex(iss);
+
+    auto t = lex.nexttoken();
+    assertdatatoken(t);
+    if (t.getdata() == "drop") {
+        t = lex.nexttoken();
+        assertdatatoken(t);
+        auto angle = Parser(t.getdata()).parse();
+        t = lex.nexttoken();
+        assertdatatoken(t);
+        auto distance = Parser(t.getdata()).parse();
+        return make_unique<DropDrawStrategy>(move(angle),move(distance));
+    }
+    if (t.getdata() == "normal")
         return make_unique<LinesDrawStrategy>();
     throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
 }
@@ -32,11 +44,11 @@ void DrawStrategy::reset() {
 }
 
 void DrawStrategy::draw(const Rule &rule, bool ruleFlip, double atScale) {
-    if (rule._doesNotDraw)
+    if (rule.doesNotDraw())
         return;
     auto from = _turtle.getposition();
     _turtle.forward(atScale);
-    if (rule._drawsInvisibly)
+    if (rule.drawsInvisibly())
         return;
     auto to = _turtle.getposition();
     drawImpl({from,to}, ruleFlip);
