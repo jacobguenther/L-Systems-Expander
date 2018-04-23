@@ -11,7 +11,7 @@
 #include "Parsenode.h"
 #include "Turtle.h"
 #include <memory>
-
+#include <vector>
 class Rulerunner;
 
 class DrawStrategy {
@@ -29,6 +29,8 @@ public:
 };
 
 using DrawStrategyPtr = std::unique_ptr<DrawStrategy>;
+
+DrawStrategyPtr drawStrategyFactory(std::string_view type, std::vector<ParsenodePtr> &&parameters = {});
 
 class LinesDrawStrategy : public DrawStrategy {
 public:

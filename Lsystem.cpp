@@ -118,7 +118,7 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
         t = lex.nexttoken();
     }
     if(!_drawStrategy)
-        _drawStrategy = make_unique<LinesDrawStrategy>();
+        _drawStrategy = drawStrategyFactory("normal",vector<ParsenodePtr>());
 }
 
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
@@ -152,25 +152,29 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
 
 void Lsystem::readSystemOptions(Lexer &lex) {
     for (auto t = lex.nexttoken(); t.isdata(); t = lex.nexttoken()) {
-        if (t.getdata() == "drawmethod") { //!!! Verify these all are appropriate and work
+        if (t.getdata() == "drawmethod") {
             t = lex.nexttoken();
             assertdatatoken(t);
             if (t.getdata() == "drop") {
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                auto dropAngleExpression = Parser(t.getdata()).parse();
+                vector<ParsenodePtr> parameters;
+                parameters.emplace_back(Parser(t.getdata()).parse());
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                auto dropDistanceExpression = Parser(t.getdata()).parse();
-                _drawStrategy = make_unique<DropDrawStrategy>(move(dropAngleExpression),move(dropDistanceExpression));
+                parameters.emplace_back(Parser(t.getdata()).parse());
+                _drawStrategy = drawStrategyFactory("drop",move(parameters));
             }
             else if (t.getdata() == "normal")
-                _drawStrategy = make_unique<LinesDrawStrategy>();
+                _drawStrategy = drawStrategyFactory("normal");
 //            else if (t.getdata() == "rectangle")
-//                _drawMethod = RECT;
-            else if (t.getdata() == "midpoint")
-                _drawStrategy = make_unique<DropDrawStrategy>(Parser("0").parse(),Parser("1.0/2.0").parse());
-            else
+//                ...
+            else if (t.getdata() == "midpoint") {
+                vector<ParsenodePtr> parameters;
+                parameters.emplace_back(Parser("0").parse());
+                parameters.emplace_back(Parser("1.0/2.0").parse());
+                _drawStrategy = drawStrategyFactory("drop",move(parameters));
+            } else
                 throw std::runtime_error("Unexpected draw method " + t.getdata());
         } else if (t.getdata() == "info") {
             t = lex.nexttoken();
