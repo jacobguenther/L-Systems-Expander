@@ -12,16 +12,14 @@
 #include <stdexcept>
 #include <string>
 
-
 class Lexer;
-class Lsystem;
 
 class Rulerunner {
 friend class RuleCommand; //Rules need to modify _backwards
 public:
-    Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c);
+    Rulerunner(const Lsystem &l, int maxdepth, double minscale, const Consttype &c);
     const Context & getContext() const;
-    DrawStrategy & getDrawStrategy();
+    DrawStrategy & getDrawStrategy() const;
     void draw();
     int getMaxDepth() const;
     const Ruletable & getRules() const;
@@ -30,6 +28,6 @@ private:
     int _maxdepth;
     bool _backwards=false;
     double _minscale;
-    Lsystem &_lSystem; //Think about this. Do we really want parent pointers?!!!
+    const Lsystem &_lSystem; 
 };
 #endif

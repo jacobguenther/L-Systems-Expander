@@ -21,7 +21,7 @@ class Rule {
    public:
     void readruleoptions(Lexer &lex);
 	void setcmds(Commands&& newcmds);//!!! pass copy move
-    void calculateParameters(const Context &cc);
+    void calculateParameters(const Context &cc) const;
 
    private:
     Commands _commands;
@@ -29,8 +29,8 @@ class Rule {
     std::unique_ptr<Parsenode> _localScaleExpression;
     bool _drawsInvisibly=false;
     bool _doesNotDraw=false;
-    double _rectWidth=0.05;
-    double _localScale=1.0;
+    mutable double _rectWidth=0.05;
+    mutable double _localScale=1.0;
 };
 
 using Ruletable = std::map<std::string, Rule >;

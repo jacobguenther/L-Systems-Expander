@@ -7,6 +7,9 @@ DrawStrategy & Command::artist(Rulerunner& rulerunner)
     return rulerunner.getDrawStrategy();
 }
 
+void Command::evaluateExpressions(const Context& /*context*/) const
+{}
+
 RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 		_angleExpression(std::move(_a)) {
 }
@@ -15,8 +18,7 @@ void RotateCommand::executeOn(Rulerunner& target, int /* unused */) {
 	artist(target).rotate(_angle);
 }
 
-void RotateCommand::evaluateExpressions(const Context& context)
-{
+void RotateCommand::evaluateExpressions(const Context& context) const{
 	_angle = _angleExpression->eval(context);
 }
 
@@ -69,6 +71,6 @@ void RuleCommand::executeOn(Rulerunner& target, int depth)
         artist(target).flip();
 }
 
-void RuleCommand::evaluateExpressions(const Context& context) {
+void RuleCommand::evaluateExpressions(const Context& context) const {
 	_atScale = _scaleExpression->eval(context);
 }

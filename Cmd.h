@@ -22,7 +22,7 @@ public:
     Command(Command&&) = delete;
     Command& operator=(Command&&) = delete;
     virtual void executeOn(Rulerunner &target, int depth) = 0;
-    virtual void evaluateExpressions(const Context & /*unused*/) {}
+    virtual void evaluateExpressions(const Context & /*unused*/) const;
 };
 
 using Commands = std::vector<std::unique_ptr<Command>>;
@@ -31,11 +31,11 @@ class RotateCommand : public Command {
 public:
 	explicit RotateCommand(std::unique_ptr<Parsenode> _a);
     void executeOn(Rulerunner& target, int depth) override;
-    void evaluateExpressions(const Context& context) override;
+    void evaluateExpressions(const Context& context) const override;
     
 private:
     std::unique_ptr<Parsenode> _angleExpression;
-    double _angle=0.0;
+    mutable double _angle=0.0;
 };
 
 class FlipCommand : public Command {
@@ -60,13 +60,13 @@ public:
     
     void executeOn(Rulerunner& target, int depth) override;
     
-    void evaluateExpressions(const Context& context) override;
+    void evaluateExpressions(const Context& context)  const override;
     
 private:
     const std::string _ruleName;
     bool _isReversed;
     bool _isFlipped;
     const ParsenodePtr _scaleExpression;
-    double _atScale=1.0;
+    mutable double _atScale=1.0;
 };
 #endif

@@ -8,7 +8,7 @@
 
 using std::string;
 
-Rulerunner::Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c)
+Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, double minscale, const Consttype &c)
 : _context(c, l.expressions)
 ,_maxdepth(maxdepth), _minscale(minscale), _lSystem(l)
 {
@@ -35,6 +35,6 @@ const Ruletable & Rulerunner::getRules() const {
     return _lSystem._rules;
 }
 
-DrawStrategy & Rulerunner::getDrawStrategy() {
+DrawStrategy & Rulerunner::getDrawStrategy() const {
     return *_lSystem._drawStrategy;
 }
