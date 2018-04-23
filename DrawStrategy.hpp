@@ -15,6 +15,7 @@
 class Rulerunner;
 
 class DrawStrategy {
+    friend class Command;
 public:
     virtual ~DrawStrategy() = default;
     DrawStrategy() = default;
@@ -23,11 +24,28 @@ public:
     DrawStrategy(DrawStrategy&&) = delete;
     DrawStrategy& operator=(DrawStrategy&&) = delete;
 
+    void reset();
     void draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale);
-    virtual void start()=0;
-    virtual void finish()=0;
+    void rotate(double angle);
+    void flip();
+    void push();
+    void pop();
+    void scaleby(double s);
+    double getscale() const;
+    void setscale(double s);
+    virtual void start();
+    virtual void finish();
+protected:
+    const Turtle & turtle();
 private:
     virtual void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) =0;
+    virtual void rotateImpl(double angle);
+    virtual void flipImpl();
+    virtual void pushImpl();
+    virtual void popImpl();
+    virtual void scalebyImpl(double s);
+    virtual void setscaleImpl(double s);
+    Turtle _turtle;
 };
 
 using DrawStrategyPtr = std::unique_ptr<DrawStrategy>;
@@ -51,15 +69,10 @@ public:
     void finish() override;
 private:
     void drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) override;
-
     ParsenodePtr _dropAngleExpression;
     ParsenodePtr _dropDistanceExpression;
     Point _lastDropped;
     bool _hasDroppedPoint=false;
 };
-
-
-
-
 
 #endif /* DrawStrategy_hpp */

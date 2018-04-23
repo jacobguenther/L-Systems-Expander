@@ -27,7 +27,7 @@ class Lsystem {
     std::string _info;
     DrawStrategyPtr _drawStrategy;
     bool active=true;
-    Ruletable table;
+    Ruletable _rules;
     std::string startrule;
     Exprtype expressions;
 };

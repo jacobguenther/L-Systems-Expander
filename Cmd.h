@@ -7,12 +7,13 @@
 #include <utility>
 
 class Context;
+class DrawStrategy;
 class Rulerunner;
 class Turtle;
 
 class Command {
 protected:
-    Turtle & turtle(Rulerunner& rulerunner);
+    DrawStrategy & artist(Rulerunner& rulerunner);
 public:
     virtual ~Command() = default;
     Command() = default;

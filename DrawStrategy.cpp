@@ -24,15 +24,81 @@ DrawStrategyPtr drawStrategyFactory(std::string_view type, std::vector<Parsenode
     throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
 }
 
+void DrawStrategy::reset() {
+    _turtle = Turtle{};
+}
+
 void DrawStrategy::draw(Rulerunner& ruleRunner, const Rule &rule, bool ruleFlip, double atScale) {
     if (rule._doesNotDraw)
         return;
-    auto from = ruleRunner._turtle.getposition();
-    ruleRunner._turtle.forward(atScale);
+    auto from = _turtle.getposition();
+    _turtle.forward(atScale);
     if (rule._drawsInvisibly)
         return;
-    auto to = ruleRunner._turtle.getposition();
+    auto to = _turtle.getposition();
     drawImpl(ruleRunner, {from,to}, ruleFlip);
+}
+
+void DrawStrategy::rotate(double angle){
+    _turtle.rotate(angle);
+    rotateImpl(angle);
+}
+
+void DrawStrategy::flip(){
+    _turtle.flip();
+    flipImpl();
+}
+
+void DrawStrategy::push(){
+    _turtle.push();
+    pushImpl();
+}
+
+void DrawStrategy::pop(){
+    _turtle.pop();
+    finish();
+    start();
+    popImpl();
+}
+
+void DrawStrategy::scaleby(double s){
+    _turtle.scaleby(s);
+    scalebyImpl(s);
+}
+
+double DrawStrategy::getscale() const {
+    return _turtle.getscale();
+}
+
+void DrawStrategy::setscale(double s){
+    _turtle.setscale(s);
+    setscaleImpl(s);
+}
+
+void DrawStrategy::scalebyImpl(double /*s*/){
+}
+
+void DrawStrategy::setscaleImpl(double /*s*/){
+}
+
+void DrawStrategy::rotateImpl(double /*angle*/){
+}
+
+void DrawStrategy::flipImpl(){
+}
+
+void DrawStrategy::pushImpl(){
+}
+
+void DrawStrategy::popImpl(){
+}
+
+void DrawStrategy::start(){}
+
+void DrawStrategy::finish(){}
+
+const Turtle & DrawStrategy::turtle() {
+    return _turtle;
 }
 
 void LinesDrawStrategy::drawImpl(const Rulerunner& /*ruleRunner*/, const Motion &m, bool /*ruleFlip*/) {
@@ -49,14 +115,22 @@ void LinesDrawStrategy::finish() {
 }
 
 DropDrawStrategy::DropDrawStrategy(ParsenodePtr dropAngleExpression, ParsenodePtr dropDistanceExpression)
-:_dropAngleExpression(move(dropAngleExpression)),_dropDistanceExpression(move(dropDistanceExpression))
-{}
+:_dropAngleExpression(move(dropAngleExpression)),_dropDistanceExpression(move(dropDistanceExpression)) {}
+
+void DropDrawStrategy::start() {
+    _hasDroppedPoint = false;
+    glBegin(GL_LINES);
+}
+
+void DropDrawStrategy::finish() {
+    glEnd();
+}
 
 void DropDrawStrategy::drawImpl(const Rulerunner& ruleRunner, const Motion &m, bool ruleFlip) {
     double dx = m.topt.x - m.frompt.x;
     double dy = m.topt.y - m.frompt.y;
     auto dd = _dropDistanceExpression->eval(ruleRunner.getContext());
-    auto da = _dropAngleExpression->eval(ruleRunner.getContext())*ruleRunner._turtle.getflip()*DEG2RAD;
+    auto da = _dropAngleExpression->eval(ruleRunner.getContext())*turtle().getflip()*DEG2RAD;
     //!!! cache these, then won't need to pass in the rulerunner
     if (ruleFlip)
         da *=-1;
@@ -75,11 +149,3 @@ void DropDrawStrategy::drawImpl(const Rulerunner& ruleRunner, const Motion &m, b
     _lastDropped = {nextX,nextY};
 }
 
-void DropDrawStrategy::start() {
-    glBegin(GL_LINES);
-}
-
-void DropDrawStrategy::finish() {
-    glEnd();
-    _hasDroppedPoint = false;
-}

@@ -2,9 +2,9 @@
 #include "Rulerunner.h"
 #include "Turtle.h"
 
-Turtle & Command::turtle(Rulerunner& rulerunner)
+DrawStrategy & Command::artist(Rulerunner& rulerunner)
 {
-    return rulerunner._turtle;
+    return rulerunner.getDrawStrategy();
 }
 
 RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
@@ -12,7 +12,7 @@ RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 }
 
 void RotateCommand::executeOn(Rulerunner& target, int /* unused */) {
-	turtle(target).rotate(_angle);
+	artist(target).rotate(_angle);
 }
 
 void RotateCommand::evaluateExpressions(const Context& context)
@@ -22,19 +22,17 @@ void RotateCommand::evaluateExpressions(const Context& context)
 
 void FlipCommand::executeOn(Rulerunner& target, int /* unused */)
 {
-	turtle(target).flip();
+	artist(target).flip();
 }
 
 void PushCommand::executeOn(Rulerunner& target, int /* unused */)
 {
-	turtle(target).push();
+	artist(target).push();
 }
 
 void PopCommand::executeOn(Rulerunner& target, int /* unused */)
 {
-	turtle(target).pop();
-    target._lSystem._drawStrategy->finish();
-    target._lSystem._drawStrategy->start();
+	artist(target).pop();
 }
 
 RuleCommand::RuleCommand(std::string_view ruleName,
@@ -45,7 +43,7 @@ RuleCommand::RuleCommand(std::string_view ruleName,
 
 void RuleCommand::executeOn(Rulerunner& target, int depth)
 {
-    auto & rule = target._therules[_ruleName];
+    auto & rule = target._lSystem._rules[_ruleName];
     
     if (target.isDeepEnough(depth)) {
         target._lSystem._drawStrategy->draw(target,rule,_isReversed^_isFlipped,_atScale);
@@ -53,9 +51,9 @@ void RuleCommand::executeOn(Rulerunner& target, int depth)
     }
     
     if (_isReversed ^ _isFlipped)
-        turtle(target).flip();
-    auto oldScale = turtle(target).getscale();
-    turtle(target).scaleby(_atScale*rule._localScale);
+        artist(target).flip();
+    auto oldScale = artist(target).getscale();
+    artist(target).scaleby(_atScale*rule._localScale);
     target._backwards ^= _isReversed; //NOLINT
 
     if(target._backwards)
@@ -66,9 +64,9 @@ void RuleCommand::executeOn(Rulerunner& target, int depth)
             i->executeOn(target,depth+1);
 
     target._backwards ^= _isReversed; //NOLINT
-    turtle(target).setscale(oldScale);
+    artist(target).setscale(oldScale);
     if (_isReversed ^ _isFlipped)
-        turtle(target).flip();
+        artist(target).flip();
 }
 
 void RuleCommand::evaluateExpressions(const Context& context) {

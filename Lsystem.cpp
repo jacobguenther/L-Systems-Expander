@@ -106,9 +106,9 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
                 t = lex.nexttoken();
                 assertdatatoken(t);
                 if (t.getdata() == ":")
-                    table[rulename].setcmds(readrule(lex));
+                    _rules[rulename].setcmds(readrule(lex));
                 else if (t.getdata() == "?")
-                    table[rulename].readruleoptions(lex);
+                    _rules[rulename].readruleoptions(lex);
                 else
                     throw runtime_error("Expected option line or rule definition");
             }

@@ -9,12 +9,11 @@
 using std::string;
 
 Rulerunner::Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c)
-: _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
+: _context(c, l.expressions)
 ,_maxdepth(maxdepth), _minscale(minscale), _lSystem(l)
 {
-    for (auto & [name,rule] : _therules)
+    for (auto & [name,rule] : _lSystem._rules)
         rule.calculateParameters(_context);
-//    handlerule(_therules[_startrule], false, false, 1.0); //!!!
 }
 
 const Context & Rulerunner::getContext() const {
@@ -22,12 +21,16 @@ const Context & Rulerunner::getContext() const {
 }
 
 void Rulerunner::draw() {
-    _lSystem._drawStrategy->start();
-    RuleCommand(_startrule, false, false).executeOn(*this, 0);
-    _lSystem._drawStrategy->finish();
+    getDrawStrategy().reset();
+    getDrawStrategy().start();
+    RuleCommand(_lSystem.startrule, false, false).executeOn(*this, 0);
+    getDrawStrategy().finish();
 }
 
 bool Rulerunner::isDeepEnough(int depth) {
-    return depth >= _maxdepth || _turtle.getscale() < _minscale;
+    return depth >= _maxdepth;
 }
 
+DrawStrategy & Rulerunner::getDrawStrategy() {
+    return *_lSystem._drawStrategy;
+}
