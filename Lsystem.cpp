@@ -24,6 +24,7 @@ void assertdatatoken(const Token &t) {
     if (t.iseol()) throw runtime_error("Unexpected end of line");
 }
 
+namespace {
 Commands readrule(Lexer &lex) {
     Commands retval;
     Token t = lex.nexttoken();
@@ -64,6 +65,7 @@ Commands readrule(Lexer &lex) {
     }
     return retval;
 }
+}//end anonymous namespace
 
 Lsystem::Lsystem(string_view name, Lexer &lex) {
     _name = name;
@@ -106,9 +108,9 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
                 t = lex.nexttoken();
                 assertdatatoken(t);
                 if (t.getdata() == ":")
-                    table[rulename].setcmds(readrule(lex));
+                    _rules[rulename].setcmds(readrule(lex));
                 else if (t.getdata() == "?")
-                    table[rulename].readruleoptions(lex);
+                    _rules[rulename].readruleoptions(lex);
                 else
                     throw runtime_error("Expected option line or rule definition");
             }
@@ -117,8 +119,8 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
         }
         t = lex.nexttoken();
     }
-    if(!_drawStrategy)
-        _drawStrategy = make_unique<LinesDrawStrategy>();
+    if(_drawStrategyToken._name.empty())
+        _drawStrategyToken._name = "normal"; //!!!Use empty for normal?
 }
 
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
@@ -152,25 +154,28 @@ vector<Lsystem> readlsystemfile(const std::string &configfilename) {
 
 void Lsystem::readSystemOptions(Lexer &lex) {
     for (auto t = lex.nexttoken(); t.isdata(); t = lex.nexttoken()) {
-        if (t.getdata() == "drawmethod") { //!!! Verify these all are appropriate and work
+        if (t.getdata() == "drawmethod") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            if (t.getdata() == "drop") {
+            _drawStrategyToken._name = t.getdata();
+            _drawStrategyToken._parameters.clear();
+            if (_drawStrategyToken._name == "drop") {
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                auto dropAngleExpression = Parser(t.getdata()).parse();
+                _drawStrategyToken._parameters.push_back(t.getdata());
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                auto dropDistanceExpression = Parser(t.getdata()).parse();
-                _drawStrategy = make_unique<DropDrawStrategy>(move(dropAngleExpression),move(dropDistanceExpression));
+                _drawStrategyToken._parameters.push_back(t.getdata());
+                //!!! continue
             }
-            else if (t.getdata() == "normal")
-                _drawStrategy = make_unique<LinesDrawStrategy>();
+            else if (_drawStrategyToken._name == "normal")
+                ;
 //            else if (t.getdata() == "rectangle")
-//                _drawMethod = RECT;
-            else if (t.getdata() == "midpoint")
-                _drawStrategy = make_unique<DropDrawStrategy>(Parser("0").parse(),Parser("1.0/2.0").parse());
-            else
+//                ...
+            else if (_drawStrategyToken._name == "midpoint") {
+                _drawStrategyToken._parameters.push_back("0.0");
+                _drawStrategyToken._parameters.push_back("1.0/2.0");
+            } else
                 throw std::runtime_error("Unexpected draw method " + t.getdata());
         } else if (t.getdata() == "info") {
             t = lex.nexttoken();
@@ -182,10 +187,27 @@ void Lsystem::readSystemOptions(Lexer &lex) {
     }
 }
 
-const std::string& Lsystem::getname() {
+const std::string& Lsystem::getname() const {
 	return _name;
 }
 
 bool Lsystem::isactive() const {
 	return active;
 }
+
+const Exprtype & Lsystem::getExpressions() const {
+    return expressions;
+}
+
+const Ruletable & Lsystem::getRules() const {
+    return _rules;
+}
+
+const string & Lsystem::startRule() const {
+    return startrule;
+}
+
+DrawStrategyToken Lsystem::getDrawStrategyToken() const {
+    return _drawStrategyToken;
+}
+

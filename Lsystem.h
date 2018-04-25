@@ -12,33 +12,24 @@
 class Lexer;
 
 class Lsystem {
-    friend class Rulerunner;
-    friend class PopCommand;
-    
-    enum Method {
-        NONE,
-        NORM,
-        DROP,
-        INVIS,
-        MIDPT,
-        WRITE
-    } ;
-
    public:
     Lsystem(std::string_view name, Lexer &lex);
-	const std::string& getname();
+	const std::string& getname() const;
 	bool isactive() const;
-
-   private:
+    const Exprtype & getExpressions() const;
+    const Ruletable & getRules() const;
+    const std::string & startRule() const;
+    DrawStrategyToken getDrawStrategyToken() const;
+private:
     void readSystemOptions(Lexer &lex);
     
     std::string _name;
     std::string _info;
-    DrawStrategyPtr _drawStrategy;
     bool active=true;
-    Ruletable table;
+    Ruletable _rules;
     std::string startrule;
     Exprtype expressions;
+    DrawStrategyToken _drawStrategyToken;
 };
 
 std::vector<Lsystem> readlsystemfile(const std::string &configfilename =

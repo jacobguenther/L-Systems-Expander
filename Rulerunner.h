@@ -12,32 +12,24 @@
 #include <stdexcept>
 #include <string>
 
-
 class Lexer;
-class Lsystem;
 
 class Rulerunner {
-friend class RotateCommand;  //!!!need friends, or make a public turtle accessor?
-friend class FlipCommand;
-friend class PopCommand;
-friend class PushCommand;
-friend class RuleCommand;
-friend class LinesDrawStrategy;
-friend class DropDrawStrategy;
+friend class RuleCommand; // RuleCommands need to modify _backwards
+friend class Command; // all Commands modify our _drawStrategy turtle
 public:
-    Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c);
+    Rulerunner(const Lsystem &l, int maxdepth, const Consttype &c,
+               DrawStrategyPtr drawStrategy);
+    const Context & getContext() const;
+    const DrawStrategy & getDrawStrategy() const;
     void draw();
+    int getMaxDepth() const;
+    const Ruletable & getRules() const;
 private:
-    bool isDeepEnough(int depth);
-    void handlerule(Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth);
-
-    Ruletable &_therules; //Would like to be const, but calculating/caching parameters changes
-    std::string _startrule;
     const Context _context;
     int _maxdepth;
-    Turtle _turtle;
     bool _backwards=false;
-    double _minscale;
-    Lsystem &_lSystem; //Think about this. Do we really want parent pointers?!!!
+    const Lsystem &_lSystem;
+    DrawStrategyPtr _drawStrategy;
 };
 #endif

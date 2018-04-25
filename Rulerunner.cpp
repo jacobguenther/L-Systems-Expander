@@ -8,50 +8,36 @@
 
 using std::string;
 
-Rulerunner::Rulerunner(Lsystem &l, int maxdepth, double minscale, const Consttype &c)
-: _therules(l.table), _startrule(l.startrule),_context(c, l.expressions)
-,_maxdepth(maxdepth), _minscale(minscale), _lSystem(l)
-{
-    for (auto & [name,rule] : _therules)
-        rule.calculateParameters(_context);
-//    handlerule(_therules[_startrule], false, false, 1.0); //!!!
+Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, const Consttype &c,
+                       DrawStrategyPtr drawStrategy)
+    :_context(c, l.getExpressions())
+    ,_maxdepth(maxdepth)
+    , _lSystem(l)
+    ,_drawStrategy(move(drawStrategy)) {
+    for (auto & [name,rule] : _lSystem.getRules())
+        rule.evaluateExpressions(_context); //!!! setContext should do ths
+    getDrawStrategy().evaluateExpressions(_context);
 }
 
-bool Rulerunner::isDeepEnough(int depth) {
-    return depth >= _maxdepth || _turtle.getscale() < _minscale;
-}
-
-void Rulerunner::handlerule(Rule &rule, bool rulerev, bool ruleflip, double atScale, int depth) {
-    //const Rule & and look everything else up?
-    if (isDeepEnough(depth)) {
-        _lSystem._drawStrategy->draw(*this,rule,ruleflip,atScale);
-        return;
-    }
-    
-    auto doCommand = [&](auto &command) {
-        if (rulerev ^ ruleflip)
-            _turtle.flip();
-        auto oldScale = _turtle.getscale();
-        _turtle.scaleby(atScale*rule._localScale);
-        _backwards ^= rulerev; //NOLINT
-        command->executeOn(*this,depth+1);
-        _backwards ^= rulerev; //NOLINT
-        _turtle.setscale(oldScale);
-        if (rulerev ^ ruleflip)
-            _turtle.flip();
-    };
-    
-    if(rulerev ^ _backwards)
-        for(auto i = rule._commands.rbegin(); i != rule._commands.rend(); ++i)
-            doCommand(*i);
-    else
-        for(auto i = rule._commands.begin(); i != rule._commands.end(); ++i)
-            doCommand(*i);
+const Context & Rulerunner::getContext() const {
+    return _context;
 }
 
 void Rulerunner::draw() {
-    _lSystem._drawStrategy->start();
-    handlerule(_therules[_startrule], false, false, 1.0,0);
-    _lSystem._drawStrategy->finish();
+    _drawStrategy->reset();
+    _drawStrategy->start();
+    RuleCommand(_lSystem.startRule(), false, false).executeOn(*this, 0);
+    _drawStrategy->finish();
 }
 
+int Rulerunner::getMaxDepth() const {
+    return _maxdepth;
+}
+
+const Ruletable & Rulerunner::getRules() const {
+    return _lSystem.getRules();
+}
+
+const DrawStrategy & Rulerunner::getDrawStrategy() const {
+    return *_drawStrategy;
+}

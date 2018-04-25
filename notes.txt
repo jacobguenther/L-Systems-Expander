@@ -98,5 +98,7 @@ We cache things because they can't be evaluated until parameter value is known, 
 "reverse" is really "reflect", yes? At least for users.
 
 
+Thoughts:
+Turtle belongs to the draw strategy. Or even is part of the draw strategy. Command base class should be friend of the draw strategy, and RuleCommand still must be friend of RuleRunner. All commands should tell the draw strategy what to do, instead of the turtle.
 
 

@@ -10,7 +10,7 @@ const double DEG2RAD = M_PI / 180;
 
 class Turtle {
    public:
-	void flipBy(double multiplier);
+	void flipBy(double multiplier);//!!! double or int or bool?
 	void flip();
 	void rotate(double turnangle);
 	void forward(double dist = 1.0);
