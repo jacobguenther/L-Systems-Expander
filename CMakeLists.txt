@@ -7,6 +7,8 @@ project (LSystems)
 set(SOURCES
 Cmd.h
 Cmd.cpp
+Color.hpp
+Color.cpp
 Context.h
 Context.cpp
 DrawStrategy.hpp

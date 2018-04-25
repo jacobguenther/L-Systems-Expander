@@ -51,6 +51,7 @@ private:
     virtual void scalebyImpl(double s);
     virtual void setscaleImpl(double s);
     Turtle _turtle;
+    double _theta;
 };
 
 using DrawStrategyPtr = std::unique_ptr<DrawStrategy>;

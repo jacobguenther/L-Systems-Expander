@@ -5,6 +5,7 @@
 //  Created by Chris Hartman on 4/20/18.
 //
 
+#include "Color.hpp"
 #include "DrawStrategy.hpp"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -43,6 +44,8 @@ void DrawStrategy::draw(const Rule &rule, bool ruleFlip, double atScale) {
         return;
     auto to = _turtle.getposition();
     drawImpl({from,to}, ruleFlip);
+    _theta += ((from.x-to.x)*(from.x-to.x)+(from.y-to.y)*(from.y-to.y));
+    Color::colorCircle(_theta).glSet();
 }
 
 void DrawStrategy::rotate(double angle){

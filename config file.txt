@@ -122,3 +122,28 @@ A A A right 90 |A left 180 invis invis
 invis : invis
 A ? localscale 1/3
 invis ? invisible
+
+sevener2
+$sm2 = asind(sqrt(3)/(2*sqrt(7)))
+$tilang = 120-$sm2
+start : d
+e : a left 120 a left 120 a left 120
+d : [ a ] left 60 \
+[ a ] left 60 \
+[ a ] left 60 \
+[ a ] left 60 \
+[ a ] left 60 \
+[ a ] left 60
+c : [ a ] left $tilang invis@ 1/sqrt(7) right $tilang-60*p1 a
+a : left 120-$sm2 a \
+right 120 a \
+a \
+right 120 a \
+left 120 a \
+a \
+left 120 a \
+right 120-$sm2
+a ? localscale 1/sqrt(7)
+b : [ a ] left 120 [ a ] left 120 [ a ] left 120
+invis ? invisible
+invis : invis 
