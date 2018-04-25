@@ -19,8 +19,8 @@ using std::make_unique;
 
 DrawStrategyPtr drawStrategyFactory(const DrawStrategyToken &dst) {
     if (dst._name == "drop") {
-        auto angle = Parser(dst._parameters[0]).parse();
-        auto distance = Parser(dst._parameters[1]).parse();
+        auto angle = parse(dst._parameters[0]);
+        auto distance = parse(dst._parameters[1]);
         return make_unique<DropDrawStrategy>(move(angle),move(distance));
     }
     if (dst._name == "normal")

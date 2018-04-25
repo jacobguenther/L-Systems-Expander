@@ -33,11 +33,11 @@ Commands readrule(Lexer &lex) {
         if (t.getdata() == "left") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            retval.push_back(make_unique<RotateCommand>(Parser(t.getdata()).parse()));
+            retval.push_back(make_unique<RotateCommand>(parse(t)));
         } else if (t.getdata() == "right") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            retval.push_back(make_unique<RotateCommand>(Parser("-(" + t.getdata() + ")").parse()));
+            retval.push_back(make_unique<RotateCommand>(parse("-(" + t.getdata() + ")")));
         } else if (t.getdata() == "|" || t.getdata() == "flip")
             retval.push_back(make_unique<FlipCommand>());
         else if (t.getdata() == "[" || t.getdata() == "push")
@@ -57,7 +57,7 @@ Commands readrule(Lexer &lex) {
                 thisrule.remove_suffix(1);
                 auto localScale = lex.nexttoken();
                 assertdatatoken(localScale);
-                retval.push_back(make_unique<RuleCommand>(string(thisrule), rev, flip, Parser(localScale.getdata()).parse()));
+                retval.push_back(make_unique<RuleCommand>(string(thisrule), rev, flip, parse(localScale.getdata())));
             } else
                 retval.push_back(make_unique<RuleCommand>(string(thisrule), rev, flip));
         }
@@ -92,7 +92,7 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
                     throw runtime_error("Expected '='");
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                expressions[rulename] = Parser(t.getdata()).parse();
+                expressions[rulename] = parse(t);
                 t = lex.nexttoken();
                 if (t.isdata())
                     throw runtime_error("Unexpected additional characters " + t.getdata());

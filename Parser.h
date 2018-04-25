@@ -2,17 +2,22 @@
 #define PARSER_H
 
 #include "Parsenode.h"
+#include "Lexer.h"
 #include <sstream>
 #include <string>
 
-class Parser {
-   public:
-	explicit Parser(const std::string& _w);
-    ParsenodePtr parse();
+ParsenodePtr parse(const std::string &s);
+ParsenodePtr parse(const Token &t);
 
-   private:
+class Parser {
+friend ParsenodePtr parse(const std::string &s);
+friend ParsenodePtr parse(const Token &t);
+
+private:
     std::istringstream input;
 
+    explicit Parser(const std::string& _w);
+    ParsenodePtr parse();
     void match(char x);
 	char nextchar();
     double number();
@@ -33,4 +38,5 @@ class Parser {
     ParsenodePtr idexpr();
     std::string getidname();
 };
+
 #endif

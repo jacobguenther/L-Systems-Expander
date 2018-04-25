@@ -199,6 +199,15 @@ void Parser::error(const std::string &text) {
     throw runtime_error(input.str() + "\n" +
                         string(input.eof() ? input.str().length() : static_cast<unsigned int>(input.tellg()), '-') + "^\n" + text);
 }
+
+ParsenodePtr parse(const std::string &s) {
+    return Parser(s).parse();
+}
+
+ParsenodePtr parse(const Token &t) {
+    return Parser(t.getdata()).parse();
+}
+
 /*
 value -> bexpr ternop
 ternop -> ? value : value

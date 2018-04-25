@@ -56,7 +56,7 @@ public:
 class RuleCommand : public Command {
 public:
 	explicit RuleCommand(std::string_view ruleName, bool isReversed,
-			bool isFlipped, ParsenodePtr scaleExpression = Parser("1.0").parse());
+			bool isFlipped, ParsenodePtr scaleExpression = parse("1.0"));
     
     void executeOn(Rulerunner& target, int depth) const override;
     

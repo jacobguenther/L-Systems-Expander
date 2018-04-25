@@ -3,6 +3,7 @@
 
 #include "Rule.h"
 #include "Cmd.h"
+#include "Parser.h"
 #include <exception>
 
 void Rule::setcmds(Commands&& newcmds) {
@@ -20,11 +21,11 @@ void Rule::readruleoptions(Lexer &lex) {
 //        } else if (t.getdata() == "rectwidth") {
 //            t = lex.nexttoken();
 //            assertdatatoken(t);
-//            _rectWidthExpression = Parser(t.getdata()).parse();
+//            _rectWidthExpression = parse(t.getdata());
         } else if (t.getdata() == "localscale") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            _localScaleExpression = Parser(t.getdata()).parse();
+            _localScaleExpression = parse(t);
         } else
             throw std::runtime_error("Unexpected option " + t.getdata());
         t = lex.nexttoken();
