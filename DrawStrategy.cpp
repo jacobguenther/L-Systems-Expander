@@ -44,7 +44,8 @@ void DrawStrategy::draw(const Rule &rule, bool ruleFlip, double atScale) {
         return;
     auto to = _turtle.getposition();
     drawImpl({from,to}, ruleFlip);
-    _theta += ((from.x-to.x)*(from.x-to.x)+(from.y-to.y)*(from.y-to.y));
+    _theta += 2*M_PI*((from.x-to.x)*(from.x-to.x)+(from.y-to.y)*(from.y-to.y));
+//    std::cout << _theta << "\n";
     Color::colorCircle(_theta).glSet();
 }
 

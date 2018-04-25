@@ -27,5 +27,5 @@ private:
     mutable double _localScale=1.0;
 };
 
-using Ruletable = std::map<std::string, Rule >;
+using Ruletable = std::unordered_map<std::string, Rule >;
 #endif
