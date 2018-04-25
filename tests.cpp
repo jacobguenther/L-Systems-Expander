@@ -4,13 +4,13 @@
 #include "Parser.h"
 
 TEST_CASE( "Parsing expressions", "[Parser]" ) {
-    auto p = Parser("0").parse();
+    auto p = parse("0");
     REQUIRE(p != nullptr);
     REQUIRE(p->eval({})==Approx(0));
-    REQUIRE(Parser("4>2").parse()->eval({}));
-    REQUIRE(!bool(Parser("2>4").parse()->eval({})));
-    REQUIRE(Parser("1?1:2").parse()->eval({})==Approx(1));
-    REQUIRE(Parser("0?1:2").parse()->eval({})==Approx(2));
+    REQUIRE(parse("4>2")->eval({}));
+    REQUIRE(!bool(parse("2>4")->eval({})));
+    REQUIRE(parse("1?1:2")->eval({})==Approx(1));
+    REQUIRE(parse("0?1:2")->eval({})==Approx(2));
 }
 
 TEST_CASE("Reading config file and creating lsystem","[Lsystem]") {
