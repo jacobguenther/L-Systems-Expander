@@ -16,22 +16,13 @@
 using std::move;
 using std::make_unique;
 
-DrawStrategyPtr drawStrategyFactory(const std::string &type) {
-    std::istringstream iss(type);
-    Lexer lex(iss);
-
-    auto t = lex.nexttoken();
-    assertdatatoken(t);
-    if (t.getdata() == "drop") {
-        t = lex.nexttoken();
-        assertdatatoken(t);
-        auto angle = Parser(t.getdata()).parse();
-        t = lex.nexttoken();
-        assertdatatoken(t);
-        auto distance = Parser(t.getdata()).parse();
+DrawStrategyPtr drawStrategyFactory(const DrawStrategyToken &dst) {
+    if (dst._name == "drop") {
+        auto angle = Parser(dst._parameters[0]).parse();
+        auto distance = Parser(dst._parameters[1]).parse();
         return make_unique<DropDrawStrategy>(move(angle),move(distance));
     }
-    if (t.getdata() == "normal")
+    if (dst._name == "normal")
         return make_unique<LinesDrawStrategy>();
     throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
 }

@@ -119,8 +119,8 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
         }
         t = lex.nexttoken();
     }
-    if(_drawStrategy.empty())
-        _drawStrategy = "normal"; //!!!Use empty for normal?
+    if(_drawStrategyToken._name.empty())
+        _drawStrategyToken._name = "normal"; //!!!Use empty for normal?
 }
 
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
@@ -157,21 +157,24 @@ void Lsystem::readSystemOptions(Lexer &lex) {
         if (t.getdata() == "drawmethod") {
             t = lex.nexttoken();
             assertdatatoken(t);
-            if (t.getdata() == "drop") {
-                _drawStrategy = t.getdata();
+            _drawStrategyToken._name = t.getdata();
+            _drawStrategyToken._parameters.clear();
+            if (_drawStrategyToken._name == "drop") {
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                _drawStrategy += " " + t.getdata();
+                _drawStrategyToken._parameters.push_back(t.getdata());
                 t = lex.nexttoken();
                 assertdatatoken(t);
-                _drawStrategy += " " + t.getdata();
+                _drawStrategyToken._parameters.push_back(t.getdata());
+                //!!! continue
             }
-            else if (t.getdata() == "normal")
-                _drawStrategy = t.getdata();
+            else if (_drawStrategyToken._name == "normal")
+                ;
 //            else if (t.getdata() == "rectangle")
 //                ...
-            else if (t.getdata() == "midpoint") {
-                _drawStrategy = "drop 0 1.0/2.0";
+            else if (_drawStrategyToken._name == "midpoint") {
+                _drawStrategyToken._parameters.push_back("0.0");
+                _drawStrategyToken._parameters.push_back("1.0/2.0");
             } else
                 throw std::runtime_error("Unexpected draw method " + t.getdata());
         } else if (t.getdata() == "info") {
@@ -204,6 +207,7 @@ const string & Lsystem::startRule() const {
     return startrule;
 }
 
-const string & Lsystem::getDrawStrategy() const {
-    return _drawStrategy;
+DrawStrategyToken Lsystem::getDrawStrategyToken() const {
+    return _drawStrategyToken;
 }
+

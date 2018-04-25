@@ -8,12 +8,14 @@
 
 using std::string;
 
-Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, const Consttype &c)
-    : _context(c, l.getExpressions()),_maxdepth(maxdepth), _lSystem(l)
-    ,_drawStrategy(drawStrategyFactory(l.getDrawStrategy()))
-{
+Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, const Consttype &c,
+                       DrawStrategyPtr drawStrategy)
+    :_context(c, l.getExpressions())
+    ,_maxdepth(maxdepth)
+    , _lSystem(l)
+    ,_drawStrategy(move(drawStrategy)) {
     for (auto & [name,rule] : _lSystem.getRules())
-        rule.evaluateExpressions(_context);
+        rule.evaluateExpressions(_context); //!!! setContext should do ths
     getDrawStrategy().evaluateExpressions(_context);
 }
 

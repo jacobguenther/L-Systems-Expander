@@ -19,8 +19,8 @@ class Lsystem {
     const Exprtype & getExpressions() const;
     const Ruletable & getRules() const;
     const std::string & startRule() const;
-    const std::string & getDrawStrategy() const;
-   private:
+    DrawStrategyToken getDrawStrategyToken() const;
+private:
     void readSystemOptions(Lexer &lex);
     
     std::string _name;
@@ -29,8 +29,7 @@ class Lsystem {
     Ruletable _rules;
     std::string startrule;
     Exprtype expressions;
-    std::string _drawStrategy;
-    std::vector<ParsenodePtr> _drawStrategyParameters;
+    DrawStrategyToken _drawStrategyToken;
 };
 
 std::vector<Lsystem> readlsystemfile(const std::string &configfilename =

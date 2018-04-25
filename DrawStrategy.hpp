@@ -14,6 +14,11 @@
 #include <vector>
 class Rulerunner;
 
+struct DrawStrategyToken {
+    std::string _name;
+    std::vector<std::string> _parameters;
+};
+
 class DrawStrategy {
 public:
     virtual ~DrawStrategy() = default;
@@ -50,7 +55,7 @@ private:
 
 using DrawStrategyPtr = std::unique_ptr<DrawStrategy>;
 
-DrawStrategyPtr drawStrategyFactory(const std::string &type);
+DrawStrategyPtr drawStrategyFactory(const DrawStrategyToken &dst);
 
 class LinesDrawStrategy : public DrawStrategy {
 public:
