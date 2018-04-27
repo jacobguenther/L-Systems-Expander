@@ -4,8 +4,8 @@
 #include "Context.h"
 #include "DrawStrategy.hpp"
 #include "Rule.h"
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 

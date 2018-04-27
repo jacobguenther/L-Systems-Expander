@@ -1,8 +1,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "Parsenode.h"
 #include "Lexer.h"
+#include "Parsenode.h"
 #include <sstream>
 #include <string>
 
