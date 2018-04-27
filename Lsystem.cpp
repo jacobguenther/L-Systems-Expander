@@ -52,9 +52,11 @@ Commands readrule(Lexer &lex) {
             bool rev = false;
             bool flip = false;
             string_view thisrule = t.getdata();
-            while (thisrule[0] == '~' || thisrule[0] == '|') {
-                if (thisrule[0] == '~') rev = true;
-                if (thisrule[0] == '|') flip = true;
+            while (thisrule[0] == '~' || thisrule[0] == '|' || thisrule[0] == '_') {
+                if (thisrule[0] == '~' || thisrule[0] == '_')
+                    rev = !rev;
+                if (thisrule[0] == '~' || thisrule[0] == '|')
+                    flip = !flip;
                 thisrule.remove_prefix(1);
             }
             if (thisrule[thisrule.length() - 1] == '@') {

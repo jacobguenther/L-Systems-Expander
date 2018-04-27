@@ -48,14 +48,14 @@ void RuleCommand::executeOn(Rulerunner& target, int depth) const
     const auto & rule = target.getRules().at(_ruleName);
     
     if (depth >= target.getMaxDepth()) {
-        target._drawStrategy->draw(rule,_isReversed^_isFlipped,_atScale);
+        target._drawStrategy->draw(rule,_isFlipped,_atScale);
         return;
     }
     
-    if (_isReversed ^ _isFlipped)
-        artist(target).flip();
     auto oldScale = artist(target).getscale();
     artist(target).scaleby(_atScale*rule.getLocalScale());
+    if (_isFlipped)
+        artist(target).flip();
     target._backwards ^= _isReversed; //NOLINT
 
     if(target._backwards)
@@ -66,9 +66,9 @@ void RuleCommand::executeOn(Rulerunner& target, int depth) const
             i->executeOn(target,depth+1);
 
     target._backwards ^= _isReversed; //NOLINT
-    artist(target).setscale(oldScale);
-    if (_isReversed ^ _isFlipped)
+    if (_isFlipped)
         artist(target).flip();
+    artist(target).setscale(oldScale);
 }
 
 void RuleCommand::evaluateExpressions(const Context& context) const {
