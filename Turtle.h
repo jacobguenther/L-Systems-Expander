@@ -24,10 +24,10 @@ class Turtle {
    private:
 
     struct TurtleState {
-        int flipfac{1};
-        Point position{0, 0};
-        double angle{0};
-        double scalefac{1};
+        int _flipFactor{1};
+        Point _position{0, 0};
+        double _angle{0};
+        double _scaleFactor{1};
     };
     
     std::stack<TurtleState> _states{{ TurtleState{} }};

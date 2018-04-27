@@ -5,7 +5,7 @@
 
 
 void Turtle::flipBy(double multiplier) {
-	_states.top().flipfac *= multiplier;
+	_states.top()._flipFactor *= multiplier;
 }
 
 void Turtle::flip() {
@@ -13,34 +13,34 @@ void Turtle::flip() {
 }
 
 void Turtle::rotate(double turnangle) {
-	_states.top().angle += _states.top().flipfac * turnangle;
+	_states.top()._angle += _states.top()._flipFactor * turnangle;
 }
 
 void Turtle::forward(double dist) {
-	_states.top().position.x += getscale() * dist
-			* cos(DEG2RAD * _states.top().angle);
-	_states.top().position.y += getscale() * dist
-			* sin(DEG2RAD * _states.top().angle);
+	_states.top()._position.x += getscale() * dist
+			* cos(DEG2RAD * _states.top()._angle);
+	_states.top()._position.y += getscale() * dist
+			* sin(DEG2RAD * _states.top()._angle);
 }
 
 void Turtle::scaleby(double s) {
-	_states.top().scalefac *= s;
+	_states.top()._scaleFactor *= s;
 }
 
 double Turtle::getscale() const {
-	return _states.top().scalefac;
+	return _states.top()._scaleFactor;
 }
 
 int Turtle::getflip() const {
-	return _states.top().flipfac;
+	return _states.top()._flipFactor;
 }
 
 void Turtle::setscale(double s) {
-	_states.top().scalefac = s;
+	_states.top()._scaleFactor = s;
 }
 
 Point Turtle::getposition() {
-	return _states.top().position;
+	return _states.top()._position;
 }
 
 void Turtle::push() {
