@@ -38,7 +38,11 @@ Commands readrule(Lexer &lex) {
             t = lex.nexttoken();
             assertdatatoken(t);
             retval.push_back(make_unique<RotateCommand>(parse("-(" + t.getdata() + ")")));
-        } else if (t.getdata() == "|" || t.getdata() == "flip")
+        } else if (t.getdata() == "+")
+            retval.push_back(make_unique<RotateCommand>(parse("$angle")));
+        else if (t.getdata() == "-")
+            retval.push_back(make_unique<RotateCommand>(parse("-$angle")));
+        else if (t.getdata() == "|" || t.getdata() == "flip")
             retval.push_back(make_unique<FlipCommand>());
         else if (t.getdata() == "[" || t.getdata() == "push")
             retval.push_back(make_unique<PushCommand>());
@@ -121,6 +125,8 @@ Lsystem::Lsystem(string_view name, Lexer &lex) {
     }
     if(_drawStrategyToken._name.empty())
         _drawStrategyToken._name = "normal"; //!!!Use empty for normal?
+    if(expressions.find("$angle") == expressions.end())
+        expressions["$angle"] = parse("90");
 }
 
 vector<Lsystem> readlsystemfile(const std::string &configfilename) {
@@ -173,14 +179,22 @@ void Lsystem::readSystemOptions(Lexer &lex) {
 //            else if (t.getdata() == "rectangle")
 //                ...
             else if (_drawStrategyToken._name == "midpoint") {
-                _drawStrategyToken._parameters.push_back("0.0");
-                _drawStrategyToken._parameters.push_back("1.0/2.0");
+                _drawStrategyToken._parameters.emplace_back("0.0");
+                _drawStrategyToken._parameters.emplace_back("1.0/2.0");
             } else
                 throw std::runtime_error("Unexpected draw method " + t.getdata());
         } else if (t.getdata() == "info") {
             t = lex.nexttoken();
             assertdatatoken(t);
             _info = t.getdata();
+        } else if (t.getdata() == "rotationsteps") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            expressions["$angle"] = parse("360/"+t.getdata());
+        } else if (t.getdata() == "rotationangle") {
+            t = lex.nexttoken();
+            assertdatatoken(t);
+            expressions["$angle"] = parse(t.getdata());
         }
         else throw runtime_error("Unexpected system option: " + t.getdata());
 

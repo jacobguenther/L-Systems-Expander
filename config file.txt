@@ -1,12 +1,12 @@
 Hilbert2
-    S : A right 90 forward right 90 A right 90 forward right 90
-    A : left 90 ~A forward right 90 A forward A right 90 forward ~A left 90
+    S : A - forward - A - forward -
+    A : + ~A forward - A forward A - forward ~A +
     A ? localscale 1/2 nodraw
     forward : forward
     forward ? localscale 1/2
 
 dragon
-    A : left 45 A right 90 ~A left 45
+    A : left 45 A - ~A left 45
     A ? localscale 1/sqrt(2)
 
 AltDragon-p
@@ -19,9 +19,9 @@ AltDragon-p
 
 bisquare
     system ? drawmethod drop 45 sqrt(2)/2
-	a : left 90 |b@ 2 right 90 a a a right 90 |a |a left 90
+	a : + |b@ 2 - a a a - |a |a +
 	a ? localscale 1/3
-	b : left 90 |b@ 2 right 90 a a a right 90 |a ~a left 90
+	b : + |b@ 2 - a a a - |a ~a +
 	b ? localscale 1/3
 
 Terdragon
@@ -117,8 +117,8 @@ invis ? invisible
 #lt ? drawmethod midpoint
 
 "Menger sponge"
-A : invis left 90 A A A right 90 |A right 90 \
-A A A right 90 |A left 180 invis invis
+A : invis + A A A - |A - \
+A A A - |A + + invis invis
 invis : invis
 A ? localscale 1/3
 invis ? invisible
