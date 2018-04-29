@@ -237,17 +237,13 @@ void Lsystem::fixRules(const Consttype &c) {
             rule._commands.pop_front();
             rule._commands.pop_back();
         }
-        string t(name);
-        Rule &trule(_rules.at(t));
-        auto numCommands = trule._commands.size();
-        std::cout << numCommands << "\n";
+        rule._localScale = 1.0;
         runner.draw(name);
-        
         auto endPoint = runner.getDrawStrategy().getPosition();
-        auto distance = endPoint.x*endPoint.x+endPoint.y*endPoint.y;
-        if( distance < 0.01)
-            continue;
-        rule._localScaleExpression = parse(std::to_string(rule._localScale/sqrt(distance)));
+        auto distanceSqr = endPoint.x*endPoint.x+endPoint.y*endPoint.y;
+        if( distanceSqr < 0.01)
+            continue; //!!!possibly still want to fix turtle angle here?
+        rule._localScaleExpression = parse(std::to_string(1.0/sqrt(distanceSqr)));
         auto angleWent = atan2(endPoint.y,endPoint.x)/DEG2RAD;
         rule._commands.push_front(make_unique<RotateCommand>(parse(std::to_string(-angleWent))));
         auto endTurtleAngle = runner.getDrawStrategy().getAngle();
