@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <utility>
+#include <deque>
 
 class Context;
 class DrawStrategy;
@@ -25,7 +26,7 @@ public:
     virtual void evaluateExpressions(const Context & /*unused*/) const;
 };
 
-using Commands = std::vector<std::unique_ptr<Command>>;
+using Commands = std::deque<std::unique_ptr<Command>>;
 
 class RotateCommand : public Command {
 public:
