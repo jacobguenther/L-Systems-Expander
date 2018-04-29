@@ -68,46 +68,44 @@ sevener.1
     F ? localscale 1/2
 
 Tromino #63.43... is acos(1/sqrt(5))
-s : lc
-start : right 90 invis left 90 \
-line left 90 line left 90 line@ 1/2 left 90 line@ 1/2 right 90 line@ 1/2 \
-left 90 line@ 1/2 left 90 startlc
-startlt : left 63.43494882 lt@ sqrt(5)/2
-startlm : left 45 lm@ 1/sqrt(2)
-startlc : lc
-startll : left 45 ll@ sqrt(2)
-startct : invis left 180-63.43494882 ct@ sqrt(5)/2
-ll : right 45 ~|lc@ 1/(2*sqrt(2)) \
-left 45 lm@ 1/4 \
-left 135-63.43494882 ct@ sqrt(5/32) \
-right 90 ~ct@ sqrt(5/32) left 63.43494882-45
-tt : right 90 ll left 90 lm@ 1/2 left 45 ~|lc@ 1/sqrt(2) left 45 ~|lm@  1/2 right 90
-ct : left 63.43494882 ~lc@ 1/sqrt(5) \
-right 63.43494882 |lt@ 1/2 \
-right 90 ~|lt@ 1/2 \
-left 63.43494882+45 ~|lm@ 1/sqrt(10) right 63.43494882-45
-lm : right 45 ~|lc@ sqrt(2)/2 left 45 ll left 90 lm@ 1/2 left 90 |lm@ 1/2 right 180
-lc : left 63.43494882 |ct@ sqrt(5)/4 \
-right 63.43494882-45 tt@ sqrt(2)/4 \
-right 135-63.43494882 ~lt@ sqrt(5)/4 \
-right 63.43494882 |lc@ 1/2 left 90
-lt : right 63.43494882 ~|lc@ 1/sqrt(5) \
-left 45 lm@ 1/sqrt(10) \
-left 45 ~|lc@ 1/sqrt(5) \
-left 45 ~|lm@ 1/sqrt(10) right 135-63.43494882
-line : line
-invis : invis
-invis ? invisible
-#ll ? drawmethod midpoint
-#tt ? drawmethod midpoint
-#ct ? drawmethod midpoint
-#lm ? drawmethod midpoint
-#lc ? drawmethod midpoint
-#lt ? drawmethod midpoint
+    s : lc
+    start : right 90 invis left 90 \
+    line left 90 line left 90 line@ 1/2 left 90 line@ 1/2 right 90 line@ 1/2 \
+    left 90 line@ 1/2 left 90 startlc
+    startlt : left 63.43494882 lt@ sqrt(5)/2
+    startlm : left 45 lm@ 1/sqrt(2)
+    startlc : lc
+    startll : left 45 ll@ sqrt(2)
+    startct : invis left 180-63.43494882 ct@ sqrt(5)/2
+    ll : right 45 ~|lc@ 1/(2*sqrt(2)) \
+    left 45 lm@ 1/4 \
+    left 135-63.43494882 ct@ sqrt(5/32) \
+    right 90 ~ct@ sqrt(5/32) left 63.43494882-45
+    tt : right 90 ll left 90 lm@ 1/2 left 45 ~|lc@ 1/sqrt(2) left 45 ~|lm@  1/2 right 90
+    ct : left 63.43494882 ~lc@ 1/sqrt(5) \
+    right 63.43494882 |lt@ 1/2 \
+    right 90 ~|lt@ 1/2 \
+    left 63.43494882+45 ~|lm@ 1/sqrt(10) right 63.43494882-45
+    lm : right 45 ~|lc@ sqrt(2)/2 left 45 ll left 90 lm@ 1/2 left 90 |lm@ 1/2 right 180
+    lc : left 63.43494882 |ct@ sqrt(5)/4 \
+    right 63.43494882-45 tt@ sqrt(2)/4 \
+    right 135-63.43494882 ~lt@ sqrt(5)/4 \
+    right 63.43494882 |lc@ 1/2 left 90
+    lt : right 63.43494882 ~|lc@ 1/sqrt(5) \
+    left 45 lm@ 1/sqrt(10) \
+    left 45 ~|lc@ 1/sqrt(5) \
+    left 45 ~|lm@ 1/sqrt(10) right 135-63.43494882
+    line : line
+    invis : invis
+    invis ? invisible
+    #ll ? drawmethod midpoint
+    #tt ? drawmethod midpoint
+    #ct ? drawmethod midpoint
+    #lm ? drawmethod midpoint
+    #lc ? drawmethod midpoint
+    #lt ? drawmethod midpoint
 
 "Menger sponge"
-A : invis + A A A - |A - \
-A A A - |A + + invis invis
-invis : invis
-A ? localscale 1/3
-invis ? invisible
+    A : invis + A A A - |A - A A A - |A + + invis invis
+    invis : invis
+    invis ? invisible
