@@ -12,7 +12,6 @@
 #else
 #include <GL/glut.h>
 #endif
-#include "Rulerunner.h"
 
 using std::move;
 using std::make_unique;

@@ -1,5 +1,5 @@
 #include "Cmd.h"
-#include "Rulerunner.h"
+#include "DrawStrategy.hpp"
 #include "Turtle.h"
 
 void Command::evaluateExpressions(const Context& /*context*/) const
@@ -9,7 +9,7 @@ RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 		_angleExpression(std::move(_a)) {
 }
 
-void RotateCommand::executeOn(Rulerunner& target, int /* unused */) const {
+void RotateCommand::executeOn(RunState& target, int /* unused */) const {
 	target._drawStrategy.rotate(_angle);
 }
 
@@ -17,17 +17,17 @@ void RotateCommand::evaluateExpressions(const Context& context) const{
 	_angle = _angleExpression->eval(context);
 }
 
-void FlipCommand::executeOn(Rulerunner& target, int /* unused */) const
+void FlipCommand::executeOn(RunState& target, int /* unused */) const
 {
 	target._drawStrategy.flip();
 }
 
-void PushCommand::executeOn(Rulerunner& target, int /* unused */) const
+void PushCommand::executeOn(RunState& target, int /* unused */) const
 {
 	target._drawStrategy.push();
 }
 
-void PopCommand::executeOn(Rulerunner& target, int /* unused */) const
+void PopCommand::executeOn(RunState& target, int /* unused */) const
 {
 	target._drawStrategy.pop();
 }
@@ -38,7 +38,12 @@ RuleCommand::RuleCommand(std::string_view ruleName,
         _scaleExpression(std::move(scaleExpression)) {
 }
 
-void RuleCommand::executeOn(Rulerunner& target, int depth) const
+void RuleCommand::run(std::string_view startrule,const Ruletable &_rules, DrawStrategy & drawStrategy, int depth) {
+    RunState rr{_rules,drawStrategy};
+    RuleCommand(startrule,false,false).executeOn(rr , depth);
+}
+
+void RuleCommand::executeOn(RunState& target, int depth) const
 {
     const auto & rule = target._rules.at(_ruleName);
     

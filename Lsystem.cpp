@@ -6,7 +6,6 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "Rule.h"
-#include "Rulerunner.h"
 #include "Token.h"
 #include <fstream>
 #include <memory>
@@ -265,7 +264,6 @@ void Lsystem::evaluateExpressions(const Context &context) {
 void Lsystem::draw(int level, DrawStrategy & drawStrategy) const {
     drawStrategy.reset();
     drawStrategy.start();
-    Rulerunner rr{_rules,drawStrategy};
-    RuleCommand(startrule, false, false).executeOn(rr, level);
+    RuleCommand::run(startrule,_rules,drawStrategy,level);
     drawStrategy.finish();
 }

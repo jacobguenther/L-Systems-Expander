@@ -8,10 +8,24 @@
 
 class Context;
 class DrawStrategy;
-struct Rulerunner;
 class Turtle;
+class Rule;
+using Ruletable = std::unordered_map<std::string, Rule >;
 
 class Command {
+    friend class RuleCommand;
+protected:
+    struct RunState {
+    public:
+        const Ruletable &_rules;
+        DrawStrategy &_drawStrategy;
+        bool _backwards=false;
+    };
+
+private:
+    virtual void executeOn(RunState &target, int depth) const = 0;
+
+
 public:
     virtual ~Command() = default;
     Command() = default;
@@ -19,7 +33,6 @@ public:
     Command& operator=(const Command&) = delete;
     Command(Command&&) = delete;
     Command& operator=(Command&&) = delete;
-    virtual void executeOn(Rulerunner &target, int depth) const = 0;
     virtual void evaluateExpressions(const Context & /*unused*/) const;
 };
 
@@ -28,27 +41,27 @@ using Commands = std::deque<std::unique_ptr<Command>>;
 class RotateCommand : public Command {
 public:
 	explicit RotateCommand(std::unique_ptr<Parsenode> _a);
-    void executeOn(Rulerunner& target, int depth) const override;
     void evaluateExpressions(const Context& context) const override;
     
 private:
+    void executeOn(RunState& target, int depth) const override;
     std::unique_ptr<Parsenode> _angleExpression;
     mutable double _angle=0.0;
 };
 
 class FlipCommand : public Command {
-public:
-	void executeOn(Rulerunner& target, int depth) const override;
+private:
+	void executeOn(RunState& target, int depth) const override;
 };
 
 class PushCommand : public Command {
-public:
-	void executeOn(Rulerunner& target, int depth) const override;
+private:
+    void executeOn(RunState& target, int depth) const override;
 };
 
 class PopCommand : public Command {
-public:
-	void executeOn(Rulerunner& target, int depth) const override;
+private:
+    void executeOn(RunState& target, int depth) const override;
 };
 
 class RuleCommand : public Command {
@@ -56,11 +69,11 @@ public:
 	explicit RuleCommand(std::string_view ruleName, bool isReversed,
 			bool isFlipped, ParsenodePtr scaleExpression = parse("1.0"));
     
-    void executeOn(Rulerunner& target, int depth) const override;
-    
+    static void run(std::string_view startrule, const Ruletable &_rules, DrawStrategy & drawStrategy, int depth);
     void evaluateExpressions(const Context& context)  const override;
     
 private:
+    void executeOn(RunState& target, int depth) const override;
     const std::string _ruleName;
     bool _isReversed;
     bool _isFlipped;

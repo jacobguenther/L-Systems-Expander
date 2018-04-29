@@ -5,7 +5,6 @@
 #include "Context.h"
 #include "GlutFunctions.hpp"
 #include "Lsystem.h"
-#include "Rulerunner.h"
 #include <algorithm>
 #include <iostream>
 #include <sstream>

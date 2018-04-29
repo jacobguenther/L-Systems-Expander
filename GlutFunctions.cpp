@@ -8,7 +8,6 @@
 #include "Cmd.h"
 #include "Context.h"
 #include "Lsystem.h"
-#include "Rulerunner.h"
 #include <algorithm>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
