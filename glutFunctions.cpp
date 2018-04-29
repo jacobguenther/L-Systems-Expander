@@ -45,7 +45,7 @@ void display() {
     vars["p1"] = p1;
     Rulerunner runner(*curfractal, level, vars,
                       drawStrategyFactory(curfractal->getDrawStrategyToken()));
-    runner.draw();
+    runner.draw(curfractal->startRule());
     glutSwapBuffers();
     while (auto jj = glGetError())
         std::cerr << gluErrorString(jj) << endl;
