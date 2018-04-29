@@ -26,6 +26,9 @@ void Rule::readruleoptions(Lexer &lex) {
             t = lex.nexttoken();
             assertdatatoken(t);
             _localScaleExpression = parse(t);
+            _shouldFix = false;
+        } else if (t.getdata() == "nofix") {
+            _shouldFix = false;
         } else
             throw std::runtime_error("Unexpected option " + t.getdata());
         t = lex.nexttoken();
