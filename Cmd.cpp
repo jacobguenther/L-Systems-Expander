@@ -1,5 +1,6 @@
 #include "Cmd.h"
 #include "DrawStrategy.hpp"
+#include "Rule.h"
 #include "Turtle.h"
 
 void Command::evaluateExpressions(const Context& /*context*/) const

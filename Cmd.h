@@ -2,21 +2,18 @@
 #define CMD_H
 
 #include "Parser.h"
+#include "Rulefwd.hpp"
 #include <deque>
+#include <memory>
 #include <string>
 #include <utility>
 
-class Context;
 class DrawStrategy;
-class Turtle;
-class Rule;
-using Ruletable = std::unordered_map<std::string, Rule >;
 
 class Command {
-    friend class RuleCommand;
+friend class RuleCommand;
 protected:
     struct RunState {
-    public:
         const Ruletable &_rules;
         DrawStrategy &_drawStrategy;
         bool _backwards=false;
@@ -24,7 +21,6 @@ protected:
 
 private:
     virtual void executeOn(RunState &target, int depth) const = 0;
-
 
 public:
     virtual ~Command() = default;

@@ -7,6 +7,7 @@
 
 #include "Color.hpp"
 #include "DrawStrategy.hpp"
+#include "Rule.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else

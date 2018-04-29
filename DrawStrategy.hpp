@@ -8,9 +8,12 @@
 #ifndef DrawStrategy_hpp
 #define DrawStrategy_hpp
 
-#include "Parsenode.h"
+#include "Context.h"
+#include "Parser.h"
+#include "Rulefwd.hpp"
 #include "Turtle.h"
 #include <memory>
+#include <string>
 #include <vector>
 
 struct DrawStrategyToken {

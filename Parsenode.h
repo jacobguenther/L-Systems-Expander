@@ -12,8 +12,6 @@
 
 //!!! Maybe turn off warnings in this file wrt using double as bool and comparing double ==
 
-using ParsenodePtr = std::unique_ptr<Parsenode>;
-
 class Parsenode {
    public:
     Parsenode() = default;
@@ -28,6 +26,8 @@ class Parsenode {
    private:
     static bool lastconstruct;
 };
+
+using ParsenodePtr = std::unique_ptr<Parsenode>;
 
 class Ternopnode : public Parsenode {
    public:

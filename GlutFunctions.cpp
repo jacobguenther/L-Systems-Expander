@@ -38,7 +38,7 @@ const double THRESHMIN = .0001;
 
 void display() {
     Consttype vars;
-    
+
     glDrawBuffer(GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT);
     vars["p1"] = p1;

@@ -1,6 +1,7 @@
 #ifndef RULE_H
 #define RULE_H
 
+#include "Rulefwd.hpp"
 #include "Cmd.h"
 #include "Lexer.h"
 #include "Parser.h"
@@ -31,6 +32,4 @@ private:
 //    mutable double _rectWidth=0.05;
     mutable double _localScale=1.0;
 };
-
-using Ruletable = std::unordered_map<std::string, Rule >;
 #endif
