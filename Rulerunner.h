@@ -18,7 +18,7 @@ class Rulerunner {
 friend class RuleCommand; // RuleCommands need to modify _backwards
 friend class Command; // all Commands modify our _drawStrategy turtle
 public:
-    Rulerunner(const Lsystem &l, const Consttype &c,
+    Rulerunner(const Ruletable &rules, const Context &context,
                DrawStrategyPtr drawStrategy);
     const Context & getContext() const;
     const DrawStrategy & getDrawStrategy() const;
@@ -29,7 +29,7 @@ private:
     const Context _context;
     int _maxdepth;
     bool _backwards=false;
-    const Lsystem &_lSystem;
+    const Ruletable &_rules;
     DrawStrategyPtr _drawStrategy;
 };
 #endif

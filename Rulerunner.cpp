@@ -8,12 +8,12 @@
 
 using std::string;
 
-Rulerunner::Rulerunner(const Lsystem &l, const Consttype &c,
+Rulerunner::Rulerunner(const Ruletable &rules, const Context &context,
                        DrawStrategyPtr drawStrategy)
-    :_context(c, l.getExpressions())
-    , _lSystem(l)
+    :_context(context)
+    , _rules(rules)
     ,_drawStrategy(move(drawStrategy)) {
-    for (auto & [name,rule] : _lSystem.getRules())
+    for (auto & [name,rule] : _rules)
         rule.evaluateExpressions(_context); //!!! setContext should do ths
     getDrawStrategy().evaluateExpressions(_context);
 }
@@ -34,7 +34,7 @@ int Rulerunner::getMaxDepth() const {
 }
 
 const Ruletable & Rulerunner::getRules() const {
-    return _lSystem.getRules();
+    return _rules;
 }
 
 const DrawStrategy & Rulerunner::getDrawStrategy() const {

@@ -230,7 +230,7 @@ DrawStrategyToken Lsystem::getDrawStrategyToken() const {
 }
 
 void Lsystem::fixRules(const Consttype &c) {
-    Rulerunner runner(*this, c, make_unique<DrawStrategy>());
+    Rulerunner runner(getRules(), Context(c,getExpressions()), make_unique<DrawStrategy>());
     for(auto & [name,rule] : _rules) {
         if(!rule.shouldFix())
             continue;
