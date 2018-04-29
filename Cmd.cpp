@@ -52,7 +52,7 @@ void RuleCommand::executeOn(Rulerunner& target, int depth) const
         return;
     }
     
-    auto oldScale = artist(target).getscale();
+    auto oldScale = artist(target).getScale();
     artist(target).scaleby(_atScale*rule.getLocalScale());
     if (_isFlipped)
         artist(target).flip();
@@ -68,7 +68,7 @@ void RuleCommand::executeOn(Rulerunner& target, int depth) const
     target._backwards ^= _isReversed; //NOLINT
     if (_isFlipped)
         artist(target).flip();
-    artist(target).setscale(oldScale);
+    artist(target).setScale(oldScale);
 }
 
 void RuleCommand::evaluateExpressions(const Context& context) const {
