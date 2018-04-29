@@ -36,8 +36,10 @@ public:
     void push();
     void pop();
     void scaleby(double s);
-    double getscale() const;
-    void setscale(double s);
+    double getScale() const;
+    void setScale(double s);
+    Point getPosition() const;
+    double getAngle() const;
     virtual void start();
     virtual void finish();
 protected:

@@ -18,7 +18,8 @@ class Turtle {
 	double getscale() const;
 	int getflip() const;
 	void setscale(double s);
-	Point getposition();
+    Point getPosition() const;
+    double getAngle() const;
 	void push();
 	void pop();
    private:

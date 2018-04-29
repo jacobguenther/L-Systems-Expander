@@ -39,8 +39,12 @@ void Turtle::setscale(double s) {
 	_states.top()._scaleFactor = s;
 }
 
-Point Turtle::getposition() {
-	return _states.top()._position;
+Point Turtle::getPosition() const {
+    return _states.top()._position;
+}
+
+double Turtle::getAngle() const {
+    return _states.top()._angle;
 }
 
 void Turtle::push() {

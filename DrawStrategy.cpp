@@ -38,11 +38,11 @@ void DrawStrategy::reset() {
 void DrawStrategy::draw(const Rule &rule, bool ruleFlip, double atScale) {
     if (rule.doesNotDraw())
         return;
-    auto from = _turtle.getposition();
+    auto from = _turtle.getPosition();
     _turtle.forward(atScale);
     if (rule.drawsInvisibly())
         return;
-    auto to = _turtle.getposition();
+    auto to = _turtle.getPosition();
     drawImpl({from,to}, ruleFlip);
     _theta += 2*M_PI*((from.x-to.x)*(from.x-to.x)+(from.y-to.y)*(from.y-to.y));
 //    std::cout << _theta << "\n";
@@ -76,11 +76,19 @@ void DrawStrategy::scaleby(double s){
     scalebyImpl(s);
 }
 
-double DrawStrategy::getscale() const {
+double DrawStrategy::getScale() const {
     return _turtle.getscale();
 }
 
-void DrawStrategy::setscale(double s){
+Point DrawStrategy::getPosition() const {
+    return _turtle.getPosition();
+}
+
+double DrawStrategy::getAngle() const {
+    return _turtle.getAngle();
+}
+
+void DrawStrategy::setScale(double s){
     _turtle.setscale(s);
     setscaleImpl(s);
 }
@@ -144,7 +152,6 @@ void DropDrawStrategy::finish() {
 void DropDrawStrategy::drawImpl(const Motion &m, bool ruleFlip) {
     double dx = m.topt.x - m.frompt.x;
     double dy = m.topt.y - m.frompt.y;
-    //!!! cache these, then won't need to pass in the rulerunner
     auto da = _dropAngle*turtle().getflip()*DEG2RAD;
     if (ruleFlip)
         da *=-1;
