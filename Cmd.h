@@ -2,10 +2,9 @@
 #define CMD_H
 
 #include "Parser.h"
-#include <list>
+#include <deque>
 #include <string>
 #include <utility>
-#include <deque>
 
 class Context;
 class DrawStrategy;
