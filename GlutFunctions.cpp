@@ -43,10 +43,12 @@ void display() {
     glDrawBuffer(GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT);
     vars["p1"] = p1;
-    curfractal->fixRules(vars);
-    Rulerunner runner(curfractal->getRules(), Context(vars,curfractal->getExpressions()),
-                      drawStrategyFactory(curfractal->getDrawStrategyToken()));
-    runner.draw(curfractal->startRule(),level);
+    Context context(vars,curfractal->getExpressions());
+    curfractal->evaluateExpressions(context);
+    curfractal->fixRules(context);
+    auto drawStrategyPtr = drawStrategyFactory(curfractal->getDrawStrategyToken());
+    drawStrategyPtr->evaluateExpressions(context);
+    curfractal->draw(level,*drawStrategyPtr);
     glutSwapBuffers();
     while (auto jj = glGetError())
         std::cerr << gluErrorString(jj) << endl;

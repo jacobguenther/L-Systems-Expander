@@ -2,11 +2,6 @@
 #include "Rulerunner.h"
 #include "Turtle.h"
 
-DrawStrategy & Command::artist(const Rulerunner& rulerunner) const
-{
-    return *rulerunner._drawStrategy;
-}
-
 void Command::evaluateExpressions(const Context& /*context*/) const
 {}
 
@@ -15,7 +10,7 @@ RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 }
 
 void RotateCommand::executeOn(Rulerunner& target, int /* unused */) const {
-	artist(target).rotate(_angle);
+	target._drawStrategy.rotate(_angle);
 }
 
 void RotateCommand::evaluateExpressions(const Context& context) const{
@@ -24,17 +19,17 @@ void RotateCommand::evaluateExpressions(const Context& context) const{
 
 void FlipCommand::executeOn(Rulerunner& target, int /* unused */) const
 {
-	artist(target).flip();
+	target._drawStrategy.flip();
 }
 
 void PushCommand::executeOn(Rulerunner& target, int /* unused */) const
 {
-	artist(target).push();
+	target._drawStrategy.push();
 }
 
 void PopCommand::executeOn(Rulerunner& target, int /* unused */) const
 {
-	artist(target).pop();
+	target._drawStrategy.pop();
 }
 
 RuleCommand::RuleCommand(std::string_view ruleName,
@@ -48,14 +43,14 @@ void RuleCommand::executeOn(Rulerunner& target, int depth) const
     const auto & rule = target._rules.at(_ruleName);
     
     if (depth == 0) {
-        target._drawStrategy->draw(rule,_isFlipped,_atScale);
+        target._drawStrategy.draw(rule,_isFlipped,_atScale);
         return;
     }
     
-    auto oldScale = artist(target).getScale();
-    artist(target).scaleby(_atScale*rule.getLocalScale());
+    auto oldScale = target._drawStrategy.getScale();
+    target._drawStrategy.scaleby(_atScale*rule.getLocalScale());
     if (_isFlipped)
-        artist(target).flip();
+        target._drawStrategy.flip();
     target._backwards ^= _isReversed; //NOLINT
 
     if(target._backwards)
@@ -67,8 +62,8 @@ void RuleCommand::executeOn(Rulerunner& target, int depth) const
 
     target._backwards ^= _isReversed; //NOLINT
     if (_isFlipped)
-        artist(target).flip();
-    artist(target).setScale(oldScale);
+        target._drawStrategy.flip();
+    target._drawStrategy.setScale(oldScale);
 }
 
 void RuleCommand::evaluateExpressions(const Context& context) const {

@@ -6,26 +6,15 @@
 #include "Parser.h"
 #include "Rule.h"
 #include "Turtle.h"
-#include <list>
-#include <stack>
-#include <stdexcept>
 #include <string>
-#include <unordered_map>
 
-class Lexer;
-
-class Rulerunner {
-friend class RuleCommand; // RuleCommands need to modify _backwards
+struct Rulerunner {
+    friend class RuleCommand; //structstructnds need to modify _backwards
 friend class Command; // all Commands modify our _drawStrategy turtle
 public:
-    Rulerunner(const Ruletable &rules, const Context &context,
-               DrawStrategyPtr drawStrategy);
-    const DrawStrategy & getDrawStrategy() const;
-    void draw(std::string_view startRule, int level);
-    int getMaxDepth() const;
-private:
-    bool _backwards=false;
+//    Rulerunner(const Ruletable &rules, DrawStrategy &drawStrategy);
     const Ruletable &_rules;
-    DrawStrategyPtr _drawStrategy;
+    DrawStrategy &_drawStrategy;
+    bool _backwards=false;
 };
 #endif

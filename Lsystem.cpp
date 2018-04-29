@@ -229,8 +229,8 @@ DrawStrategyToken Lsystem::getDrawStrategyToken() const {
     return _drawStrategyToken;
 }
 
-void Lsystem::fixRules(const Consttype &c) {
-    Rulerunner runner(getRules(), Context(c,getExpressions()), make_unique<DrawStrategy>());
+void Lsystem::fixRules(const Context &context) {
+    DrawStrategy drawStrategy;
     for(auto & [name,rule] : _rules) {
         if(!rule.shouldFix())
             continue;
@@ -239,16 +239,33 @@ void Lsystem::fixRules(const Consttype &c) {
             rule._commands.pop_back();
         }
         rule._localScale = 1.0;
-        runner.draw(name,1);
-        auto endPoint = runner.getDrawStrategy().getPosition();
+        draw(1,drawStrategy);
+        auto endPoint = drawStrategy.getPosition();
         auto distanceSqr = endPoint.x*endPoint.x+endPoint.y*endPoint.y;
         if( distanceSqr < 0.01)
             continue; //!!!possibly still want to fix turtle angle here?
-        rule._localScaleExpression = parse(std::to_string(1.0/sqrt(distanceSqr)));
+        rule._localScale = 1.0/sqrt(distanceSqr);
+        rule._localScaleExpression = parse(std::to_string(rule._localScale));
         auto angleWent = atan2(endPoint.y,endPoint.x)/DEG2RAD;
         rule._commands.push_front(make_unique<RotateCommand>(parse(std::to_string(-angleWent))));
-        auto endTurtleAngle = runner.getDrawStrategy().getAngle();
+        rule._commands.front()->evaluateExpressions(context);
+        auto endTurtleAngle = drawStrategy.getAngle();
         rule._commands.push_back(make_unique<RotateCommand>(parse(std::to_string(angleWent-endTurtleAngle))));
+        rule._commands.back()->evaluateExpressions(context);
         rule._isFixed = true;
     }
+}
+
+void Lsystem::evaluateExpressions(const Context &context) {
+    for (auto & [name,rule] : _rules)
+        rule.evaluateExpressions(context);
+    fixRules(context);
+}
+
+void Lsystem::draw(int level, DrawStrategy & drawStrategy) const {
+    drawStrategy.reset();
+    drawStrategy.start();
+    Rulerunner rr{_rules,drawStrategy};
+    RuleCommand(startrule, false, false).executeOn(rr, level);
+    drawStrategy.finish();
 }

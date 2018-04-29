@@ -12,7 +12,6 @@
 #include "Turtle.h"
 #include <memory>
 #include <vector>
-class Rulerunner;
 
 struct DrawStrategyToken {
     std::string _name;

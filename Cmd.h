@@ -8,12 +8,10 @@
 
 class Context;
 class DrawStrategy;
-class Rulerunner;
+struct Rulerunner;
 class Turtle;
 
 class Command {
-protected:
-    DrawStrategy & artist(const Rulerunner& rulerunner) const;
 public:
     virtual ~Command() = default;
     Command() = default;
