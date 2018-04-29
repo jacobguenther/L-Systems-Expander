@@ -22,7 +22,7 @@ public:
                DrawStrategyPtr drawStrategy);
     const Context & getContext() const;
     const DrawStrategy & getDrawStrategy() const;
-    void draw();
+    void draw(std::string_view startRule);
     int getMaxDepth() const;
     const Ruletable & getRules() const;
 private:

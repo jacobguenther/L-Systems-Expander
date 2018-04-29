@@ -23,10 +23,10 @@ const Context & Rulerunner::getContext() const {
     return _context;
 }
 
-void Rulerunner::draw() {
+void Rulerunner::draw(std::string_view startRule) {
     _drawStrategy->reset();
     _drawStrategy->start();
-    RuleCommand(_lSystem.startRule(), false, false).executeOn(*this, 0);
+    RuleCommand(startRule, false, false).executeOn(*this, 0);
     _drawStrategy->finish();
 }
 
