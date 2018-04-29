@@ -1,3 +1,22 @@
+niner
+    a : a + |a - a + |a - a right 60 |a - a + |a left 60 a
+    system ? rotationangle 120 #drawmethod midpoint
+
+sevener
+    $sm  = asind(1/(2*sqrt(7)))
+    $sm2 = asind(sqrt(3)/(2*sqrt(7)))
+    a :                  a  \
+    right 90+$sm-$sm2    a  \
+    right 90+$sm2-$sm   ~a  \
+    left 2*$sm2          a  \
+    right 2*$sm2        ~a  \
+    left 90+$sm2-$sm     a  \
+    left 90+$sm-$sm2     a
+
+13.1
+    a : a - a a - a + a - a a a + a - a + a a + a
+    system ? rotationangle 120
+
 dragon
     A : A - ~A
 
