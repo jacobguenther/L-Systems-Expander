@@ -230,7 +230,7 @@ DrawStrategyToken Lsystem::getDrawStrategyToken() const {
 }
 
 void Lsystem::fixRules(const Consttype &c) {
-    Rulerunner runner(*this, 1, c, make_unique<DrawStrategy>());
+    Rulerunner runner(*this, c, make_unique<DrawStrategy>());
     for(auto & [name,rule] : _rules) {
         if(!rule.shouldFix())
             continue;
@@ -239,7 +239,7 @@ void Lsystem::fixRules(const Consttype &c) {
             rule._commands.pop_back();
         }
         rule._localScale = 1.0;
-        runner.draw(name);
+        runner.draw(name,1);
         auto endPoint = runner.getDrawStrategy().getPosition();
         auto distanceSqr = endPoint.x*endPoint.x+endPoint.y*endPoint.y;
         if( distanceSqr < 0.01)

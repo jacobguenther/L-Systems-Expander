@@ -8,10 +8,9 @@
 
 using std::string;
 
-Rulerunner::Rulerunner(const Lsystem &l, int maxdepth, const Consttype &c,
+Rulerunner::Rulerunner(const Lsystem &l, const Consttype &c,
                        DrawStrategyPtr drawStrategy)
     :_context(c, l.getExpressions())
-    ,_maxdepth(maxdepth)
     , _lSystem(l)
     ,_drawStrategy(move(drawStrategy)) {
     for (auto & [name,rule] : _lSystem.getRules())
@@ -23,10 +22,10 @@ const Context & Rulerunner::getContext() const {
     return _context;
 }
 
-void Rulerunner::draw(std::string_view startRule) {
+void Rulerunner::draw(std::string_view startRule, int level) {
     _drawStrategy->reset();
     _drawStrategy->start();
-    RuleCommand(startRule, false, false).executeOn(*this, 0);
+    RuleCommand(startRule, false, false).executeOn(*this, level);
     _drawStrategy->finish();
 }
 

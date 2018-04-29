@@ -44,9 +44,9 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     vars["p1"] = p1;
     curfractal->fixRules(vars);
-    Rulerunner runner(*curfractal, level, vars,
+    Rulerunner runner(*curfractal, vars,
                       drawStrategyFactory(curfractal->getDrawStrategyToken()));
-    runner.draw(curfractal->startRule());
+    runner.draw(curfractal->startRule(),level);
     glutSwapBuffers();
     while (auto jj = glGetError())
         std::cerr << gluErrorString(jj) << endl;
