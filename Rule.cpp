@@ -53,3 +53,10 @@ bool Rule::doesNotDraw() const {
 bool Rule::drawsInvisibly() const {
     return _drawsInvisibly;
 }
+
+bool Rule::isFixed() const {
+    return _isFixed;
+}
+bool Rule::shouldFix() const {
+    return _shouldFix;
+}

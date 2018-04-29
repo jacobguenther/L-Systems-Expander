@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 class Rule {
+    friend class Lsystem;
    public:
     void readruleoptions(Lexer &lex);
 	void setcmds(Commands&& newcmds);//!!! pass copy move
@@ -17,12 +18,16 @@ class Rule {
     const Commands & getCommands() const;
     bool doesNotDraw() const;
     bool drawsInvisibly() const;
+    bool isFixed() const;
+    bool shouldFix() const;
 private:
     Commands _commands;
 //    std::unique_ptr<Parsenode> _rectWidthExpression;
     std::unique_ptr<Parsenode> _localScaleExpression;
     bool _drawsInvisibly=false;
     bool _doesNotDraw=false;
+    bool _isFixed=false;
+    bool _shouldFix=true;
 //    mutable double _rectWidth=0.05;
     mutable double _localScale=1.0;
 };
