@@ -45,7 +45,7 @@ public:
 protected:
     const Turtle & turtle();
 private:
-    virtual void drawImpl(const Motion &m, bool ruleFlip) =0;
+    virtual void drawImpl(const Motion &m, bool ruleFlip);
     virtual void rotateImpl(double angle);
     virtual void flipImpl();
     virtual void pushImpl();

@@ -28,6 +28,9 @@ DrawStrategyPtr drawStrategyFactory(const DrawStrategyToken &dst) {
     throw std::runtime_error("Unrecognized draw strategy in drawStrategyFactory");
 }
 
+void DrawStrategy::drawImpl(const Motion & /*m*/, bool /*ruleFlip*/){
+}
+
 void DrawStrategy::evaluateExpressions(const Context& /*context*/) const
 {}
 
