@@ -10,16 +10,11 @@ using std::string;
 
 Rulerunner::Rulerunner(const Ruletable &rules, const Context &context,
                        DrawStrategyPtr drawStrategy)
-    :_context(context)
-    , _rules(rules)
+    :_rules(rules)
     ,_drawStrategy(move(drawStrategy)) {
     for (auto & [name,rule] : _rules)
-        rule.evaluateExpressions(_context); //!!! setContext should do ths
-    getDrawStrategy().evaluateExpressions(_context);
-}
-
-const Context & Rulerunner::getContext() const {
-    return _context;
+        rule.evaluateExpressions(context); //!!! setContext should do ths
+    getDrawStrategy().evaluateExpressions(context);
 }
 
 void Rulerunner::draw(std::string_view startRule, int level) {
@@ -27,14 +22,6 @@ void Rulerunner::draw(std::string_view startRule, int level) {
     _drawStrategy->start();
     RuleCommand(startRule, false, false).executeOn(*this, level);
     _drawStrategy->finish();
-}
-
-int Rulerunner::getMaxDepth() const {
-    return _maxdepth;
-}
-
-const Ruletable & Rulerunner::getRules() const {
-    return _rules;
 }
 
 const DrawStrategy & Rulerunner::getDrawStrategy() const {

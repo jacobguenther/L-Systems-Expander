@@ -45,7 +45,7 @@ RuleCommand::RuleCommand(std::string_view ruleName,
 
 void RuleCommand::executeOn(Rulerunner& target, int depth) const
 {
-    const auto & rule = target.getRules().at(_ruleName);
+    const auto & rule = target._rules.at(_ruleName);
     
     if (depth == 0) {
         target._drawStrategy->draw(rule,_isFlipped,_atScale);
