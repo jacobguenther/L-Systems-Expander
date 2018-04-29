@@ -182,6 +182,7 @@ void Lsystem::readSystemOptions(Lexer &lex) {
 //            else if (t.getdata() == "rectangle")
 //                ...
             else if (_drawStrategyToken._name == "midpoint") {
+                _drawStrategyToken._name = "drop";
                 _drawStrategyToken._parameters.emplace_back("0.0");
                 _drawStrategyToken._parameters.emplace_back("1.0/2.0");
             } else
