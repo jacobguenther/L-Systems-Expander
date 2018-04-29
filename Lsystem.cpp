@@ -6,6 +6,7 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "Rule.h"
+#include "Rulerunner.h"
 #include "Token.h"
 #include <fstream>
 #include <memory>
@@ -227,3 +228,30 @@ DrawStrategyToken Lsystem::getDrawStrategyToken() const {
     return _drawStrategyToken;
 }
 
+void Lsystem::fixRules(const Consttype &c) {
+    Rulerunner runner(*this, 1, c, make_unique<DrawStrategy>());
+    for(auto & [name,rule] : _rules) {
+        if(!rule.shouldFix())
+            continue;
+        if(rule.isFixed()) {
+            rule._commands.pop_front();
+            rule._commands.pop_back();
+        }
+        string t(name);
+        Rule &trule(_rules.at(t));
+        auto numCommands = trule._commands.size();
+        std::cout << numCommands << "\n";
+        runner.draw(name);
+        
+        auto endPoint = runner.getDrawStrategy().getPosition();
+        auto distance = endPoint.x*endPoint.x+endPoint.y*endPoint.y;
+        if( distance < 0.01)
+            continue;
+        rule._localScaleExpression = parse(std::to_string(rule._localScale/sqrt(distance)));
+        auto angleWent = atan2(endPoint.y,endPoint.x)/DEG2RAD;
+        rule._commands.push_front(make_unique<RotateCommand>(parse(std::to_string(-angleWent))));
+        auto endTurtleAngle = runner.getDrawStrategy().getAngle();
+        rule._commands.push_back(make_unique<RotateCommand>(parse(std::to_string(angleWent-endTurtleAngle))));
+        rule._isFixed = true;
+    }
+}

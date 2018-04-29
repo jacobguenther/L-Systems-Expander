@@ -20,6 +20,7 @@ class Lsystem {
     const Ruletable & getRules() const;
     const std::string & startRule() const;
     DrawStrategyToken getDrawStrategyToken() const;
+    void fixRules(const Consttype &c);
 private:
     void readSystemOptions(Lexer &lex);
     

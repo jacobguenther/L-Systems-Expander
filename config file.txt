@@ -1,13 +1,12 @@
+dragon
+A : A - ~A
+
 Hilbert2
     S : A - forward - A - forward -
     A : + ~A forward - A forward A - forward ~A +
     A ? localscale 1/2 nodraw
     forward : forward
     forward ? localscale 1/2
-
-dragon
-    A : left 45 A - ~A left 45
-    A ? localscale 1/sqrt(2)
 
 AltDragon-p
     $a = 90*p1
@@ -25,9 +24,8 @@ bisquare
 	b ? localscale 1/3
 
 Terdragon
-	A : + A - - - - A + + + + A -
-	A ? localscale 1/sqrt(3)
-    system ?  rotationangle 30
+	A : A - A + A
+    system ?  rotationangle 120
 
 sevener.1
 	$sm2 = asind(sqrt(3)/(2*sqrt(7)))
