@@ -68,8 +68,8 @@ void DrawStrategy::push(){
 }
 
 void DrawStrategy::pop(){
-    _turtle.pop();
     finish();
+    _turtle.pop();
     start();
     popImpl();
 }
