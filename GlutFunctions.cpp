@@ -44,7 +44,6 @@ void display() {
     vars["p1"] = p1;
     Context context(vars,curfractal->getExpressions());
     curfractal->evaluateExpressions(context);
-    curfractal->fixRules(context);
     auto drawStrategyPtr = drawStrategyFactory(curfractal->getDrawStrategyToken());
     drawStrategyPtr->evaluateExpressions(context);
     curfractal->draw(level,*drawStrategyPtr);
