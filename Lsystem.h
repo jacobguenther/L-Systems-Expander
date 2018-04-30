@@ -23,6 +23,7 @@ class Lsystem {
     void fixRules(const Context &context);
     void evaluateExpressions(const Context &context);
     void draw(int level, DrawStrategy & drawStrategy) const;
+    void draw(int level, DrawStrategy & drawStrategy, std::string_view name) const;
 private:
     void readSystemOptions(Lexer &lex);
     

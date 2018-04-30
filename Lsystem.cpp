@@ -238,7 +238,7 @@ void Lsystem::fixRules(const Context &context) {
             rule._commands.pop_back();
         }
         rule._localScale = 1.0;
-        draw(1,drawStrategy);
+        draw(1,drawStrategy,name);
         auto endPoint = drawStrategy.getPosition();
         auto distanceSqr = endPoint.x*endPoint.x+endPoint.y*endPoint.y;
         if( distanceSqr < 0.01)
@@ -262,8 +262,12 @@ void Lsystem::evaluateExpressions(const Context &context) {
 }
 
 void Lsystem::draw(int level, DrawStrategy & drawStrategy) const {
+    draw(level, drawStrategy, startrule);
+}
+
+void Lsystem::draw(int level, DrawStrategy & drawStrategy, std::string_view name) const {
     drawStrategy.reset();
     drawStrategy.start();
-    RuleCommand::run(startrule,_rules,drawStrategy,level);
+    RuleCommand::run(name,_rules,drawStrategy,level);
     drawStrategy.finish();
 }
