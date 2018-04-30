@@ -48,6 +48,17 @@ void RuleCommand::run(std::string_view startrule,const Ruletable &_rules, DrawSt
     RuleCommand(startrule,false,false).executeOn(rr , depth);
 }
 
+template <typename Func>
+void forwardOrBackwards(bool backwards,const Commands &c, Func f)
+{
+    if(backwards)
+        for(auto i = c.rbegin(); i != c.rend(); ++i)
+            f(i);
+    else
+        for(auto i = c.begin(); i != c.end(); ++i)
+            f(i);
+}
+
 void RuleCommand::executeOn(RunState& target, int depth) const
 {
     const auto & rule = target._rules.at(_ruleName);
@@ -63,12 +74,8 @@ void RuleCommand::executeOn(RunState& target, int depth) const
         target._drawStrategy.flip();
     target._backwards ^= _isReversed; //NOLINT
 
-    if(target._backwards)
-        for(auto i = rule.getCommands().rbegin(); i != rule.getCommands().rend(); ++i)
-            forwardExecuteTo(**i,target,depth-1);
-    else
-        for(auto &i : rule.getCommands())
-            forwardExecuteTo(*i,target,depth-1);
+    forwardOrBackwards(target._backwards, rule.getCommands(), [&](auto i){
+        forwardExecuteTo(**i,target,depth-1);});
 
     target._backwards ^= _isReversed; //NOLINT
     if (_isFlipped)

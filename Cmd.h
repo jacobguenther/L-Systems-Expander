@@ -30,6 +30,7 @@ public:
     Command& operator=(const Command&) = delete;
     Command(Command&&) = delete;
     Command& operator=(Command&&) = delete;
+    
     virtual void evaluateExpressions(const Context & /*unused*/) const;
 };
 
