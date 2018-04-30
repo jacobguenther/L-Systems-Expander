@@ -6,6 +6,10 @@
 void Command::evaluateExpressions(const Context& /*context*/) const
 {}
 
+void Command::forwardExecuteTo(const Command &command, RunState &target, int depth) const {
+    command.executeOn(target, depth);
+}
+
 RotateCommand::RotateCommand(std::unique_ptr<Parsenode> _a) :
 		_angleExpression(std::move(_a)) {
 }
@@ -61,10 +65,10 @@ void RuleCommand::executeOn(RunState& target, int depth) const
 
     if(target._backwards)
         for(auto i = rule.getCommands().rbegin(); i != rule.getCommands().rend(); ++i)
-            (*i)->executeOn(target,depth-1);
+            forwardExecuteTo(**i,target,depth-1);
     else
         for(auto &i : rule.getCommands())
-            i->executeOn(target,depth-1);
+            forwardExecuteTo(*i,target,depth-1);
 
     target._backwards ^= _isReversed; //NOLINT
     if (_isFlipped)

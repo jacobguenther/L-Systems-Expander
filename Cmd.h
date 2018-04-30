@@ -11,14 +11,15 @@
 class DrawStrategy;
 
 class Command {
-friend class RuleCommand;
 protected:
     struct RunState {
         const Ruletable &_rules;
         DrawStrategy &_drawStrategy;
         bool _backwards=false;
     };
-
+    
+    void forwardExecuteTo(const Command &command, RunState &target, int depth) const;
+    
 private:
     virtual void executeOn(RunState &target, int depth) const = 0;
 
