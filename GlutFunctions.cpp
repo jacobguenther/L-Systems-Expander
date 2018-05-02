@@ -11,6 +11,7 @@
 #include <algorithm>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
+#include <GLKit/GLKMatrix4.h>
 #else
 #include <GL/glut.h>
 #endif
@@ -36,6 +37,16 @@ double thresh = 0.003;
 const double THRESHMAX = 1.0;
 const double THRESHMIN = .0001;
 
+inline void setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top)
+{
+#ifdef __APPLE__
+    GLKMatrix4 newOrtho = GLKMatrix4MakeOrtho(left, right, bottom, top, -1.0f, 1.0f);
+    glLoadMatrixf(newOrtho.m);
+#else
+    gluOrtho2D(left, right, bottom, top);
+#endif
+}
+    
 void display() {
     Consttype vars;
 
@@ -56,7 +67,7 @@ void init() {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-0.5, 1.5, -1, 1);
+    setOrthographicMatrix(-0.5, 1.5, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glLineWidth(2.0);
@@ -179,9 +190,9 @@ void reshape(int w, int h) {
     glLoadIdentity();
     
     if (w <= h)
-        gluOrtho2D(-0.5, 1.5, -1.0 * h / w, 1.0 * h / w);
+        setOrthographicMatrix(-0.5, 1.5, -1.0 * h / w, 1.0 * h / w);
     else
-        gluOrtho2D(-0.5 * w / h, 1.5 * w / h, -1.0, 1.0);
+        setOrthographicMatrix(-0.5 * w / h, 1.5 * w / h, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
     glutPostRedisplay();
 }
