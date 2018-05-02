@@ -40,7 +40,7 @@ const double THRESHMIN = .0001;
 inline void setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top)
 {
 #ifdef __APPLE__
-    GLKMatrix4 newOrtho = GLKMatrix4MakeOrtho(left, right, bottom, top, -1.0f, 1.0f);
+    GLKMatrix4 newOrtho = GLKMatrix4MakeOrtho(float(left), float(right), float(bottom), float(top), -1.0f, 1.0f);
     glLoadMatrixf(newOrtho.m);
 #else
     gluOrtho2D(left, right, bottom, top);
