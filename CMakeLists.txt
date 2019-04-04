@@ -13,8 +13,8 @@ Context.h
 Context.cpp
 DrawStrategy.hpp
 DrawStrategy.cpp
-GlutFunctions.hpp
-GlutFunctions.cpp
+GLFWwrapper.hpp
+GLFWwrapper.cpp
 Lexer.cpp
 Lexer.h
 Lsystem.cpp
@@ -51,14 +51,14 @@ set(CMAKE_CXX_FLAGS
 ")
 
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
-include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+find_package(glfw3 3.2 REQUIRED)
+include_directories( ${OPENGL_INCLUDE_DIRS})
 
 add_executable(testsuite ${SOURCES} catchmain.cpp tests.cpp )
-target_link_libraries(testsuite ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+target_link_libraries(testsuite ${OPENGL_LIBRARIES} glfw)
 
 add_executable(lsystems ${SOURCES} main.cpp "config file.txt")
 configure_file("config file.txt" "config file.txt" COPYONLY)
-target_link_libraries(lsystems ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+target_link_libraries(lsystems ${OPENGL_LIBRARIES} glfw)
 
 
