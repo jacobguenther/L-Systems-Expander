@@ -1,6 +1,6 @@
 //
 //  GLFWwrapper.cpp
-//  lsystem
+//  GLFWwrapper.cpp
 //
 //  Created by Jacob Guenther on 4/3/2019
 //
@@ -79,10 +79,9 @@ void GLFWwrapper::glfwKeyCallback(
     }
 
     auto associatedWrapper = static_cast<GLFWwrapper*>(glfwGetWindowUserPointer(window));
-    if (GLFWwrapper::isKeyNumber(key))
-    {
-        auto number = GLFWwrapper::numberOfKey(key);
-        associatedWrapper->adjustLevel(number);
+    auto maybeNumber = GLFWwrapper::glfwKeyMacroToNumber(key);
+    if (maybeNumber.value_or(-1) >= 0) {
+        associatedWrapper->adjustLevel(maybeNumber.value());
     }
     else
     {
@@ -229,25 +228,7 @@ void GLFWwrapper::updateTitle()
         + " " + _curfractal->getname()
         + " Level: " + to_string(_level)).c_str());
 }
-bool GLFWwrapper::isKeyNumber(int keyMacro)
-{
-    switch (keyMacro) {
-        case GLFW_KEY_0:
-        case GLFW_KEY_1:
-        case GLFW_KEY_2:
-        case GLFW_KEY_3:
-        case GLFW_KEY_4:
-        case GLFW_KEY_5:
-        case GLFW_KEY_6:
-        case GLFW_KEY_7:
-        case GLFW_KEY_8:
-        case GLFW_KEY_9:
-            return true;
-        default:
-            return false;
-    };
-}
-int GLFWwrapper::numberOfKey(int keyMacro)
+std::optional<int> GLFWwrapper::glfwKeyMacroToNumber(int keyMacro)
 {
     switch (keyMacro) {
         case GLFW_KEY_0:
@@ -271,7 +252,7 @@ int GLFWwrapper::numberOfKey(int keyMacro)
         case GLFW_KEY_9:
             return 9;
         default:
-            throw(runtime_error("GLFW macro is not a number key"));
+            return {};
     };   
 }
 

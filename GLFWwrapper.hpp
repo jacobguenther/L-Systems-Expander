@@ -1,6 +1,6 @@
 //
 //  GLFWwrapper.hpp
-//  lsystem
+//  GLFWwrapper.hpp
 //
 //  Created by Jacob Guenther on 4/3/2019
 //
@@ -74,8 +74,7 @@ private:
         int action, int mods);
     static void glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height);
 
-    static bool isKeyNumber(int keyMacro);
-    static int numberOfKey(int keyMacro);
+    static std::optional<int> glfwKeyMacroToNumber(int keyMacro);
 
     static void setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top);
 };
