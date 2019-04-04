@@ -1,6 +1,5 @@
 //
 //  GLFWwrapper.hpp
-//  GLFWwrapper.hpp
 //
 //  Created by Jacob Guenther on 4/3/2019
 //
@@ -13,17 +12,17 @@
 #include "Lsystem.h"
 #include "WindowCreateData.hpp"
 
-#include <algorithm>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <string_view>
 #include <utility>
 
 class GLFWwrapper {
-public:
+   public:
     using LsystemContainer = std::vector<Lsystem>;
     using SystemIterator = std::vector<Lsystem>::iterator;
 
@@ -35,7 +34,8 @@ public:
     ~GLFWwrapper();
 
     void run() const;
-private:
+
+   private:
     WindowCreateData _createData;
     GLFWwindow* _window;
     int _level;
@@ -69,10 +69,10 @@ private:
     static const double MAX_PRESS_SPEED;
     static double LAST_PRESS_TIME;
     static void glfwKeyCallback(
-        GLFWwindow *window,
+        GLFWwindow* window,
         int key, int scancode,
         int action, int mods);
-    static void glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height);
+    static void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
     static std::optional<int> glfwKeyMacroToNumber(int keyMacro);
 

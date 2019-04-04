@@ -1,19 +1,18 @@
 //
 //  GLFWwrapper.cpp
-//  GLFWwrapper.cpp
 //
 //  Created by Jacob Guenther on 4/3/2019
 //
 
 #include "GLFWwrapper.hpp"
 
-using std::pair;
 using std::cout;
 using std::endl;
-using std::move;
-using std::to_string;
-using std::runtime_error;
 using std::find_if;
+using std::move;
+using std::pair;
+using std::runtime_error;
+using std::to_string;
 
 const double GLFWwrapper::MAX_PRESS_SPEED{0.2};
 double GLFWwrapper::LAST_PRESS_TIME{0};
@@ -22,13 +21,7 @@ const double GLFWwrapper::THRESHOLD_MAX{1.0};
 const double GLFWwrapper::THRESHOLD_MIN{0.0001};
 
 GLFWwrapper::GLFWwrapper(WindowCreateData createData)
-    : _createData{createData}
-    , _window{nullptr}
-    , _level{1}
-    , _scaleAmount{1.4}
-    , _moveSize{0.01}
-    , _tx{-0.5}, _ty{0.0}, _sc{1.0}
-{
+    : _createData{createData}, _window{nullptr}, _level{1}, _scaleAmount{1.4}, _moveSize{0.01}, _tx{-0.5}, _ty{0.0}, _sc{1.0} {
     glfwSetErrorCallback(GLFWwrapper::glfwErrorCallback);
     auto isInit = glfwInit();
     if (!isInit) {
@@ -44,13 +37,13 @@ GLFWwrapper::GLFWwrapper(WindowCreateData createData)
     if (_window == nullptr) {
         throw(runtime_error("Failed to create glfwCreateWindow"));
     }
-    
+
     glfwSetWindowUserPointer(_window, this);
     glfwSetInputMode(_window, GLFW_STICKY_KEYS, 1);
 
     glfwMakeContextCurrent(_window);
     glfwSwapInterval(static_cast<int>(_createData._shouldSyncFrame));
-    
+
     setInitialGLState();
 
     glfwSetKeyCallback(_window, GLFWwrapper::glfwKeyCallback);
@@ -58,19 +51,16 @@ GLFWwrapper::GLFWwrapper(WindowCreateData createData)
 
     readTheConfigFile();
 }
-GLFWwrapper::~GLFWwrapper()
-{
+GLFWwrapper::~GLFWwrapper() {
     glfwDestroyWindow(_window);
     glfwTerminate();
 }
-void GLFWwrapper::glfwErrorCallback(int error, const char* description)
-{
+void GLFWwrapper::glfwErrorCallback(int error, const char* description) {
     cout << "Error Number: " << error << "::" << description << endl;
 }
 void GLFWwrapper::glfwKeyCallback(
-    GLFWwindow *window,
-    int key, int /* scancode */, int /* action */, int /* mods */)
-{
+    GLFWwindow* window,
+    int key, int /* scancode */, int /* action */, int /* mods */) {
     auto currentTime = glfwGetTime();
     if (currentTime - GLFWwrapper::LAST_PRESS_TIME > GLFWwrapper::MAX_PRESS_SPEED) {
         LAST_PRESS_TIME = currentTime;
@@ -82,9 +72,7 @@ void GLFWwrapper::glfwKeyCallback(
     auto maybeNumber = GLFWwrapper::glfwKeyMacroToNumber(key);
     if (maybeNumber.value_or(-1) >= 0) {
         associatedWrapper->adjustLevel(maybeNumber.value());
-    }
-    else
-    {
+    } else {
         auto currentLevel = associatedWrapper->get_level();
         switch (key) {
             case GLFW_KEY_ESCAPE:
@@ -156,12 +144,11 @@ void GLFWwrapper::glfwKeyCallback(
         }
     }
 }
-void GLFWwrapper::glfwFramebufferSizeCallback(GLFWwindow * /* window */, int width, int height)
-{
+void GLFWwrapper::glfwFramebufferSizeCallback(GLFWwindow* /* window */, int width, int height) {
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+
     if (width <= height) {
         setOrthographicMatrix(-0.5, 1.5, -1.0 * height / width, 1.0 * height / width);
     } else {
@@ -171,20 +158,17 @@ void GLFWwrapper::glfwFramebufferSizeCallback(GLFWwindow * /* window */, int wid
     glMatrixMode(GL_MODELVIEW);
 }
 
-void GLFWwrapper::readTheConfigFile()
-{
+void GLFWwrapper::readTheConfigFile() {
     _systems = readlsystemfile();
-    _curfractal = find_if(_systems.begin(),_systems.end(),[](const auto &f){return f.isactive();});
-    if (_curfractal==_systems.end()) {
+    _curfractal = find_if(_systems.begin(), _systems.end(), [](const auto& f) { return f.isactive(); });
+    if (_curfractal == _systems.end()) {
         throw(runtime_error("No active fractals in config file"));
     }
     updateTitle();
 }
 
-void GLFWwrapper::run() const
-{
-    while (!glfwWindowShouldClose(_window))
-    {   
+void GLFWwrapper::run() const {
+    while (!glfwWindowShouldClose(_window)) {
         Consttype vars;
         glDrawBuffer(GL_BACK);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -194,7 +178,7 @@ void GLFWwrapper::run() const
         _curfractal->evaluateExpressions(context);
         auto drawStrategyPtr = drawStrategyFactory(_curfractal->getDrawStrategyToken());
         drawStrategyPtr->evaluateExpressions(context);
-        _curfractal->draw(_level,*drawStrategyPtr);
+        _curfractal->draw(_level, *drawStrategyPtr);
 
         while (auto jj = glGetError()) {
             std::cerr << gluErrorString(jj) << endl;
@@ -204,32 +188,25 @@ void GLFWwrapper::run() const
         glfwSwapBuffers(_window);
     }
 }
-pair<int, int> GLFWwrapper::get_framebufferSize() const
-{
+pair<int, int> GLFWwrapper::get_framebufferSize() const {
     int width{0};
     int height{0};
     glfwGetFramebufferSize(_window, &width, &height);
     return {width, height};
 }
-int GLFWwrapper::get_level() const
-{
+int GLFWwrapper::get_level() const {
     return _level;
 }
-void GLFWwrapper::adjustLevel(int level)
-{
+void GLFWwrapper::adjustLevel(int level) {
     _level = level;
     updateTitle();
 }
-void GLFWwrapper::updateTitle()
-{
+void GLFWwrapper::updateTitle() {
     glfwSetWindowTitle(
         _window,
-        (_createData._windowTitle
-        + " " + _curfractal->getname()
-        + " Level: " + to_string(_level)).c_str());
+        (_createData._windowTitle + " " + _curfractal->getname() + " Level: " + to_string(_level)).c_str());
 }
-std::optional<int> GLFWwrapper::glfwKeyMacroToNumber(int keyMacro)
-{
+std::optional<int> GLFWwrapper::glfwKeyMacroToNumber(int keyMacro) {
     switch (keyMacro) {
         case GLFW_KEY_0:
             return 0;
@@ -253,11 +230,10 @@ std::optional<int> GLFWwrapper::glfwKeyMacroToNumber(int keyMacro)
             return 9;
         default:
             return {};
-    };   
+    };
 }
 
-void GLFWwrapper::setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top)
-{
+void GLFWwrapper::setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top) {
 #ifdef __APPLE__
     GLKMatrix4 newOrtho = GLKMatrix4MakeOrtho(float(left), float(right), float(bottom), float(top), -1.0f, 1.0f);
     glLoadMatrixf(newOrtho.m);
@@ -266,8 +242,7 @@ void GLFWwrapper::setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble 
 #endif
 }
 
-void GLFWwrapper::setWindowHints()
-{
+void GLFWwrapper::setWindowHints() {
     // Window related hints
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
@@ -295,28 +270,27 @@ void GLFWwrapper::setWindowHints()
 
     glfwWindowHint(GLFW_AUX_BUFFERS, 0);
 
-    glfwWindowHint(GLFW_STEREO, GLFW_FALSE); // hard constraint
+    glfwWindowHint(GLFW_STEREO, GLFW_FALSE);  // hard constraint
     glfwWindowHint(GLFW_SAMPLES, static_cast<int>(_createData._numMultisamplingSamples));
     glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE); // hard constraint
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);  // hard constraint
 
     // Monitor related hints
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
     // Context related hints
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API); // hard constraint
-    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API); // hard constraint
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);                    // hard constraint
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);  // hard constraint
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_CONTEXT_ROBUSTNESS, GLFW_NO_ROBUSTNESS);
     glfwWindowHint(GLFW_CONTEXT_RELEASE_BEHAVIOR, GLFW_ANY_RELEASE_BEHAVIOR);
     glfwWindowHint(GLFW_CONTEXT_NO_ERROR, GLFW_FALSE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE); // hard constraint
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE);  // hard constraint
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_FALSE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE); // hard constraint
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);  // hard constraint
 }
-void GLFWwrapper::setInitialGLState()
-{
+void GLFWwrapper::setInitialGLState() {
     auto frameSize = get_framebufferSize();
     glViewport(0, 0, frameSize.first, frameSize.second);
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -328,3 +302,4 @@ void GLFWwrapper::setInitialGLState()
     glLineWidth(2.0);
     glColor3d(0.8, 0.8, 0.5);
 }
+
