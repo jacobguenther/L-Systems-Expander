@@ -58,7 +58,7 @@ private:
     std::pair<int, int> get_framebufferSize() const;
     int get_level() const;
     void adjustLevel(int level);
-    void readSystemConigFile();
+    void readTheConfigFile();
 
     void setWindowHints();
     void setInitialGLState();

@@ -56,7 +56,7 @@ GLFWwrapper::GLFWwrapper(WindowCreateData createData)
     glfwSetKeyCallback(_window, GLFWwrapper::glfwKeyCallback);
     glfwSetFramebufferSizeCallback(_window, GLFWwrapper::glfwFramebufferSizeCallback);
 
-    readSystemConigFile();
+    readTheConfigFile();
     adjustLevel(_level);
 }
 GLFWwrapper::~GLFWwrapper()
@@ -173,7 +173,7 @@ void GLFWwrapper::glfwFramebufferSizeCallback(GLFWwindow * /* window */, int wid
     glMatrixMode(GL_MODELVIEW);
 }
 
-void GLFWwrapper::readSystemConigFile()
+void GLFWwrapper::readTheConfigFile()
 {
     _systems = readlsystemfile();
     _curfractal = find_if(_systems.begin(),_systems.end(),[](const auto &f){return f.isactive();});
