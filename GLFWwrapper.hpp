@@ -8,20 +8,19 @@
 #ifndef GLFW_WRAPPER_HPP
 #define GLFW_WRAPPER_HPP
 
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <string_view>
-#include <utility>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GLFW/glfw3.h>
-
 #include "Cmd.h"
 #include "Context.h"
 #include "Lsystem.h"
 #include "WindowCreateData.hpp"
+
+#include <algorithm>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
+#include <string>
+#include <string_view>
+#include <utility>
 
 class GLFWwrapper {
 public:
