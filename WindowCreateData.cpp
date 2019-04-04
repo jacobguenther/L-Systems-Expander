@@ -1,6 +1,6 @@
 // WindowCreateData.cpp
 
-#include "WindowCreateData.cpp"
+#include "WindowCreateData.hpp"
 
 WindowCreateData::WindowCreateData(
     std::string windowTitle,

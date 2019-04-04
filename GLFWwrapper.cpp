@@ -29,7 +29,6 @@ GLFWwrapper::GLFWwrapper(WindowCreateData createData)
     , _moveSize{0.01}
     , _tx{-0.5}, _ty{0.0}, _sc{1.0}
 {
-    
     glfwSetErrorCallback(GLFWwrapper::glfwErrorCallback);
     auto isInit = glfwInit();
     if (!isInit) {
@@ -38,9 +37,9 @@ GLFWwrapper::GLFWwrapper(WindowCreateData createData)
 
     setWindowHints();
     _window = glfwCreateWindow(
-        _createData.windowDimensions.first,
-        _createData.windowDimensions.second,
-        _createData.windowTitle.c_str(),
+        _createData._windowDimensions.first,
+        _createData._windowDimensions.second,
+        _createData._windowTitle.c_str(),
         nullptr, nullptr);
     if (_window == nullptr) {
         throw(runtime_error("Failed to create glfwCreateWindow"));
@@ -50,7 +49,7 @@ GLFWwrapper::GLFWwrapper(WindowCreateData createData)
     glfwSetInputMode(_window, GLFW_STICKY_KEYS, 1);
 
     glfwMakeContextCurrent(_window);
-    glfwSwapInterval(static_cast<int>(_createData.syncFrame));
+    glfwSwapInterval(static_cast<int>(_createData._shouldSyncFrame));
     
     setInitialGLState();
 
@@ -278,8 +277,8 @@ void GLFWwrapper::adjustLevel(int level)
 {
     _level = level;
     glfwSetWindowTitle(_window,
-        (_createData.windowTitle
-        //+ " " + _curfractal->getname()
+        (_createData._windowTitle
+        + " " + _curfractal->getname()
         + " Level: " + to_string(_level)).c_str());
 }
 void GLFWwrapper::setWindowHints()
@@ -312,7 +311,7 @@ void GLFWwrapper::setWindowHints()
     glfwWindowHint(GLFW_AUX_BUFFERS, 0);
 
     glfwWindowHint(GLFW_STEREO, GLFW_FALSE); // hard constraint
-    glfwWindowHint(GLFW_SAMPLES, static_cast<int>(_createData.multisamplingSamples));
+    glfwWindowHint(GLFW_SAMPLES, static_cast<int>(_createData._numMultisamplingSamples));
     glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE); // hard constraint
 
