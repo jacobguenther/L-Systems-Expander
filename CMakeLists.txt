@@ -33,6 +33,8 @@ Token.cpp
 Token.h
 Turtle.h
 Turtle.cpp
+WindowCreateData.hpp
+WindowCreateData.cpp
 )
 
 #turn on all warnings, minus some that are not useful
