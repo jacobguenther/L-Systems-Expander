@@ -57,7 +57,6 @@ GLFWwrapper::GLFWwrapper(WindowCreateData createData)
     glfwSetFramebufferSizeCallback(_window, GLFWwrapper::glfwFramebufferSizeCallback);
 
     readTheConfigFile();
-    adjustLevel(_level);
 }
 GLFWwrapper::~GLFWwrapper()
 {
@@ -180,6 +179,7 @@ void GLFWwrapper::readTheConfigFile()
     if (_curfractal==_systems.end()) {
         throw(runtime_error("No active fractals in config file"));
     }
+    updateTitle();
 }
 
 void GLFWwrapper::run() const
@@ -216,7 +216,19 @@ int GLFWwrapper::get_level() const
 {
     return _level;
 }
-
+void GLFWwrapper::adjustLevel(int level)
+{
+    _level = level;
+    updateTitle();
+}
+void GLFWwrapper::updateTitle()
+{
+    glfwSetWindowTitle(
+        _window,
+        (_createData._windowTitle
+        + " " + _curfractal->getname()
+        + " Level: " + to_string(_level)).c_str());
+}
 bool GLFWwrapper::isKeyNumber(int keyMacro)
 {
     switch (keyMacro) {
@@ -273,14 +285,6 @@ void GLFWwrapper::setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble 
 #endif
 }
 
-void GLFWwrapper::adjustLevel(int level)
-{
-    _level = level;
-    glfwSetWindowTitle(_window,
-        (_createData._windowTitle
-        + " " + _curfractal->getname()
-        + " Level: " + to_string(_level)).c_str());
-}
 void GLFWwrapper::setWindowHints()
 {
     // Window related hints

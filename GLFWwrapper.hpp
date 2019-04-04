@@ -58,6 +58,7 @@ private:
     std::pair<int, int> get_framebufferSize() const;
     int get_level() const;
     void adjustLevel(int level);
+    void updateTitle();
     void readTheConfigFile();
 
     void setWindowHints();
