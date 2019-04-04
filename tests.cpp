@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "GlutFunctions.hpp"
+#include "GLFWwrapper.hpp"
 #include "Lsystem.h"
 #include "Parser.h"
 
@@ -15,7 +15,8 @@ TEST_CASE( "Parsing expressions", "[Parser]" ) {
 
 TEST_CASE("Reading config file and creating lsystem","[Lsystem]") {
 
-    readtheconfigfile();
+    WindowCreateData createData;
+    GLFWwrapper wrapper(createData); // readtheconfigfile();
     
 
 }
