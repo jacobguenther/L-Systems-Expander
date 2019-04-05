@@ -181,7 +181,6 @@ void GLFWwrapper::glfwKeyCallback(
     if (maybeNumber.value_or(-1) >= 0) {
         associatedWrapper->adjustLevel(maybeNumber.value());
     } else {
-        auto currentLevel = associatedWrapper->get_level();
         switch (key) {
             case GLFW_KEY_ESCAPE:
                 exit(0);
@@ -214,10 +213,10 @@ void GLFWwrapper::glfwKeyCallback(
                 associatedWrapper->_ty -= associatedWrapper->_moveSize / associatedWrapper->_sc;
                 break;
             case GLFW_KEY_COMMA:
-                associatedWrapper->adjustLevel((currentLevel == 0) ? 0 : currentLevel - 1);
+                associatedWrapper->adjustLevel((associatedWrapper->get_level() == 0) ? 0 : associatedWrapper->get_level() - 1);
                 break;
             case GLFW_KEY_PERIOD:
-                associatedWrapper->adjustLevel(currentLevel + 1);
+                associatedWrapper->adjustLevel(associatedWrapper->get_level() + 1);
                 break;
             case GLFW_KEY_U:
                 associatedWrapper->_p1 += 0.005;
