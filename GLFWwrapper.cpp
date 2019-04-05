@@ -60,7 +60,7 @@ void GLFWwrapper::run() const {
         Consttype vars;
         glDrawBuffer(GL_BACK);
         glClear(GL_COLOR_BUFFER_BIT);
-        vars["p1"] = p1;
+        vars["p1"] = _p1;
 
         Context context(vars, _curfractal->getExpressions());
         _curfractal->evaluateExpressions(context);
@@ -220,31 +220,31 @@ void GLFWwrapper::glfwKeyCallback(
                 associatedWrapper->adjustLevel(currentLevel + 1);
                 break;
             case GLFW_KEY_U:
-                associatedWrapper->p1 += 0.005;
-                if (associatedWrapper->p1 > 1.0) {
-                    associatedWrapper->p1 = 1.0;
+                associatedWrapper->_p1 += 0.005;
+                if (associatedWrapper->_p1 > 1.0) {
+                    associatedWrapper->_p1 = 1.0;
                 }
                 break;
             case GLFW_KEY_Y:
-                associatedWrapper->p1 -= 0.005;
-                if (associatedWrapper->p1 < 0.0) {
-                    associatedWrapper->p1 = 0;
+                associatedWrapper->_p1 -= 0.005;
+                if (associatedWrapper->_p1 < 0.0) {
+                    associatedWrapper->_p1 = 0;
                 }
                 break;
             case GLFW_KEY_LEFT_BRACKET:
-                associatedWrapper->threshold *= 1.5;
-                if (associatedWrapper->threshold > GLFWwrapper::THRESHOLD_MAX) {
-                    associatedWrapper->threshold = GLFWwrapper::THRESHOLD_MAX;
+                associatedWrapper->_threshold *= 1.5;
+                if (associatedWrapper->_threshold > GLFWwrapper::THRESHOLD_MAX) {
+                    associatedWrapper->_threshold = GLFWwrapper::THRESHOLD_MAX;
                 }
                 break;
             case GLFW_KEY_RIGHT_BRACKET:
-                associatedWrapper->threshold *= 1.5;
-                if (associatedWrapper->threshold < GLFWwrapper::THRESHOLD_MIN) {
-                    associatedWrapper->threshold = GLFWwrapper::THRESHOLD_MIN;
+                associatedWrapper->_threshold *= 1.5;
+                if (associatedWrapper->_threshold < GLFWwrapper::THRESHOLD_MIN) {
+                    associatedWrapper->_threshold = GLFWwrapper::THRESHOLD_MIN;
                 }
                 break;
             case GLFW_KEY_BACKSLASH:
-                associatedWrapper->threshold = GLFWwrapper::THRESHOLD_MIN;
+                associatedWrapper->_threshold = GLFWwrapper::THRESHOLD_MIN;
                 associatedWrapper->adjustLevel(200);
                 break;
             default:
@@ -291,7 +291,6 @@ std::optional<int> GLFWwrapper::glfwKeyMacroToNumber(int keyMacro) {
             return {};
     };
 }
-
 void GLFWwrapper::setOrthographicMatrix(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top) {
 #ifdef __APPLE__
     GLKMatrix4 newOrtho = GLKMatrix4MakeOrtho(float(left), float(right), float(bottom), float(top), -1.0f, 1.0f);

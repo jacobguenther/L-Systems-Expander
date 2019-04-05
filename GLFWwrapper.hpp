@@ -49,11 +49,11 @@ class GLFWwrapper {
     LsystemContainer _systems;
     SystemIterator _curfractal{_systems.end()};
 
-    double threshold{0.003};
+    double _threshold{0.003};
     static const double THRESHOLD_MAX;
     static const double THRESHOLD_MIN;
 
-    double p1{0.0};
+    double _p1{0.0};
 
     std::pair<int, int> get_framebufferSize() const;
     int get_level() const;
